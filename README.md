@@ -24,26 +24,40 @@ mundifruta/
 **Regra de ouro:** conteúdo que muda com frequência (produtos, preços) vive em
 `js/dados.js`. Nunca é preciso tocar em `app.js` para mudar um preço.
 
-## Como atualizar preços
+## Estrutura de um produto
 
-Abrir `js/dados.js` e substituir `preco:P` pelo preço real:
+Cada produto (em `js/dados.js`) segue o estilo **nome + peso + preço fixo**:
 
 ```js
-// antes (mostra "A consultar")
-{ nome:"Morangos", emoji:"🍓", preco:P, ... },
-
-// depois
-{ nome:"Morangos", emoji:"🍓", preco:"3,49 €/kg", ... },
+{ nome:"Bananas", emoji:"🍌", peso:"1 kg", preco:P, foto:FOTOS.bananas, badge:null },
 ```
 
-Guardar o ficheiro → recarregar a página. O preço aparece no cartão do produto,
+| Campo | O que é | Exemplo |
+|-------|---------|---------|
+| `nome`  | nome mostrado          | `"Morangos"` |
+| `emoji` | ícone de reserva       | `"🍓"` |
+| `peso`  | peso/quantidade vendida | `"Caixa 250 g"`, `"1 kg"`, `"±500 g"` |
+| `preco` | preço para essa quantidade | `"3,49 €"` (ou `P` = "A consultar") |
+| `foto`  | chave de `FOTOS`        | `FOTOS.morangos` |
+| `badge` | etiqueta opcional       | `"🔥 Popular"` |
+
+## Como atualizar preços
+
+Abrir `js/dados.js` e substituir `preco:P` pelo preço real. Ajustar também `peso`
+se necessário:
+
+```js
+// antes:  { nome:"Morangos", ... peso:"Caixa 250 g", preco:P, ... }
+// depois: { nome:"Morangos", ... peso:"Caixa 250 g", preco:"3,49 €", ... }
+```
+
+Guardar → recarregar a página. O preço e o peso aparecem no cartão do produto,
 no carrinho e na mensagem de WhatsApp automaticamente.
 
 ## Como adicionar/remover produtos
 
-Em `js/dados.js`, adicionar ou apagar uma linha nos arrays `produtos.frutas` ou
-`produtos.legumes`. Campos: `nome`, `emoji`, `preco`, `foto` (chave de `FOTOS`),
-`badge` (opcional: `"🔥 Popular"` etc.).
+Em `js/dados.js`, adicionar ou apagar uma linha nos arrays `produtos.frutas`,
+`produtos.legumes` ou `produtos.cabazes` (cabazes = cestos prontos).
 
 ## Como testar localmente
 
