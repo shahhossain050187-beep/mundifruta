@@ -767,4 +767,10 @@
       flex:0 0 auto; min-width:44px; font-weight:700; color:var(--forest-2); font-size:0.82rem;
     }
     .cabaz-modal-list .ci-nome { color:var(--text); }
+    .cabaz-modal-list .ci-grupo {
+      grid-column:1 / -1; font-family:'Poppins',sans-serif; font-weight:700; font-size:0.78rem;
+      text-transform:uppercase; letter-spacing:1px; color:var(--forest-2);
+      border-bottom:none; padding:10px 0 2px; margin-top:4px;
+    }
+    .cabaz-modal-nota { text-align:center; color:var(--text-md); font-size:0.76rem; font-style:italic; margin:-8px 0 18px; }
     .cabaz-modal-add { width:100%; }

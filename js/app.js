@@ -18,18 +18,19 @@ const carrinho = {};
   function renderSummer() {
     const grid = document.getElementById('summer-grid');
     const items = [
-      { idx:0,  tag:'Verão',    sub:'Marrocos • Por kg' },
-      { idx:4,  tag:'Popular',  sub:'Nacional • Por kg' },
-      { idx:5,  tag:'Sazonal',  sub:'Nacional • Por kg' },
-      { idx:11, tag:'Premium',  sub:'Fundão • Por kg' },
-      { idx:13, tag:'Sazonal',  sub:'Chile • Por kg' },
-      { idx:14, tag:'Tropical', sub:'Brasil • Por kg' },
-      { idx:15, tag:'Premium',  sub:'Costa Rica • Por kg' },
-      { idx:45, tag:'Verão',    sub:'Cuvete 130 g' },
+      { nome:'Melancia',         tag:'Verão',    sub:'Marrocos • Por kg' },
+      { nome:'Morangos',         tag:'Popular',  sub:'Nacional • Por kg' },
+      { nome:'Pêssego Amarelo',  tag:'Sazonal',  sub:'Nacional • Por kg' },
+      { nome:'Cereja de Fundão', tag:'Premium',  sub:'Fundão • Por kg' },
+      { nome:'Uvas sem Grainha', tag:'Sazonal',  sub:'Chile • Por kg' },
+      { nome:'Manga Avião',      tag:'Tropical', sub:'Brasil • Por kg' },
+      { nome:'Abacaxi Maturado', tag:'Premium',  sub:'Costa Rica • Por kg' },
+      { nome:'Framboesa',        tag:'Verão',    sub:'Cuvete 130 g' },
     ];
-    items.forEach(({ idx, tag, sub }) => {
+    items.forEach(({ nome, tag, sub }) => {
+      const idx = produtos.frutas.findIndex(f => f.nome === nome);
+      if (idx < 0) return;
       const item = produtos.frutas[idx];
-      if (!item) return;
       const card = document.createElement('div');
       card.className = 'sc';
       card.innerHTML = `
@@ -149,9 +150,12 @@ const carrinho = {};
     if (!item || !item.itens) return;
     document.getElementById('cabaz-modal-title').textContent = item.nome;
     document.getElementById('cabaz-modal-price').textContent = item.preco;
-    document.getElementById('cabaz-modal-list').innerHTML = item.itens.map(it =>
-      `<li><span class="ci-q">${it.q}</span><span class="ci-nome">${it.nome}</span></li>`
-    ).join('');
+    document.getElementById('cabaz-modal-list').innerHTML = item.itens.map(it => {
+      const header = it.grupo ? `<li class="ci-grupo">${it.grupo}</li>` : '';
+      return `${header}<li><span class="ci-q">${it.q}</span><span class="ci-nome">${it.nome}</span></li>`;
+    }).join('');
+    const notaEl = document.getElementById('cabaz-modal-nota');
+    if (notaEl) { notaEl.textContent = item.nota || ''; notaEl.style.display = item.nota ? 'block' : 'none'; }
     const addBtn = document.getElementById('cabaz-modal-add');
     addBtn.onclick = () => {
       if (!carrinho[id]) toggleProduto(id, item);
