@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:frutariafernando.pt)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(python -c \"import fitz; print\\('ok'\\)\" 2>&1)",
+      "WebSearch",
+      "mcp__visualize__read_me",
+      "mcp__visualize__show_widget",
+      "Bash(ls \"C:/Users/RFT/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/94ff213c-a4ce-43e1-ae2d-e15ea49e450f/c01db0f8-1351-468b-94a2-941404ce5c16/skills/canvas-design/canvas-fonts\" 2>&1 | grep -iE \"playfair|poppins|fraunces|cormorant|dmserif|libre|montserrat|inter|manrope|spectral|lora|cabinet|sen|outfit|jost|marcellus|prata|bodoni\" )",
+      "Bash(python make_template.py)",
+      "Bash(python -c \"import os; print\\(os.path.abspath\\('C:/Users/RFT/mundifruta/mundifruta-offer-template.png'\\)\\); print\\('exists:', os.path.exists\\('C:/Users/RFT/mundifruta/mundifruta-offer-template.png'\\)\\)\")",
+      "Bash(cp \"C:/Users/RFT/mundifruta/mundifruta-offer-template.png\" \"C:/Users/RFT/Desktop/mundifruta-offer-template.png\")",
+      "Bash(cp \"C:/Users/RFT/mundifruta/mundifruta-offer-template.png\" \"C:/Users/RFT/Downloads/mundifruta-offer-template.png\")",
+      "Read(//c/Users/RFT/Desktop/**)",
+      "PowerShell(explorer.exe \"C:\\\\Users\\\\RFT\\\\mundifruta\")",
+      "mcp__claude-in-chrome__list_connected_browsers",
+      "mcp__claude-in-chrome__tabs_context_mcp",
+      "mcp__claude-in-chrome__navigate",
+      "mcp__claude-in-chrome__read_page",
+      "mcp__claude-in-chrome__computer",
+      "Bash(find \"C:/Users/RFT\" -maxdepth 3 -iname \"*figos*fresco*\" -o -maxdepth 3 -iname \"mundifruta-figos*\" 2>/dev/null | head; echo \"---recent pngs in Downloads \\(last 10\\)---\"; ls -lt \"C:/Users/RFT/Downloads/\"*.png 2>/dev/null | head)"
+    ]
+  }
+}
