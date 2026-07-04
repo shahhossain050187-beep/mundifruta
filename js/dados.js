@@ -112,11 +112,27 @@
       { nome:"Batata-doce", emoji:"🍠", peso:"±1 kg",   preco:P, foto:FOTOS.batatadoce, badge:null },
     ],
     // CABAZES — cestos prontos de frutas e/ou legumes.
-    // Ajuste nomes, descrições (qtd) e preços conforme desejar.
+    // Ajuste nomes, descrições (peso), preços e a lista `itens` conforme desejar.
+    // `itens` é opcional; se existir, o cartão mostra "Ver o que leva" (abre janela com a lista).
     cabazes: [
       { nome:"Cabaz Semanal",      emoji:"🧺", peso:"Frutas & legumes variados", preco:P, foto:FOTOS.cabaz_mix,     badge:"⭐ Popular",  badgeClass:"badge-hot" },
       { nome:"Cabaz Familiar",     emoji:"🧺", peso:"Para toda a família",       preco:P, foto:FOTOS.cabaz_frutas,  badge:null },
-      { nome:"Cabaz de Verão",     emoji:"🍉", peso:"Frutos da época",           preco:P, foto:FOTOS.cabaz_verao,   badge:"🌞 Verão",   badgeClass:"" },
+      { nome:"Cabaz de Verão",     emoji:"🍉", peso:"Frutos da época",           preco:P, foto:FOTOS.cabaz_verao,   badge:"🌞 Verão",   badgeClass:"",
+        itens: [
+          { q:"1",      nome:"Melão" },
+          { q:"1",      nome:"Melancia" },
+          { q:"1",      nome:"Abacaxi" },
+          { q:"1",      nome:"Manga" },
+          { q:"1",      nome:"Papaia" },
+          { q:"500 g",  nome:"Pêssego" },
+          { q:"500 g",  nome:"Ameixas" },
+          { q:"500 g",  nome:"Alperce" },
+          { q:"125 g",  nome:"Mirtilo" },
+          { q:"125 g",  nome:"Framboesas" },
+          { q:"1 kg",   nome:"Banana" },
+          { q:"1 kg",   nome:"Laranja" },
+          { q:"1 kg",   nome:"Maçã" },
+        ] },
       { nome:"Cabaz de Legumes",   emoji:"🥦", peso:"Legumes frescos p/ sopa",   preco:P, foto:FOTOS.cabaz_legumes, badge:null },
     ],
   };

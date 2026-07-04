@@ -108,6 +108,65 @@ const carrinho = {};
     grid.querySelectorAll('.product-card').forEach(c => obs.observe(c));
   }
 
+  /* ══ CABAZES ══ */
+  function renderCabazes() {
+    const grid = document.getElementById('grid-cabazes');
+    produtos.cabazes.forEach((item, i) => {
+      const id = `cabaz-${i}`;
+      item._cat = 'cabazes'; item._id = id;
+      produtos_map[id] = item;
+      const temItens = item.itens && item.itens.length;
+      const badge = item.badge ? `<div class="product-badge ${item.badgeClass||''}">${item.badge}</div>` : '';
+      const verBtn = temItens ? `<button class="cabaz-ver" onclick="event.stopPropagation(); abrirCabaz('${id}')">👁 Ver o que leva</button>` : '';
+      const card = document.createElement('div');
+      card.className = 'product-card'; card.id = `card-${id}`;
+      card.innerHTML = `
+        ${badge}
+        <div class="sel-check">✓</div>
+        <div class="photo-wrap">
+          <img src="${urlFoto(item.foto)}" alt="${item.nome}" data-emoji="${item.emoji}" onerror="erroImagem(this)" loading="lazy"/>
+        </div>
+        <div class="card-body">
+          <div class="product-name">${item.nome}</div>
+          ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
+          <div class="product-price">${item.preco}</div>
+          ${verBtn}
+          <button class="add-btn" onclick="event.stopPropagation(); toggleProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="alterarQtd('${id}',-1,event)">−</button>
+            <span class="qty-num" id="qty-${id}">1</span>
+            <button class="qty-btn" onclick="alterarQtd('${id}',1,event)">+</button>
+          </div>
+        </div>`;
+      card.addEventListener('click', () => { if (temItens) abrirCabaz(id); else toggleProduto(id, item); });
+      grid.appendChild(card);
+      requestAnimationFrame(() => card.classList.add('visible'));
+    });
+  }
+
+  function abrirCabaz(id) {
+    const item = produtos_map[id];
+    if (!item || !item.itens) return;
+    document.getElementById('cabaz-modal-title').textContent = item.nome;
+    document.getElementById('cabaz-modal-price').textContent = item.preco;
+    document.getElementById('cabaz-modal-list').innerHTML = item.itens.map(it =>
+      `<li><span class="ci-q">${it.q}</span><span class="ci-nome">${it.nome}</span></li>`
+    ).join('');
+    const addBtn = document.getElementById('cabaz-modal-add');
+    addBtn.onclick = () => {
+      if (!carrinho[id]) toggleProduto(id, item);
+      fecharCabaz();
+      document.getElementById('encomenda').scrollIntoView({ behavior:'smooth' });
+    };
+    document.getElementById('cabaz-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function fecharCabaz() {
+    document.getElementById('cabaz-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
   /* ══ CART ══ */
   function toggleProduto(id, item) {
     const card = document.getElementById(`card-${id}`);
@@ -235,6 +294,6 @@ const carrinho = {};
   renderSummer();
   renderGrid(produtos.frutas,  'grid-frutas',  'fruta',  'frutas');
   renderGrid(produtos.legumes, 'grid-legumes', 'legume', 'legumes');
-  renderGrid(produtos.cabazes, 'grid-cabazes', 'cabaz',  'cabazes');
+  renderCabazes();
   document.getElementById('count-frutas').textContent  = produtos.frutas.length;
   document.getElementById('count-legumes').textContent = produtos.legumes.length;

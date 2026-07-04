@@ -674,4 +674,52 @@
       .social-link { transform:translateX(calc(100% - 46px)); }
       .social-wa   { transform:translateX(0); }
       .section { padding:64px 16px; }
+      .cabaz-modal-box { padding:26px 20px; }
+      .cabaz-modal-list { grid-template-columns:1fr; }
     }
+
+    /* ══════════════════════════════════════
+       CABAZ — "ver o que leva" + modal
+    ══════════════════════════════════════ */
+    .cabaz-ver {
+      width:100%; margin-bottom:8px; padding:8px 10px; border:1px solid var(--sage-lt);
+      background:rgba(82,183,136,0.08); color:var(--forest-2); border-radius:var(--r-md);
+      font-family:'Poppins',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer;
+      transition:background 0.2s, border-color 0.2s;
+    }
+    .cabaz-ver:hover { background:rgba(82,183,136,0.16); border-color:var(--sage); }
+
+    .cabaz-modal {
+      position:fixed; inset:0; z-index:2000; display:flex; align-items:center; justify-content:center;
+      padding:20px; background:rgba(26,26,46,0.6); backdrop-filter:blur(4px);
+      opacity:0; visibility:hidden; transition:opacity 0.25s, visibility 0.25s;
+    }
+    .cabaz-modal.open { opacity:1; visibility:visible; }
+    .cabaz-modal-box {
+      position:relative; width:100%; max-width:520px; max-height:88vh; overflow-y:auto;
+      background:var(--cream); border-radius:var(--r-xl); padding:34px 32px 28px;
+      box-shadow:var(--sh-lg); transform:translateY(16px) scale(0.98); transition:transform 0.25s;
+    }
+    .cabaz-modal.open .cabaz-modal-box { transform:translateY(0) scale(1); }
+    .cabaz-modal-close {
+      position:absolute; top:14px; right:14px; width:34px; height:34px; border:none; cursor:pointer;
+      border-radius:var(--r-full); background:var(--cream-2); color:var(--text); font-size:1rem;
+      display:flex; align-items:center; justify-content:center; transition:background 0.2s;
+    }
+    .cabaz-modal-close:hover { background:var(--cream-3); }
+    .cabaz-modal-head { text-align:center; margin-bottom:6px; }
+    .cabaz-modal-head h3 { font-family:'Playfair Display',serif; font-size:1.7rem; color:var(--forest); margin:4px 0; }
+    .cabaz-modal-price { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:700; color:var(--peach); }
+    .cabaz-modal-sub { text-align:center; color:var(--text-md); font-size:0.86rem; margin:10px 0 18px; }
+    .cabaz-modal-list {
+      list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; margin-bottom:24px;
+    }
+    .cabaz-modal-list li {
+      display:flex; align-items:baseline; gap:8px; padding:7px 0;
+      border-bottom:1px dashed var(--cream-3); font-size:0.9rem;
+    }
+    .cabaz-modal-list .ci-q {
+      flex:0 0 auto; min-width:44px; font-weight:700; color:var(--forest-2); font-size:0.82rem;
+    }
+    .cabaz-modal-list .ci-nome { color:var(--text); }
+    .cabaz-modal-add { width:100%; }
