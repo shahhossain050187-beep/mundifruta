@@ -1,7 +1,16 @@
 /* ═══════════════════════════════════════════════════════════
-   DADOS DO SITE — produtos, preços e fotos
-   Para atualizar um preço: substitua `preco:P` por `preco:"1,99 €/kg"`.
-   `P` é o texto mostrado quando o preço ainda não está definido.
+   DADOS DO SITE — produtos, cabazes, preços e fotos
+
+   Cada produto tem 4 campos importantes:
+     nome  → nome mostrado
+     peso  → peso/quantidade (ex: "1 kg", "±500 g", "Caixa 250 g")
+     preco → preço para essa quantidade (ex: "1,90 €")
+     foto  → chave de FOTOS (a imagem)
+
+   COMO ATUALIZAR UM PREÇO:
+     substituir  preco:P  por  preco:"1,90 €"
+   `P` é o texto mostrado enquanto o preço não está definido.
+   Também pode ajustar `peso` para o peso real de cada produto.
    ═══════════════════════════════════════════════════════════ */
   const P = "A consultar";
 
@@ -44,6 +53,10 @@
     cogumelos:  "https://images.pexels.com/photos/1435706/pexels-photo-1435706.jpeg",
     couve:      "https://images.pexels.com/photos/2518893/pexels-photo-2518893.jpeg",
     batatadoce: "https://images.pexels.com/photos/89247/pexels-photo-89247.jpeg",
+    cabaz_frutas:  "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg",
+    cabaz_legumes: "https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg",
+    cabaz_mix:     "https://images.pexels.com/photos/1300972/pexels-photo-1300972.jpeg",
+    cabaz_verao:   "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg",
   };
   const SFX = "?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop";
 
@@ -51,51 +64,59 @@
 
   const produtos = {
     frutas: [
-      { nome:"Maçã Golden",         emoji:"🍎", preco:P, foto:FOTOS.macas,        badge:null },
-      { nome:"Maçã Reineta",        emoji:"🍏", preco:P, foto:FOTOS.macas,        badge:null },
-      { nome:"Bananas",             emoji:"🍌", preco:P, foto:FOTOS.bananas,      badge:null },
-      { nome:"Laranjas",            emoji:"🍊", preco:P, foto:FOTOS.laranjas,     badge:null },
-      { nome:"Tangerina",           emoji:"🍊", preco:P, foto:FOTOS.tangerina,    badge:null },
-      { nome:"Uva sem Grainha",     emoji:"🍇", preco:P, foto:FOTOS.uvas,         badge:null },
-      { nome:"Uva Red Globe",       emoji:"🍇", preco:P, foto:FOTOS.uvas,         badge:"⭐ Destaque", badgeClass:"" },
-      { nome:"Morangos",            emoji:"🍓", preco:P, foto:FOTOS.morangos,     badge:"🔥 Popular",  badgeClass:"badge-hot" },
-      { nome:"Melancia",            emoji:"🍉", preco:P, foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Manga",               emoji:"🥭", preco:P, foto:FOTOS.manga,        badge:"🌴 Tropical", badgeClass:"badge-new" },
-      { nome:"Ananás",              emoji:"🍍", preco:P, foto:FOTOS.ananas,       badge:null },
-      { nome:"Pêras",               emoji:"🍐", preco:P, foto:FOTOS.peras,        badge:null },
-      { nome:"Limões",              emoji:"🍋", preco:P, foto:FOTOS.limoes,       badge:null },
-      { nome:"Pêssego Amarelo",     emoji:"🍑", preco:P, foto:FOTOS.pessegos,     badge:null },
-      { nome:"Pêssego Vermelho",    emoji:"🍑", preco:P, foto:FOTOS.pessegos,     badge:null },
-      { nome:"Pêssego Paraguaio",   emoji:"🍑", preco:P, foto:FOTOS.pessegos,     badge:null },
-      { nome:"Nectarina",           emoji:"🍑", preco:P, foto:FOTOS.pessegos,     badge:null },
-      { nome:"Cereja de Fundão",    emoji:"🍒", preco:P, foto:FOTOS.cerejas,      badge:"💎 Premium",  badgeClass:"badge-hot" },
-      { nome:"Cereja Gardunha 2kg", emoji:"🍒", preco:P, foto:FOTOS.cerejas,      badge:"📦 Caixa",    badgeClass:"" },
-      { nome:"Figos",               emoji:"🫐", preco:P, foto:FOTOS.figos,        badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Romã",                emoji:"🔴", preco:P, foto:FOTOS.roma,         badge:null },
-      { nome:"Kiwi",                emoji:"🥝", preco:P, foto:FOTOS.kiwi,         badge:null },
-      { nome:"Abacate",             emoji:"🥑", preco:P, foto:FOTOS.abacate,      badge:null },
-      { nome:"Coco",                emoji:"🥥", preco:P, foto:FOTOS.coco,         badge:null },
-      { nome:"Melão Verde",         emoji:"🍈", preco:P, foto:FOTOS.melao_verde,  badge:null },
-      { nome:"Melão Branco",        emoji:"🍈", preco:P, foto:FOTOS.melao_branco, badge:null },
-      { nome:"Melão Amarelo",       emoji:"🍈", preco:P, foto:FOTOS.melao_am,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Ameixa Vermelha",     emoji:"🍇", preco:P, foto:FOTOS.ameixa,       badge:null },
+      { nome:"Maçã Golden",         emoji:"🍎", peso:"1 kg",       preco:P, foto:FOTOS.macas,        badge:null },
+      { nome:"Maçã Reineta",        emoji:"🍏", peso:"1 kg",       preco:P, foto:FOTOS.macas,        badge:null },
+      { nome:"Bananas",             emoji:"🍌", peso:"1 kg",       preco:P, foto:FOTOS.bananas,      badge:null },
+      { nome:"Laranjas",            emoji:"🍊", peso:"1 kg",       preco:P, foto:FOTOS.laranjas,     badge:null },
+      { nome:"Tangerina",           emoji:"🍊", peso:"±500 g",     preco:P, foto:FOTOS.tangerina,    badge:null },
+      { nome:"Uva sem Grainha",     emoji:"🍇", peso:"±500 g",     preco:P, foto:FOTOS.uvas,         badge:null },
+      { nome:"Uva Red Globe",       emoji:"🍇", peso:"±500 g",     preco:P, foto:FOTOS.uvas,         badge:"⭐ Destaque", badgeClass:"" },
+      { nome:"Morangos",            emoji:"🍓", peso:"Caixa 250 g", preco:P, foto:FOTOS.morangos,    badge:"🔥 Popular",  badgeClass:"badge-hot" },
+      { nome:"Melancia",            emoji:"🍉", peso:"±3 kg",      preco:P, foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Manga",               emoji:"🥭", peso:"±500 g",     preco:P, foto:FOTOS.manga,        badge:"🌴 Tropical", badgeClass:"badge-new" },
+      { nome:"Ananás",              emoji:"🍍", peso:"±1,7 kg",    preco:P, foto:FOTOS.ananas,       badge:null },
+      { nome:"Pêras",               emoji:"🍐", peso:"1 kg",       preco:P, foto:FOTOS.peras,        badge:null },
+      { nome:"Limões",              emoji:"🍋", peso:"500 g",      preco:P, foto:FOTOS.limoes,       badge:null },
+      { nome:"Pêssego Amarelo",     emoji:"🍑", peso:"±500 g",     preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Pêssego Vermelho",    emoji:"🍑", peso:"±500 g",     preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Pêssego Paraguaio",   emoji:"🍑", peso:"±500 g",     preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Nectarina",           emoji:"🍑", peso:"±500 g",     preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Cereja de Fundão",    emoji:"🍒", peso:"500 g",      preco:P, foto:FOTOS.cerejas,      badge:"💎 Premium",  badgeClass:"badge-hot" },
+      { nome:"Cereja Gardunha",     emoji:"🍒", peso:"Caixa 2 kg", preco:P, foto:FOTOS.cerejas,      badge:"📦 Caixa",    badgeClass:"" },
+      { nome:"Figos",               emoji:"🫐", peso:"±500 g",     preco:P, foto:FOTOS.figos,        badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Romã",                emoji:"🔴", peso:"±500 g",     preco:P, foto:FOTOS.roma,         badge:null },
+      { nome:"Kiwi",                emoji:"🥝", peso:"±500 g",     preco:P, foto:FOTOS.kiwi,         badge:null },
+      { nome:"Abacate",             emoji:"🥑", peso:"±750 g",     preco:P, foto:FOTOS.abacate,      badge:null },
+      { nome:"Coco",                emoji:"🥥", peso:"1 un",       preco:P, foto:FOTOS.coco,         badge:null },
+      { nome:"Melão Verde",         emoji:"🍈", peso:"±3 kg",      preco:P, foto:FOTOS.melao_verde,  badge:null },
+      { nome:"Melão Branco",        emoji:"🍈", peso:"±3 kg",      preco:P, foto:FOTOS.melao_branco, badge:null },
+      { nome:"Melão Amarelo",       emoji:"🍈", peso:"±3 kg",      preco:P, foto:FOTOS.melao_am,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Ameixa Vermelha",     emoji:"🍇", peso:"±500 g",     preco:P, foto:FOTOS.ameixa,       badge:null },
     ],
     legumes: [
-      { nome:"Tomates",     emoji:"🍅", preco:P, foto:FOTOS.tomates,    badge:"🔥 Popular", badgeClass:"badge-hot" },
-      { nome:"Cenouras",    emoji:"🥕", preco:P, foto:FOTOS.cenouras,   badge:null },
-      { nome:"Brócolos",    emoji:"🥦", preco:P, foto:FOTOS.brocoulos,  badge:"🌱 Bio",     badgeClass:"badge-bio" },
-      { nome:"Alface",      emoji:"🥬", preco:P, foto:FOTOS.alface,     badge:null },
-      { nome:"Pepino",      emoji:"🥒", preco:P, foto:FOTOS.pepino,     badge:null },
-      { nome:"Pimentos",    emoji:"🫑", preco:P, foto:FOTOS.pimentos,   badge:null },
-      { nome:"Cebolas",     emoji:"🧅", preco:P, foto:FOTOS.cebolas,    badge:null },
-      { nome:"Alho",        emoji:"🧄", preco:P, foto:FOTOS.alho,       badge:null },
-      { nome:"Batatas",     emoji:"🥔", preco:P, foto:FOTOS.batatas,    badge:null },
-      { nome:"Milho",       emoji:"🌽", preco:P, foto:FOTOS.milho,      badge:null },
-      { nome:"Espinafres",  emoji:"🥬", preco:P, foto:FOTOS.espinafres, badge:"🌱 Bio",     badgeClass:"badge-bio" },
-      { nome:"Beringela",   emoji:"🍆", preco:P, foto:FOTOS.beringela,  badge:null },
-      { nome:"Curgete",     emoji:"🥒", preco:P, foto:FOTOS.curgete,    badge:null },
-      { nome:"Cogumelos",   emoji:"🍄", preco:P, foto:FOTOS.cogumelos,  badge:null },
-      { nome:"Couve",       emoji:"🥬", preco:P, foto:FOTOS.couve,      badge:null },
-      { nome:"Batata-doce", emoji:"🍠", preco:P, foto:FOTOS.batatadoce, badge:null },
+      { nome:"Tomates",     emoji:"🍅", peso:"1 kg",    preco:P, foto:FOTOS.tomates,    badge:"🔥 Popular", badgeClass:"badge-hot" },
+      { nome:"Cenouras",    emoji:"🥕", peso:"1 kg",    preco:P, foto:FOTOS.cenouras,   badge:null },
+      { nome:"Brócolos",    emoji:"🥦", peso:"±900 g",  preco:P, foto:FOTOS.brocoulos,  badge:"🌱 Bio",     badgeClass:"badge-bio" },
+      { nome:"Alface",      emoji:"🥬", peso:"±300 g",  preco:P, foto:FOTOS.alface,     badge:null },
+      { nome:"Pepino",      emoji:"🥒", peso:"±400 g",  preco:P, foto:FOTOS.pepino,     badge:null },
+      { nome:"Pimentos",    emoji:"🫑", peso:"±500 g",  preco:P, foto:FOTOS.pimentos,   badge:null },
+      { nome:"Cebolas",     emoji:"🧅", peso:"±500 g",  preco:P, foto:FOTOS.cebolas,    badge:null },
+      { nome:"Alho",        emoji:"🧄", peso:"±250 g",  preco:P, foto:FOTOS.alho,       badge:null },
+      { nome:"Batatas",     emoji:"🥔", peso:"±3 kg",   preco:P, foto:FOTOS.batatas,    badge:null },
+      { nome:"Milho",       emoji:"🌽", peso:"1 un",    preco:P, foto:FOTOS.milho,      badge:null },
+      { nome:"Espinafres",  emoji:"🥬", peso:"±500 g",  preco:P, foto:FOTOS.espinafres, badge:"🌱 Bio",     badgeClass:"badge-bio" },
+      { nome:"Beringela",   emoji:"🍆", peso:"±450 g",  preco:P, foto:FOTOS.beringela,  badge:null },
+      { nome:"Curgete",     emoji:"🥒", peso:"±500 g",  preco:P, foto:FOTOS.curgete,    badge:null },
+      { nome:"Cogumelos",   emoji:"🍄", peso:"300 g",   preco:P, foto:FOTOS.cogumelos,  badge:null },
+      { nome:"Couve",       emoji:"🥬", peso:"±900 g",  preco:P, foto:FOTOS.couve,      badge:null },
+      { nome:"Batata-doce", emoji:"🍠", peso:"±1 kg",   preco:P, foto:FOTOS.batatadoce, badge:null },
+    ],
+    // CABAZES — cestos prontos de frutas e/ou legumes.
+    // Ajuste nomes, descrições (qtd) e preços conforme desejar.
+    cabazes: [
+      { nome:"Cabaz Semanal",      emoji:"🧺", peso:"Frutas & legumes variados", preco:P, foto:FOTOS.cabaz_mix,     badge:"⭐ Popular",  badgeClass:"badge-hot" },
+      { nome:"Cabaz Familiar",     emoji:"🧺", peso:"Para toda a família",       preco:P, foto:FOTOS.cabaz_frutas,  badge:null },
+      { nome:"Cabaz de Verão",     emoji:"🍉", peso:"Frutos da época",           preco:P, foto:FOTOS.cabaz_verao,   badge:"🌞 Verão",   badgeClass:"" },
+      { nome:"Cabaz de Legumes",   emoji:"🥦", peso:"Legumes frescos p/ sopa",   preco:P, foto:FOTOS.cabaz_legumes, badge:null },
     ],
   };

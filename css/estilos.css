@@ -467,7 +467,8 @@
     }
 
     .card-body { padding:18px 18px 22px; }
-    .product-name { font-weight:700; font-size:0.96rem; color:var(--charcoal); margin-bottom:5px; line-height:1.3; }
+    .product-name { font-weight:700; font-size:0.96rem; color:var(--charcoal); margin-bottom:3px; line-height:1.3; }
+    .product-peso { font-size:0.72rem; color:var(--text-md); font-weight:500; margin-bottom:5px; }
     .product-price {
       font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
       color:var(--forest); margin-bottom:6px;

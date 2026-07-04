@@ -74,6 +74,7 @@ const carrinho = {};
       </div>
       <div class="card-body">
         <div class="product-name">${item.nome}</div>
+        ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
         <div class="product-price">${item.preco}</div>
         <div class="product-fresh">✓ Fresco Diário</div>
         <button class="add-btn" onclick="event.stopPropagation(); toggleProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
@@ -141,7 +142,7 @@ const carrinho = {};
     const itens = Object.values(carrinho);
     if (!itens.length) { lista.innerHTML = '<li class="empty-msg">Sem artigos ainda. Selecione produtos acima para começar.</li>'; return; }
     lista.innerHTML = itens.map(i =>
-      `<li class="order-item"><span>${i.emoji} ${i.nome}</span><span class="order-item-price">×${i.qtd} &nbsp;${i.preco}</span></li>`
+      `<li class="order-item"><span>${i.emoji} ${i.nome}${i.peso ? ` <small>(${i.peso})</small>` : ''}</span><span class="order-item-price">×${i.qtd} &nbsp;${i.preco}</span></li>`
     ).join('');
   }
 
@@ -190,7 +191,7 @@ const carrinho = {};
     let t = `Olá MUNDIFRUTA! Gostaria de fazer uma encomenda para levantamento na loja:\n\n👤 Nome: ${nome}\n📞 Telemóvel: ${tel}\n`;
     if (hora) t += `🕐 Levantamento: ${hora}\n`;
     t += `\n🛒 Encomenda:\n`;
-    itens.forEach(i => { t += `• ${i.nome} ×${i.qtd} (${i.preco})\n`; });
+    itens.forEach(i => { t += `• ${i.nome}${i.peso ? ` ${i.peso}` : ''} ×${i.qtd} (${i.preco})\n`; });
     if (notas) t += `\n📝 Notas: ${notas}`;
     return t;
   }
@@ -234,5 +235,6 @@ const carrinho = {};
   renderSummer();
   renderGrid(produtos.frutas,  'grid-frutas',  'fruta',  'frutas');
   renderGrid(produtos.legumes, 'grid-legumes', 'legume', 'legumes');
+  renderGrid(produtos.cabazes, 'grid-cabazes', 'cabaz',  'cabazes');
   document.getElementById('count-frutas').textContent  = produtos.frutas.length;
   document.getElementById('count-legumes').textContent = produtos.legumes.length;
