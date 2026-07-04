@@ -19,13 +19,13 @@ const carrinho = {};
     const grid = document.getElementById('summer-grid');
     const items = [
       { idx:0,  tag:'Verão',    sub:'Fresca • Por kg' },
-      { idx:3,  tag:'Verão',    sub:'Amarelo • Por kg' },
+      { idx:3,  tag:'Verão',    sub:'Nacional • Por kg' },
       { idx:4,  tag:'Popular',  sub:'Fresca • Por kg' },
       { idx:5,  tag:'Sazonal',  sub:'Amarelo • Por kg' },
-      { idx:10, tag:'Premium',  sub:'Fundão • Por kg' },
-      { idx:12, tag:'Sazonal',  sub:'Fresco • Por kg' },
-      { idx:15, tag:'Tropical', sub:'Por kg' },
+      { idx:11, tag:'Premium',  sub:'Fundão • Por kg' },
+      { idx:13, tag:'Sazonal',  sub:'Fresco • Por kg' },
       { idx:16, tag:'Tropical', sub:'Por kg' },
+      { idx:17, tag:'Tropical', sub:'Por kg' },
     ];
     items.forEach(({ idx, tag, sub }) => {
       const item = produtos.frutas[idx];

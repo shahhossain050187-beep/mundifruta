@@ -74,14 +74,15 @@
     // FRUTAS — frutos de verão primeiro, depois os regulares. Preço por kg.
     frutas: [
       // ── Frutos de Verão ──
-      { nome:"Melancia",            emoji:"🍉", peso:"1 kg", preco:P, foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Melão Verde",         emoji:"🍈", peso:"1 kg", preco:P, foto:FOTOS.melao_verde,  badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Melão Branco",        emoji:"🍈", peso:"1 kg", preco:P, foto:FOTOS.melao_branco, badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Melão Amarelo",       emoji:"🍈", peso:"1 kg", preco:P, foto:FOTOS.melao_am,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Morangos",            emoji:"🍓", peso:"1 kg", preco:P, foto:FOTOS.morangos,     badge:"🔥 Popular",  badgeClass:"badge-hot" },
-      { nome:"Pêssego Amarelo",     emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Pêssego Vermelho",    emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
-      { nome:"Pêssego Paraguaio",   emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Melancia",             emoji:"🍉", peso:"1 kg", preco:P, foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Melancia sem Sementes",emoji:"🍉", peso:"1 kg", preco:P, foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Melão Branco",         emoji:"🍈", peso:"1 kg", preco:P, foto:FOTOS.melao_branco, badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Meloa Nacional",       emoji:"🍈", peso:"1 kg", preco:P, foto:FOTOS.melao_am,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Morangos",             emoji:"🍓", peso:"1 kg", preco:P, foto:FOTOS.morangos,     badge:"🔥 Popular",  badgeClass:"badge-hot" },
+      { nome:"Pêssego Amarelo",      emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Pêssego Vermelho",     emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Pêssego Rosa",         emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
+      { nome:"Pêssego Paraguaio",    emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
       { nome:"Nectarina",           emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.pessegos,     badge:null },
       { nome:"Ameixa Vermelha",     emoji:"🍑", peso:"1 kg", preco:P, foto:FOTOS.ameixa,       badge:null },
       { nome:"Cereja de Fundão",    emoji:"🍒", peso:"1 kg", preco:P, foto:FOTOS.cerejas,      badge:"💎 Premium",  badgeClass:"badge-hot" },
