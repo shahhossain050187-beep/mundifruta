@@ -59,6 +59,16 @@ no carrinho e na mensagem de WhatsApp automaticamente.
 Em `js/dados.js`, adicionar ou apagar uma linha nos arrays `produtos.frutas`,
 `produtos.legumes` ou `produtos.cabazes` (cabazes = cestos prontos).
 
+## Fotos dos produtos
+
+Todas as imagens estão em `fotos/` (nada é carregado da internet em tempo real):
+- `foto_1_1.jpeg` … `foto_12_1.jpeg` — **fotografias próprias da loja** (preferir sempre estas)
+- restantes (`macas.jpeg`, `tomates.jpeg`, etc.) — imagens de reserva livres
+  (Pexels / Wikimedia Commons), usadas como *placeholder* até haver foto própria
+
+Para trocar por uma foto real: substituir o ficheiro em `fotos/` mantendo o mesmo
+nome, ou apontar a chave em `FOTOS` (em `js/dados.js`) para o novo ficheiro.
+
 ## Como testar localmente
 
 Abrir `index.html` no browser (duplo clique) — não precisa de servidor.
