@@ -157,3 +157,22 @@
       { nome:"Cabaz de Legumes",   emoji:"🥦", peso:"Legumes frescos p/ sopa",   preco:P, foto:FOTOS.cabaz_legumes, badge:null },
     ],
   };
+
+  /* ═══════════════════════════════════════════════════════════
+     AVALIAÇÕES — nota real do Google Business (4,9 ★ · 107 avaliações).
+     Os textos abaixo são PLACEHOLDER. Substitua por avaliações reais
+     copiadas do Google (nome do cliente + texto), mantendo em português.
+     ═══════════════════════════════════════════════════════════ */
+  const avaliacoesInfo = {
+    nota: "4,9",
+    total: 107,
+    link: "https://maps.app.goo.gl/1gHGqMac4ahTtfxf8?g_st=ac",
+    // Temas que os clientes mais destacam (tags reais do Google):
+    temas: ["Frescura", "Qualidade da fruta", "Limpeza", "Variedade", "Simpatia"],
+  };
+
+  const avaliacoes = [
+    { nome:"[Nome do cliente]", estrelas:5, texto:"[Cole aqui uma avaliação real do Google, em português.]" },
+    { nome:"[Nome do cliente]", estrelas:5, texto:"[Cole aqui uma avaliação real do Google, em português.]" },
+    { nome:"[Nome do cliente]", estrelas:5, texto:"[Cole aqui uma avaliação real do Google, em português.]" },
+  ];

@@ -676,7 +676,51 @@
       .section { padding:64px 16px; }
       .cabaz-modal-box { padding:26px 20px; }
       .cabaz-modal-list { grid-template-columns:1fr; }
+      .reviews-grid { grid-template-columns:1fr; }
+      .google-badge { flex-wrap:wrap; justify-content:center; text-align:center; }
     }
+
+    /* ══════════════════════════════════════
+       AVALIAÇÕES (Google reviews / trust)
+    ══════════════════════════════════════ */
+    .google-badge {
+      display:flex; align-items:center; gap:12px; width:max-content; max-width:100%;
+      margin:0 auto 22px; padding:12px 22px; background:var(--white);
+      border:1px solid var(--cream-3); border-radius:var(--r-full); box-shadow:var(--sh);
+      text-decoration:none; transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .google-badge:hover { transform:translateY(-2px); box-shadow:var(--sh-lg); }
+    .gb-logo {
+      font-family:'Poppins',sans-serif; font-weight:800; font-size:1.2rem; color:#4285F4;
+      background:var(--cream-2); width:34px; height:34px; border-radius:var(--r-full);
+      display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+    }
+    .gb-nota { font-family:'Playfair Display',serif; font-weight:900; font-size:1.4rem; color:var(--text); }
+    .gb-stars { color:#FBBC04; letter-spacing:1px; font-size:1.05rem; }
+    .gb-total { color:var(--text-md); font-size:0.86rem; font-weight:500; }
+
+    .temas-row { display:flex; flex-wrap:wrap; justify-content:center; gap:9px; margin-bottom:40px; }
+    .tema-chip {
+      background:rgba(82,183,136,0.1); color:var(--forest-2); border:1px solid var(--sage-lt);
+      padding:6px 14px; border-radius:var(--r-full); font-size:0.8rem; font-weight:600;
+    }
+
+    .reviews-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:1000px; margin:0 auto 30px;
+    }
+    .review-card {
+      background:var(--white); border:1px solid var(--cream-3); border-radius:var(--r-lg);
+      padding:24px 22px; box-shadow:var(--sh); text-align:left; display:flex; flex-direction:column; gap:12px;
+    }
+    .review-stars { color:#FBBC04; letter-spacing:1px; font-size:1rem; }
+    .review-text { color:var(--text); font-size:0.92rem; line-height:1.6; flex:1; font-style:italic; }
+    .review-author { display:flex; align-items:center; gap:10px; font-weight:600; color:var(--charcoal); font-size:0.9rem; }
+    .review-avatar {
+      width:36px; height:36px; border-radius:var(--r-full); background:var(--sage); color:var(--white);
+      display:flex; align-items:center; justify-content:center; font-weight:700; flex:0 0 auto;
+    }
+    .reviews-cta { display:block; text-align:center; color:var(--forest-2); font-weight:600; text-decoration:none; font-size:0.92rem; }
+    .reviews-cta:hover { color:var(--peach); }
 
     /* ══════════════════════════════════════
        CABAZ — "ver o que leva" + modal

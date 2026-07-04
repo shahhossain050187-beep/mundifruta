@@ -290,10 +290,29 @@ const carrinho = {};
   }, { threshold:0.1 });
   document.querySelectorAll('.fi').forEach(el => fiObs.observe(el));
 
+  /* ══ AVALIAÇÕES ══ */
+  function renderAvaliacoes() {
+    document.getElementById('gb-nota').textContent = avaliacoesInfo.nota;
+    document.getElementById('gb-total').textContent = `${avaliacoesInfo.total} avaliações no Google`;
+    document.getElementById('google-badge').href = avaliacoesInfo.link;
+    document.getElementById('reviews-cta').href = avaliacoesInfo.link;
+    document.getElementById('temas-row').innerHTML = avaliacoesInfo.temas
+      .map(t => `<span class="tema-chip">✓ ${t}</span>`).join('');
+    document.getElementById('reviews-grid').innerHTML = avaliacoes.map(a => {
+      const stars = '★★★★★'.slice(0, a.estrelas) + '☆☆☆☆☆'.slice(0, 5 - a.estrelas);
+      return `<div class="review-card">
+        <div class="review-stars">${stars}</div>
+        <p class="review-text">${a.texto}</p>
+        <div class="review-author"><span class="review-avatar">${(a.nome[0]||'?').replace('[','C')}</span>${a.nome}</div>
+      </div>`;
+    }).join('');
+  }
+
   /* ══ INIT ══ */
   renderSummer();
   renderGrid(produtos.frutas,  'grid-frutas',  'fruta',  'frutas');
   renderGrid(produtos.legumes, 'grid-legumes', 'legume', 'legumes');
   renderCabazes();
+  renderAvaliacoes();
   document.getElementById('count-frutas').textContent  = produtos.frutas.length;
   document.getElementById('count-legumes').textContent = produtos.legumes.length;
