@@ -18,14 +18,14 @@ const carrinho = {};
   function renderSummer() {
     const grid = document.getElementById('summer-grid');
     const items = [
-      { idx:0,  tag:'Verão',    sub:'Fresca • Por kg' },
-      { idx:3,  tag:'Verão',    sub:'Nacional • Por kg' },
-      { idx:4,  tag:'Popular',  sub:'Fresca • Por kg' },
-      { idx:5,  tag:'Sazonal',  sub:'Amarelo • Por kg' },
+      { idx:0,  tag:'Verão',    sub:'Marrocos • Por kg' },
+      { idx:4,  tag:'Popular',  sub:'Nacional • Por kg' },
+      { idx:5,  tag:'Sazonal',  sub:'Nacional • Por kg' },
       { idx:11, tag:'Premium',  sub:'Fundão • Por kg' },
-      { idx:13, tag:'Sazonal',  sub:'Fresco • Por kg' },
-      { idx:16, tag:'Tropical', sub:'Por kg' },
-      { idx:17, tag:'Tropical', sub:'Por kg' },
+      { idx:13, tag:'Sazonal',  sub:'Chile • Por kg' },
+      { idx:14, tag:'Tropical', sub:'Brasil • Por kg' },
+      { idx:15, tag:'Premium',  sub:'Costa Rica • Por kg' },
+      { idx:45, tag:'Verão',    sub:'Cuvete 130 g' },
     ];
     items.forEach(({ idx, tag, sub }) => {
       const item = produtos.frutas[idx];
@@ -76,7 +76,7 @@ const carrinho = {};
         <div class="product-name">${item.nome}</div>
         ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
         <div class="product-price">${item.preco}</div>
-        <div class="product-fresh">✓ Fresco Diário</div>
+        ${item.origem ? `<div class="product-origem">🌍 ${item.origem}</div>` : '<div class="product-fresh">✓ Fresco Diário</div>'}
         <button class="add-btn" onclick="event.stopPropagation(); toggleProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
         <div class="qty-controls">
           <button class="qty-btn" onclick="alterarQtd('${id}',-1,event)">−</button>
