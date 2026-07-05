@@ -16,7 +16,7 @@
 
   const FOTOS = {
     bananas:      "fotos/foto_8_1.jpeg",
-    laranjas:     "fotos/foto_7_1.jpeg",
+    laranjas:     "fotos/laranjas.jpeg",
     morangos:     "fotos/foto_10_1.jpeg",
     melancia:     "fotos/foto_3_1.jpeg",
     melancia_redonda: "fotos/melancia_redonda.jpeg",
