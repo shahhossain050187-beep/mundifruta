@@ -95,7 +95,9 @@ const carrinho = {};
       const id = `${prefix}-${i}`;
       item._cat = cat; item._id = id;
       produtos_map[id] = item;
-      grid.appendChild(criarCard(item, id));
+      const card = criarCard(item, id);
+      card.dataset.ord = i;
+      grid.appendChild(card);
     });
     // Staggered reveal via IntersectionObserver
     const obs = new IntersectionObserver((entries) => {
@@ -199,6 +201,8 @@ const carrinho = {};
   function atualizarBadge() {
     const n = Object.keys(carrinho).length;
     document.getElementById('cart-count').textContent = n;
+    const mb = document.getElementById('mb-cart-count');
+    if (mb) { mb.textContent = n; mb.style.display = n > 0 ? 'flex' : 'none'; }
     const fc = document.getElementById('float-cart');
     if (fc) {
       document.getElementById('float-cart-count').textContent = n;
@@ -218,6 +222,27 @@ const carrinho = {};
     lista.innerHTML = itens.map(i =>
       `<li class="order-item"><span>${i.emoji} ${i.nome}${i.peso ? ` <small>(${i.peso})</small>` : ''}</span><span class="order-item-price">×${i.qtd} &nbsp;${i.preco}</span></li>`
     ).join('');
+  }
+
+  /* ══ PRICE SORT ══ */
+  function precoNum(card) {
+    const t = card.querySelector('.product-price').textContent;
+    const m = t.match(/(\d+)[.,](\d{2})/);
+    return m ? parseInt(m[1],10) + parseInt(m[2],10)/100 : Infinity; // "A consultar" → end
+  }
+  function ordenarPreco() {
+    const dir = document.getElementById('price-sort').value;
+    ['frutas','legumes'].forEach(cat => {
+      const grid = document.getElementById(`grid-${cat}`);
+      if (!grid) return;
+      const cards = Array.from(grid.querySelectorAll('.product-card'));
+      if (dir) {
+        cards.sort((a,b) => dir==='asc' ? precoNum(a)-precoNum(b) : precoNum(b)-precoNum(a));
+      } else {
+        cards.sort((a,b) => (+a.dataset.ord||0) - (+b.dataset.ord||0)); // restore original order
+      }
+      cards.forEach(c => grid.appendChild(c));
+    });
   }
 
   /* ══ SEARCH ══ */
@@ -265,7 +290,7 @@ const carrinho = {};
     let t = `Olá MUNDIFRUTA! Gostaria de fazer uma encomenda para levantamento na loja:\n\n👤 Nome: ${nome}\n📞 Telemóvel: ${tel}\n`;
     if (hora) t += `🕐 Levantamento: ${hora}\n`;
     t += `\n🛒 Encomenda:\n`;
-    itens.forEach(i => { t += `• ${i.nome}${i.peso ? ` ${i.peso}` : ''} ×${i.qtd} (${i.preco})\n`; });
+    itens.forEach(i => { t += `• *${i.qtd}x* ${i.nome}${i.peso ? ` (${i.peso})` : ''} — ${i.preco}\n`; });
     if (notas) t += `\n📝 Notas: ${notas}`;
     return t;
   }
@@ -298,6 +323,24 @@ const carrinho = {};
     document.getElementById('main-nav').classList.toggle('scrolled', y > 60);
     document.getElementById('scroll-top').classList.toggle('visible', y > 400);
   }, { passive:true });
+
+  /* ══ NAV ACTIVE HIGHLIGHT ══ */
+  (function navSpy(){
+    const map = { produtos:'#produtos', cabazes:'#cabazes', verao:'#verao', avaliacoes:'#avaliacoes', contacto:'#contacto' };
+    const links = {};
+    document.querySelectorAll('.nav-links a').forEach(a => { links[a.getAttribute('href')] = a; });
+    const secs = Object.keys(map).map(id => document.getElementById(id)).filter(Boolean);
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          Object.values(links).forEach(l => l.classList.remove('active'));
+          const link = links['#'+e.target.id];
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin:'-45% 0px -50% 0px' });
+    secs.forEach(s => obs.observe(s));
+  })();
 
   /* ══ FADE-IN ══ */
   const fiObs = new IntersectionObserver(entries => {
