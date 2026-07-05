@@ -197,7 +197,18 @@ const carrinho = {};
   }
 
   function atualizarBadge() {
-    document.getElementById('cart-count').textContent = Object.keys(carrinho).length;
+    const n = Object.keys(carrinho).length;
+    document.getElementById('cart-count').textContent = n;
+    const fc = document.getElementById('float-cart');
+    if (fc) {
+      document.getElementById('float-cart-count').textContent = n;
+      if (n > 0) {
+        fc.classList.add('visible');
+        fc.classList.remove('pop'); void fc.offsetWidth; fc.classList.add('pop');
+      } else {
+        fc.classList.remove('visible');
+      }
+    }
   }
 
   function atualizarResumo() {

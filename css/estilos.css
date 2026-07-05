@@ -256,6 +256,27 @@
       .cat-quick-btn .cq-emoji { font-size:2.2rem; }
     }
 
+    /* ══ FLOATING CART (pops top-right when items added) ══ */
+    .float-cart {
+      position:fixed; top:76px; right:14px; z-index:1150;
+      display:flex; align-items:center; gap:8px; padding:11px 16px; border:none; cursor:pointer;
+      background:var(--peach); color:#fff; border-radius:var(--r-full); box-shadow:var(--sh-lg);
+      font-family:'Poppins',sans-serif; font-weight:700; font-size:0.92rem;
+      opacity:0; transform:translateY(-14px) scale(0.9); pointer-events:none;
+      transition:opacity 0.25s ease, transform 0.25s ease, background 0.2s;
+    }
+    .float-cart.visible { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+    .float-cart:hover { background:var(--peach-lt); }
+    .float-cart .fc-icon { font-size:1.15rem; line-height:1; }
+    .float-cart .fc-count {
+      background:#fff; color:var(--peach); border-radius:var(--r-full);
+      min-width:23px; height:23px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center;
+      font-size:0.82rem; font-weight:800;
+    }
+    .float-cart.pop { animation:fc-pop 0.42s ease; }
+    @keyframes fc-pop { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 100%{transform:scale(1)} }
+    @media (max-width:480px){ .float-cart .fc-label { display:none; } .float-cart { padding:11px 13px; } }
+
     .order-steps-mini {
       max-width:1000px; margin:14px auto 0; padding:12px 20px;
       display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 14px;
