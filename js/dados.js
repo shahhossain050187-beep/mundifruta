@@ -167,7 +167,7 @@
       { nome:"Diospiro Nacional",       emoji:"🟠", peso:"1 kg", preco:"3,99 €", origem:"Nacional",     foto:FOTOS.diospiro,     badge:null },
       { nome:"Mamão",                   emoji:"🥭", peso:"1 kg", preco:"4,79 €",                        foto:FOTOS.mamao,        badge:null },
       { nome:"Papaia",                  emoji:"🥭", peso:"1 kg", preco:"5,49 €",                        foto:FOTOS.papaia,       badge:null },
-      { nome:"Romã",                    emoji:"🔴", peso:"1 kg", preco:P,                               foto:FOTOS.roma,         badge:null },
+      { nome:"Romã",                    emoji:"🔴", peso:"1 kg", preco:"4,99 €",                        foto:FOTOS.roma,         badge:null },
       { nome:"Maçã Pink Lady",          emoji:"🍎", peso:"1 kg", preco:"3,99 €",                        foto:FOTOS.maca_pink_lady, badge:null },
       { nome:"Maçã Granny Smith",       emoji:"🍏", peso:"1 kg", preco:"2,99 €",                        foto:FOTOS.maca_verde,   badge:null },
       { nome:"Maçã Golden",             emoji:"🍎", peso:"1 kg", preco:P,                               foto:FOTOS.maca_golden,  badge:null },
