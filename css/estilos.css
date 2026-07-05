@@ -111,13 +111,13 @@
        HERO
     ══════════════════════════════════════ */
     .hero {
-      min-height:78vh;
+      min-height:58vh;
       background:
         radial-gradient(ellipse at 18% 55%, rgba(82,183,136,0.18) 0%, transparent 55%),
         radial-gradient(ellipse at 82% 18%, rgba(224,123,57,0.14) 0%, transparent 48%),
         linear-gradient(148deg, #081c12 0%, #1B4332 38%, #2D6A4F 70%, #163826 100%);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      text-align:center; padding:116px 24px 74px;
+      text-align:center; padding:104px 24px 56px;
       position:relative; overflow:hidden;
     }
     .hero::before {
@@ -635,6 +635,7 @@
     .social-icon  { width:22px; height:22px; flex-shrink:0; order:2; }
     .social-fb   { background:#1877F2; }
     .social-goog { background:#EA4335; }
+    .social-map  { background:var(--peach); }
     .social-wa   {
       background:#25D366; transform:translateX(0);
       font-size:.88rem; padding:14px 16px 14px 20px;
