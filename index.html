@@ -83,9 +83,9 @@
   <div class="nav-inner">
     <a href="#inicio" class="logo">MUNDI<span class="logo-accent">FRUTA</span></a>
     <div class="nav-links">
-      <a href="#verao">Especiais</a>
-      <a href="#cabazes">Cabazes</a>
       <a href="#produtos">Produtos</a>
+      <a href="#cabazes">Cabazes</a>
+      <a href="#verao">Especiais</a>
       <a href="#avaliacoes">Avaliações</a>
       <a href="#contacto">Contacto</a>
     </div>
@@ -160,18 +160,46 @@
   </div>
 </div>
 
-<!-- ═══════════ BRAND STRIP ═══════════ -->
-<div class="brand-strip">
-  <div class="brand-strip-inner">
-    <div class="brand-pill"><span class="brand-dot"></span> Fresco</div>
-    <div class="brand-div"></div>
-    <div class="brand-pill"><span class="brand-dot"></span> Premium</div>
-    <div class="brand-div"></div>
-    <div class="brand-pill"><span class="brand-dot"></span> Local</div>
-    <div class="brand-div"></div>
-    <div class="brand-pill"><span class="brand-dot"></span> Saudável</div>
-    <div class="brand-div"></div>
-    <div class="brand-pill"><span class="brand-dot"></span> Natural</div>
+<!-- ═══════════ CATEGORY QUICK ACCESS ═══════════ -->
+<div class="cat-quick">
+  <button class="cat-quick-btn" onclick="mostrarCategoria('frutas', document.getElementById('tab-frutas')); document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">
+    <span class="cq-emoji">🍎</span><span class="cq-label">Frutas</span>
+  </button>
+  <button class="cat-quick-btn" onclick="mostrarCategoria('legumes', document.getElementById('tab-legumes')); document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">
+    <span class="cq-emoji">🥦</span><span class="cq-label">Legumes</span>
+  </button>
+  <button class="cat-quick-btn" onclick="document.getElementById('cabazes').scrollIntoView({behavior:'smooth'})">
+    <span class="cq-emoji">🧺</span><span class="cq-label">Cabazes</span>
+  </button>
+  <button class="cat-quick-btn cq-order" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
+    <span class="cq-emoji">🛒</span><span class="cq-label">Encomendar</span>
+  </button>
+</div>
+
+<!-- ═══════════ PRODUCTS ═══════════ -->
+<div class="section" id="produtos" style="padding-top:40px">
+  <div class="section-hdr fi" style="margin-bottom:32px">
+    <span class="eyebrow">Loja Online</span>
+    <h2 class="section-title">Os Nossos Produtos</h2>
+    <p class="section-sub">Clique em qualquer produto para adicionar à sua encomenda</p>
+  </div>
+  <div class="product-container">
+    <div class="search-row">
+      <input class="search-input" id="search-input" type="text" placeholder="Pesquisar produto... (ex: morangos, tomates)" oninput="pesquisar()"/>
+      <button class="search-clear" id="search-clear" onclick="limparPesquisa()">✕</button>
+    </div>
+    <div class="cat-tabs">
+      <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
+      <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
+    </div>
+    <div class="cat-section visible" id="cat-frutas">
+      <div class="products-grid" id="grid-frutas"></div>
+      <div class="no-results" id="no-frutas" style="display:none">Nenhum produto encontrado.</div>
+    </div>
+    <div class="cat-section" id="cat-legumes">
+      <div class="products-grid" id="grid-legumes"></div>
+      <div class="no-results" id="no-legumes" style="display:none">Nenhum produto encontrado.</div>
+    </div>
   </div>
 </div>
 
@@ -222,33 +250,6 @@
       <div class="step-icon">🛍️</div>
       <div class="step-title">Levante na Loja</div>
       <div class="step-text">Envie por WhatsApp ou Email e levante a sua encomenda fresca na nossa loja em Carnaxide.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ PRODUCTS ═══════════ -->
-<div class="section" id="produtos">
-  <div class="section-hdr fi" style="margin-bottom:48px">
-    <span class="eyebrow">O Que Oferecemos</span>
-    <h2 class="section-title">Os Nossos Produtos</h2>
-    <p class="section-sub">Clique em qualquer produto para adicionar à sua encomenda</p>
-  </div>
-  <div class="product-container">
-    <div class="search-row">
-      <input class="search-input" id="search-input" type="text" placeholder="Pesquisar produto... (ex: morangos, tomates)" oninput="pesquisar()"/>
-      <button class="search-clear" id="search-clear" onclick="limparPesquisa()">✕</button>
-    </div>
-    <div class="cat-tabs">
-      <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
-      <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
-    </div>
-    <div class="cat-section visible" id="cat-frutas">
-      <div class="products-grid" id="grid-frutas"></div>
-      <div class="no-results" id="no-frutas" style="display:none">Nenhum produto encontrado.</div>
-    </div>
-    <div class="cat-section" id="cat-legumes">
-      <div class="products-grid" id="grid-legumes"></div>
-      <div class="no-results" id="no-legumes" style="display:none">Nenhum produto encontrado.</div>
     </div>
   </div>
 </div>
