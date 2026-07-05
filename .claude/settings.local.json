@@ -19,7 +19,11 @@
       "mcp__claude-in-chrome__navigate",
       "mcp__claude-in-chrome__read_page",
       "mcp__claude-in-chrome__computer",
-      "Bash(find \"C:/Users/RFT\" -maxdepth 3 -iname \"*figos*fresco*\" -o -maxdepth 3 -iname \"mundifruta-figos*\" 2>/dev/null | head; echo \"---recent pngs in Downloads \\(last 10\\)---\"; ls -lt \"C:/Users/RFT/Downloads/\"*.png 2>/dev/null | head)"
+      "Bash(find \"C:/Users/RFT\" -maxdepth 3 -iname \"*figos*fresco*\" -o -maxdepth 3 -iname \"mundifruta-figos*\" 2>/dev/null | head; echo \"---recent pngs in Downloads \\(last 10\\)---\"; ls -lt \"C:/Users/RFT/Downloads/\"*.png 2>/dev/null | head)",
+      "WebFetch(domain:share.google)",
+      "WebFetch(domain:www.google.com)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
