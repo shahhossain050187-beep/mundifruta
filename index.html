@@ -154,17 +154,29 @@
 
 <!-- ═══════════ CATEGORY QUICK ACCESS ═══════════ -->
 <div class="cat-quick">
-  <button class="cat-quick-btn" onclick="mostrarCategoria('frutas', document.getElementById('tab-frutas')); document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">
-    <span class="cq-emoji">🍎</span><span class="cq-label">Frutas</span>
+  <button class="cat-quick-btn" onclick="document.getElementById('populares').scrollIntoView({behavior:'smooth'})">
+    <img src="fotos/cabaz_frutas.jpeg" alt="Seleção de frutas frescas" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Frutas</span>
   </button>
-  <button class="cat-quick-btn" onclick="mostrarCategoria('legumes', document.getElementById('tab-legumes')); document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">
-    <span class="cq-emoji">🥦</span><span class="cq-label">Legumes</span>
+  <button class="cat-quick-btn" onclick="document.getElementById('legumes-frescos').scrollIntoView({behavior:'smooth'})">
+    <img src="fotos/cabaz_legumes.jpeg" alt="Seleção apenas de legumes frescos" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Legumes</span>
   </button>
   <button class="cat-quick-btn" onclick="document.getElementById('cabazes').scrollIntoView({behavior:'smooth'})">
-    <span class="cq-emoji">🧺</span><span class="cq-label">Cabazes</span>
+    <img src="fotos/cabaz_detox.jpeg" alt="Cabaz de frutas e legumes" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Cabazes</span>
+  </button>
+  <button class="cat-quick-btn" onclick="document.getElementById('promocoes').scrollIntoView({behavior:'smooth'})">
+    <img src="fotos/morangos.jpeg" alt="Promoções e destaques da semana" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Promoções</span>
+  </button>
+  <button class="cat-quick-btn" onclick="document.getElementById('verao').scrollIntoView({behavior:'smooth'})">
+    <img src="fotos/melancia.jpeg" alt="Fruta fresca da época" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Fruta da Época</span>
   </button>
   <button class="cat-quick-btn cq-order" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
-    <span class="cq-emoji">🛒</span><span class="cq-label">Encomendar</span>
+    <img src="fotos/cabaz_mix.jpeg" alt="Ir para o carrinho" loading="lazy" decoding="async"/>
+    <span class="cq-overlay"></span><span class="cq-label">Carrinho <b id="quick-cart-count">0</b></span>
   </button>
 </div>
 
@@ -172,19 +184,54 @@
 <div class="order-steps-mini">
   <span class="osm-step"><b>1</b> Escolha os produtos</span>
   <span class="osm-arrow">→</span>
-  <span class="osm-step"><b>2</b> Preencha os dados</span>
+  <span class="osm-step"><b>2</b> Adicione ao carrinho</span>
   <span class="osm-arrow">→</span>
-  <span class="osm-step"><b>3</b> Envie por WhatsApp 📱</span>
+  <span class="osm-step"><b>3</b> Confirme o subtotal</span>
   <span class="osm-arrow">→</span>
-  <span class="osm-step"><b>4</b> Levante na loja 🛍️</span>
+  <span class="osm-step"><b>4</b> Envie por WhatsApp</span>
+  <span class="osm-arrow">→</span>
+  <span class="osm-step"><b>5</b> Levante na loja</span>
+</div>
+
+<!-- ═══════════ SHOPPING-FIRST SECTIONS ═══════════ -->
+<div class="section shop-feature promo-shop" id="promocoes">
+  <div class="shop-feature-head">
+    <div><span class="eyebrow">Poupe esta semana</span><h2 class="section-title">Promoções da Semana</h2></div>
+    <button class="shop-link" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver catálogo completo →</button>
+  </div>
+  <div class="feature-grid" id="promo-grid"></div>
+</div>
+
+<div class="section shop-feature alt" id="populares">
+  <div class="shop-feature-head">
+    <div><span class="eyebrow">Os favoritos dos clientes</span><h2 class="section-title">Frutas Populares</h2></div>
+    <button class="shop-link" onclick="abrirCatalogo('frutas')">Ver todas as frutas →</button>
+  </div>
+  <div class="feature-grid" id="popular-grid"></div>
+</div>
+
+<div class="section shop-feature" id="verao">
+  <div class="shop-feature-head">
+    <div><span class="eyebrow">No melhor momento</span><h2 class="section-title">Fruta da Época</h2></div>
+    <button class="shop-link" onclick="abrirCatalogo('frutas')">Explorar fruta →</button>
+  </div>
+  <div class="feature-grid" id="season-grid"></div>
+</div>
+
+<div class="section shop-feature alt" id="legumes-frescos">
+  <div class="shop-feature-head">
+    <div><span class="eyebrow">Escolhidos diariamente</span><h2 class="section-title">Legumes Frescos</h2></div>
+    <button class="shop-link" onclick="abrirCatalogo('legumes')">Ver todos os legumes →</button>
+  </div>
+  <div class="feature-grid" id="veg-featured-grid"></div>
 </div>
 
 <!-- ═══════════ PRODUCTS ═══════════ -->
 <div class="section" id="produtos" style="padding-top:40px">
   <div class="section-hdr fi" style="margin-bottom:32px">
-    <span class="eyebrow">Loja Online</span>
-    <h2 class="section-title">Os Nossos Produtos</h2>
-    <p class="section-sub">Clique em qualquer produto para adicionar à sua encomenda</p>
+    <span class="eyebrow">Catálogo Completo</span>
+    <h2 class="section-title">Encontre o que Procura</h2>
+    <p class="section-sub">Pesquise ou navegue por páginas. Clique na fotografia para ver os detalhes.</p>
   </div>
   <div class="product-container">
     <div class="search-row">
@@ -205,22 +252,15 @@
     <div class="cat-section visible" id="cat-frutas">
       <div class="products-grid" id="grid-frutas"></div>
       <div class="no-results" id="no-frutas" style="display:none">Nenhum produto encontrado.</div>
+      <div class="catalog-pagination" id="pagination-frutas"></div>
+      <button class="veg-suggestion" onclick="abrirCatalogo('legumes')">Continuar para Legumes Frescos →</button>
     </div>
     <div class="cat-section" id="cat-legumes">
       <div class="products-grid" id="grid-legumes"></div>
       <div class="no-results" id="no-legumes" style="display:none">Nenhum produto encontrado.</div>
+      <div class="catalog-pagination" id="pagination-legumes"></div>
     </div>
   </div>
-</div>
-
-<!-- ═══════════ SUMMER SPECIALS ═══════════ -->
-<div class="summer-section" id="verao">
-  <div class="summer-hdr fi">
-    <span class="eyebrow">Seleção da Estação</span>
-    <h2 class="section-title">Especiais de Verão</h2>
-    <p class="section-sub" style="margin-bottom:0">Os frutos mais frescos e saborosos desta temporada</p>
-  </div>
-  <div class="summer-scroll" id="summer-grid"></div>
 </div>
 
 <!-- ═══════════ CABAZES ═══════════ -->
@@ -240,26 +280,38 @@
   <div class="section-hdr fi" style="margin-bottom:52px">
     <span class="eyebrow">Simples e Rápido</span>
     <h2 class="section-title">Como Encomendar</h2>
-    <p class="section-sub">Encomende online e levante na loja em 3 passos</p>
+    <p class="section-sub">Da escolha ao levantamento em 5 passos simples</p>
   </div>
   <div class="steps-grid">
     <div class="step-card fi">
       <div class="step-num">1</div>
-      <div class="step-icon">🛒</div>
+      <div class="step-icon">1</div>
       <div class="step-title">Escolha os Produtos</div>
-      <div class="step-text">Navegue pelo nosso catálogo e clique nos produtos que deseja. Ajuste as quantidades a seu gosto.</div>
+      <div class="step-text">Veja os destaques ou pesquise no catálogo.</div>
     </div>
     <div class="step-card fi">
       <div class="step-num">2</div>
-      <div class="step-icon">📝</div>
-      <div class="step-title">Preencha os Dados</div>
-      <div class="step-text">Introduza o seu nome, telemóvel e a hora a que deseja levantar a encomenda.</div>
+      <div class="step-icon">2</div>
+      <div class="step-title">Adicione ao Carrinho</div>
+      <div class="step-text">Escolha a quantidade e adicione os produtos.</div>
     </div>
     <div class="step-card fi">
       <div class="step-num">3</div>
-      <div class="step-icon">🛍️</div>
+      <div class="step-icon">3</div>
+      <div class="step-title">Confirme o Subtotal</div>
+      <div class="step-text">Reveja quantidades, preços e o total estimado.</div>
+    </div>
+    <div class="step-card fi">
+      <div class="step-num">4</div>
+      <div class="step-icon">4</div>
+      <div class="step-title">Envie por WhatsApp</div>
+      <div class="step-text">Preencha os seus dados e envie a encomenda.</div>
+    </div>
+    <div class="step-card fi">
+      <div class="step-num">5</div>
+      <div class="step-icon">5</div>
       <div class="step-title">Levante na Loja</div>
-      <div class="step-text">Envie por WhatsApp ou Email e levante a sua encomenda fresca na nossa loja em Carnaxide.</div>
+      <div class="step-text">Aguarde confirmação e levante em Carnaxide.</div>
     </div>
   </div>
 </div>
@@ -284,6 +336,7 @@
         <ul class="order-items" id="order-list">
           <li class="empty-msg">Sem artigos ainda. Selecione produtos acima para começar.</li>
         </ul>
+        <div class="order-total" id="order-total" hidden></div>
       </div>
       <div class="order-card">
         <div class="order-card-title">📋 Os Seus Dados</div>
@@ -392,14 +445,17 @@
 <!-- ═══════════ MOBILE BOTTOM BAR ═══════════ -->
 <nav class="mobile-bar" id="mobile-bar">
   <button class="mb-item" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
-    <span class="mb-icon">🛒</span><span class="mb-label">Encomenda</span>
+    <span class="mb-icon">🛒</span><span class="mb-label">Carrinho</span>
     <span class="mb-badge" id="mb-cart-count">0</span>
   </button>
-  <a class="mb-item" href="https://www.google.com/maps/dir/?api=1&destination=Mundifruta-Carnaxide%2C+Av.+de+Portugal%2C+Centro+C%C3%ADvico%2C+Loja+24-C%2C+2790-129+Carnaxide" target="_blank" rel="noopener">
-    <span class="mb-icon">📍</span><span class="mb-label">Como Chegar</span>
+  <a class="mb-item" href="#promocoes">
+    <span class="mb-icon">%</span><span class="mb-label">Promoções</span>
   </a>
   <a class="mb-item" href="https://wa.me/351932699850" target="_blank" rel="noopener">
     <span class="mb-icon">💬</span><span class="mb-label">WhatsApp</span>
+  </a>
+  <a class="mb-item" href="https://www.google.com/maps/dir/?api=1&destination=Mundifruta-Carnaxide%2C+Av.+de+Portugal%2C+Centro+C%C3%ADvico%2C+Loja+24-C%2C+2790-129+Carnaxide" target="_blank" rel="noopener">
+    <span class="mb-icon">📍</span><span class="mb-label">Como Chegar</span>
   </a>
 </nav>
 
@@ -412,6 +468,27 @@
 
 <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">▲</button>
 <div class="toast" id="toast"></div>
+
+<!-- ═══════════ PRODUCT PREVIEW MODAL ═══════════ -->
+<div class="product-modal" id="product-modal" onclick="if(event.target===this)fecharProduto()">
+  <div class="product-modal-box" role="dialog" aria-modal="true" aria-labelledby="product-modal-name">
+    <button class="product-modal-close" type="button" onclick="fecharProduto()" aria-label="Fechar">✕</button>
+    <div class="product-modal-photo"><img id="product-modal-image" src="" alt=""/></div>
+    <div class="product-modal-info">
+      <span class="product-modal-status" id="product-modal-status">Disponível hoje</span>
+      <h3 id="product-modal-name"></h3>
+      <div class="product-modal-price" id="product-modal-price"></div>
+      <div class="product-modal-unit" id="product-modal-unit"></div>
+      <p id="product-modal-note"></p>
+      <div class="product-modal-qty" aria-label="Selecionar quantidade">
+        <button type="button" onclick="alterarQtdModal(-1)" aria-label="Diminuir quantidade">−</button>
+        <strong id="product-modal-qty">1</strong>
+        <button type="button" onclick="alterarQtdModal(1)" aria-label="Aumentar quantidade">+</button>
+      </div>
+      <button class="product-modal-add" type="button" onclick="adicionarDoModal()">＋ Adicionar ao Carrinho</button>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════ CABAZ MODAL ═══════════ -->
 <div class="cabaz-modal" id="cabaz-modal" onclick="if(event.target===this)fecharCabaz()">
