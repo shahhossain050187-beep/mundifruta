@@ -294,7 +294,7 @@ const carrinho = {};
     }
     atualizarEstadoProduto(id);
     mostrarToast(`✓ ${item.nome} adicionado`);
-    atualizarResumo(); atualizarBadge();
+    atualizarResumo(); atualizarBadge(); salvarCarrinho();
   }
 
   function atualizarEstadoProduto(id) {
@@ -314,7 +314,7 @@ const carrinho = {};
     if (!carrinho[id]) return;
     carrinho[id].qtd = Math.max(1, carrinho[id].qtd + delta);
     atualizarEstadoProduto(id);
-    atualizarResumo(); atualizarBadge();
+    atualizarResumo(); atualizarBadge(); salvarCarrinho();
   }
 
   function removerProduto(id) {
@@ -323,6 +323,32 @@ const carrinho = {};
     delete carrinho[id];
     atualizarEstadoProduto(id);
     mostrarToast(`${item.emoji} ${item.nome} removido`);
+    atualizarResumo(); atualizarBadge(); salvarCarrinho();
+  }
+
+  // change quantity from within the cart summary
+  function alterarQtdCarrinho(id, delta) {
+    if (!carrinho[id]) return;
+    carrinho[id].qtd = Math.max(1, carrinho[id].qtd + delta);
+    atualizarEstadoProduto(id);
+    atualizarResumo(); atualizarBadge(); salvarCarrinho();
+  }
+
+  /* ══ PERSISTENT CART (localStorage) ══ */
+  function salvarCarrinho() {
+    try {
+      localStorage.setItem('mf_cart', JSON.stringify(
+        Object.fromEntries(Object.entries(carrinho).map(([k,v]) => [k, v.qtd]))
+      ));
+    } catch (e) {}
+  }
+  function carregarCarrinho() {
+    let saved; try { saved = JSON.parse(localStorage.getItem('mf_cart') || '{}'); } catch (e) { saved = {}; }
+    Object.entries(saved).forEach(([id, qtd]) => {
+      const item = produtos_map[id]; if (!item) return;
+      carrinho[id] = { ...item, qtd: Math.max(1, qtd|0) };
+      atualizarEstadoProduto(id);
+    });
     atualizarResumo(); atualizarBadge();
   }
 
@@ -361,8 +387,13 @@ const carrinho = {};
       return `<li class="order-item">
         <span class="order-item-main">${i.emoji} ${i.nome}${i.peso ? ` <small>(${i.peso})</small>` : ''}</span>
         <span class="order-item-actions">
-          <span class="order-item-price">${i.qtd} × ${i.preco} = <strong>${subtotal}</strong></span>
-          <button class="order-remove" type="button" onclick="removerProduto('${i._id}')" aria-label="Remover ${i.nome}">Remover</button>
+          <span class="oi-stepper">
+            <button type="button" onclick="alterarQtdCarrinho('${i._id}',-1)" aria-label="Menos">−</button>
+            <b>${i.qtd}</b>
+            <button type="button" onclick="alterarQtdCarrinho('${i._id}',1)" aria-label="Mais">+</button>
+          </span>
+          <span class="order-item-price">${i.preco} · <strong>${subtotal}</strong></span>
+          <button class="order-remove" type="button" onclick="removerProduto('${i._id}')" aria-label="Remover ${i.nome}">✕</button>
         </span>
       </li>`;
     }).join('');
@@ -390,7 +421,12 @@ const carrinho = {};
       estado.filtrados = estado.todos.filter(item =>
         !termo || item.nome.toLocaleLowerCase('pt').includes(termo)
       );
-      if (ordem) {
+      if (ordem === 'az' || ordem === 'za') {
+        estado.filtrados.sort((a,b) => {
+          const cmp = a.nome.localeCompare(b.nome, 'pt', { sensitivity:'base' });
+          return ordem === 'az' ? cmp : -cmp;
+        });
+      } else if (ordem) {
         estado.filtrados.sort((a,b) => {
           const precoA = precoItem(a);
           const precoB = precoItem(b);
@@ -543,7 +579,7 @@ const carrinho = {};
   renderAvaliacoes();
   document.getElementById('count-frutas').textContent  = produtos.frutas.length;
   document.getElementById('count-legumes').textContent = produtos.legumes.length;
-  atualizarBadge();
+  carregarCarrinho();
 
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
