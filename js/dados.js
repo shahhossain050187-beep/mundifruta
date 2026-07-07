@@ -300,7 +300,7 @@
           {                 q:"1 kg",   nome:"Laranja" },
           {                 q:"1 kg",   nome:"Maçã" },
         ] },
-      { nome:"Cabaz de Legumes",   emoji:"🥦", peso:"≈ 11,8 kg", preco:P, foto:FOTOS.cabaz_legumes, badge:null,
+      { nome:"Cabaz de Legumes",   emoji:"🥦", peso:"≈ 11,8 kg", preco:"34,95 €", foto:FOTOS.cabaz_legumes, badge:null,
         nota:"A imagem desta cabaz é meramente ilustrativa.",
         itens: [
           { grupo:"Legumes", q:"500 g", nome:"Pepino" },
