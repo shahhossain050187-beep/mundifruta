@@ -1,7 +1,7 @@
 const carrinho = {};
   const produtos_map = {};
   let catAtual = 'frutas';
-  const POR_PAGINA = 12;
+  const POR_PAGINA = 26;
   const catalogoEstado = {
     frutas:  { pagina:1, todos:[], filtrados:[] },
     legumes: { pagina:1, todos:[], filtrados:[] }

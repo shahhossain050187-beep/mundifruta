@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=9"/>
+  <link rel="stylesheet" href="css/estilos.css?v=11"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -229,22 +229,24 @@
     <p class="section-sub">Pesquise ou navegue por páginas. Clique na fotografia para ver os detalhes.</p>
   </div>
   <div class="product-container">
-    <div class="search-row">
-      <input class="search-input" id="search-input" type="text" placeholder="Pesquisar produto... (ex: morangos, tomates)" oninput="pesquisar()"/>
-      <button class="search-clear" id="search-clear" onclick="limparPesquisa()">✕</button>
-    </div>
-    <div class="sort-row">
-      <select class="price-sort" id="price-sort" onchange="ordenarPreco()" aria-label="Ordenar por preço">
-        <option value="">↕ Ordenar</option>
-        <option value="asc">Preço: baixo → alto</option>
-        <option value="desc">Preço: alto → baixo</option>
-        <option value="az">Nome: A → Z</option>
-        <option value="za">Nome: Z → A</option>
-      </select>
-    </div>
-    <div class="cat-tabs">
-      <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
-      <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
+    <div class="catalog-bar">
+      <div class="search-row">
+        <input class="search-input" id="search-input" type="text" placeholder="Pesquisar produto... (ex: morangos, tomates)" oninput="pesquisar()"/>
+        <button class="search-clear" id="search-clear" onclick="limparPesquisa()">✕</button>
+      </div>
+      <div class="catalog-bar-row">
+        <div class="cat-tabs">
+          <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
+          <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
+        </div>
+        <select class="price-sort" id="price-sort" onchange="ordenarPreco()" aria-label="Ordenar por preço">
+          <option value="">↕ Ordenar</option>
+          <option value="asc">Preço: baixo → alto</option>
+          <option value="desc">Preço: alto → baixo</option>
+          <option value="az">Nome: A → Z</option>
+          <option value="za">Nome: Z → A</option>
+        </select>
+      </div>
     </div>
     <div class="cat-section visible" id="cat-frutas">
       <div class="products-grid" id="grid-frutas"></div>
@@ -503,7 +505,7 @@
   </div>
 </div>
 
-<script src="js/dados.js?v=9"></script>
-<script src="js/app.js?v=9"></script>
+<script src="js/dados.js?v=11"></script>
+<script src="js/app.js?v=11"></script>
 </body>
 </html>
