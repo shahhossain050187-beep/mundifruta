@@ -1345,3 +1345,88 @@
       .product-name { font-size:.68rem; }
       .add-btn { font-size:.62rem; }
     }
+
+    /* Final shopping-flow refinements */
+    .veg-suggestion[hidden] { display:none; }
+    #produtos { padding-top:32px !important; }
+    #produtos .section-hdr { margin-bottom:18px !important; }
+    #produtos .section-sub { display:none; }
+
+    @media (max-width:700px) {
+      .info-strip,
+      .order-steps-mini { display:none; }
+      .hero { padding:60px 16px 12px; }
+      .hero-heading { font-size:1.68rem; line-height:1.1; }
+      .hero-trust { margin-top:7px; }
+      .hero-rating { padding:6px 11px; }
+      .hero-ctas { margin-top:8px; margin-bottom:0; }
+      .hero-ctas .btn-prim { min-height:38px; padding:10px 20px; font-size:.84rem; }
+      .hero-wave { height:18px; }
+      .cat-quick {
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
+        padding:10px 10px 8px;
+      }
+      .cat-quick-btn {
+        min-height:86px;
+        border-radius:12px;
+      }
+      .cat-quick-btn .cq-label {
+        left:9px;
+        right:9px;
+        bottom:9px;
+        font-size:.76rem;
+        line-height:1.15;
+      }
+      .cat-quick-btn .cq-label b {
+        min-width:21px;
+        height:21px;
+        font-size:.65rem;
+      }
+      #produtos { padding:22px 10px 44px !important; }
+      #produtos .section-title { font-size:1.48rem; }
+      .catalog-bar {
+        top:50px;
+        margin-left:-10px;
+        margin-right:-10px;
+        padding:8px 10px;
+      }
+      .search-input {
+        padding:11px 42px 11px 16px;
+        font-size:.84rem;
+      }
+      .catalog-bar-row {
+        justify-content:center;
+      }
+      .catalog-bar .cat-tab {
+        padding:8px 12px;
+        font-size:.76rem;
+      }
+      .catalog-bar .price-sort {
+        max-width:124px;
+        padding:7px 8px;
+        font-size:.7rem;
+      }
+      .catalog-pagination {
+        gap:8px;
+        margin-top:16px;
+      }
+      .catalog-pagination button {
+        min-height:36px;
+        padding:0 11px;
+        font-size:.72rem;
+      }
+      .catalog-pagination span {
+        flex:1;
+        min-width:96px;
+        text-align:center;
+        font-size:.72rem;
+      }
+      .veg-suggestion {
+        bottom:74px;
+        min-height:42px;
+        margin-top:16px;
+        font-size:.76rem;
+      }
+      .shop-feature { padding-top:42px; }
+    }

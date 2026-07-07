@@ -1,7 +1,7 @@
 const carrinho = {};
   const produtos_map = {};
   let catAtual = 'frutas';
-  const POR_PAGINA = 26;
+  const POR_PAGINA = 27;
   const catalogoEstado = {
     frutas:  { pagina:1, todos:[], filtrados:[] },
     legumes: { pagina:1, todos:[], filtrados:[] }
@@ -122,6 +122,7 @@ const carrinho = {};
     });
     document.getElementById(`no-${cat}`).style.display = pagina.length ? 'none' : 'block';
     renderPaginacao(cat);
+    atualizarSugestaoLegumes(cat);
 
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
@@ -143,6 +144,16 @@ const carrinho = {};
       <button type="button" onclick="mudarPagina('${cat}',-1)" ${estado.pagina === 1 ? 'disabled' : ''}>← Anterior</button>
       <span>Página ${estado.pagina} de ${paginas}</span>
       <button type="button" onclick="mudarPagina('${cat}',1)" ${estado.pagina === paginas ? 'disabled' : ''}>Seguinte →</button>`;
+  }
+
+  function atualizarSugestaoLegumes(cat) {
+    if (cat !== 'frutas') return;
+    const sugestao = document.querySelector('#cat-frutas .veg-suggestion');
+    if (!sugestao) return;
+    const estado = catalogoEstado.frutas;
+    const termo = document.getElementById('search-input').value.trim();
+    const paginas = Math.max(1, Math.ceil(estado.filtrados.length / POR_PAGINA));
+    sugestao.hidden = Boolean(termo) || estado.filtrados.length === 0 || estado.pagina < paginas;
   }
 
   function mudarPagina(cat, delta) {
@@ -514,6 +525,12 @@ const carrinho = {};
   /* ══ UI ══ */
   function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 
+  function promoverCatalogo() {
+    const atalhos = document.querySelector('.cat-quick');
+    const catalogo = document.getElementById('produtos');
+    if (atalhos && catalogo) atalhos.insertAdjacentElement('afterend', catalogo);
+  }
+
   let toastTimer;
   function mostrarToast(msg) {
     const t = document.getElementById('toast');
@@ -572,6 +589,7 @@ const carrinho = {};
   }
 
   /* ══ INIT ══ */
+  promoverCatalogo();
   renderGrid(produtos.frutas,  'grid-frutas',  'fruta',  'frutas');
   renderGrid(produtos.legumes, 'grid-legumes', 'legume', 'legumes');
   renderDestaques();

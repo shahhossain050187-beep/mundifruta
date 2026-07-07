@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=11"/>
+  <link rel="stylesheet" href="css/estilos.css?v=12"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -149,11 +149,11 @@
 
 <!-- ═══════════ CATEGORY QUICK ACCESS ═══════════ -->
 <div class="cat-quick">
-  <button class="cat-quick-btn" onclick="document.getElementById('populares').scrollIntoView({behavior:'smooth'})">
+  <button class="cat-quick-btn" onclick="abrirCatalogo('frutas')">
     <img src="fotos/cabaz_frutas.jpeg" alt="Seleção de frutas frescas" loading="lazy" decoding="async"/>
     <span class="cq-overlay"></span><span class="cq-label">Frutas</span>
   </button>
-  <button class="cat-quick-btn" onclick="document.getElementById('legumes-frescos').scrollIntoView({behavior:'smooth'})">
+  <button class="cat-quick-btn" onclick="abrirCatalogo('legumes')">
     <img src="fotos/cabaz_legumes.jpeg" alt="Seleção apenas de legumes frescos" loading="lazy" decoding="async"/>
     <span class="cq-overlay"></span><span class="cq-label">Legumes</span>
   </button>
@@ -236,8 +236,8 @@
       </div>
       <div class="catalog-bar-row">
         <div class="cat-tabs">
-          <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
-          <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
+          <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">Frutas <span class="cat-count" id="count-frutas">28</span></button>
+          <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">Legumes <span class="cat-count" id="count-legumes">16</span></button>
         </div>
         <select class="price-sort" id="price-sort" onchange="ordenarPreco()" aria-label="Ordenar por preço">
           <option value="">↕ Ordenar</option>
@@ -505,7 +505,7 @@
   </div>
 </div>
 
-<script src="js/dados.js?v=11"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/dados.js?v=12"></script>
+<script src="js/app.js?v=12"></script>
 </body>
 </html>
