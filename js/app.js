@@ -13,13 +13,13 @@ const carrinho = {};
   const DISCLAIMER_PRODUTOS_NATURAIS = 'Produtos naturais podem variar de peso. O pre?o final ser? calculado de acordo com o peso exato preparado para a sua encomenda.';
   const PRODUTOS_PESO_VARIAVEL = {
     'Abacaxi Maturado': { pricePerKg:2.99, averageWeightKg:1.8 },
-    'Abacaxi Avi?o Costa Rica': { pricePerKg:6.50, averageWeightKg:2.2 },
+    'Abacaxi Avi?o': { pricePerKg:6.49, averageWeightKg:2.5 },
     'Mel?o Branco': { pricePerKg:1.20, averageWeightKg:3.5 },
     'Melancia': { pricePerKg:0.99, averageWeightKg:3.0 },
     'Meloa': { pricePerKg:2.49, averageWeightKg:1.3 },
-    'Manga Avi?o': { pricePerKg:5.79, averageWeightKg:0.67 },
-    'Papaia': { pricePerKg:5.50, averageWeightKg:0.58 },
-    'Mam?o': { pricePerKg:4.79, averageWeightKg:1.8 }
+    'Manga': { pricePerKg:5.79, averageWeightKg:0.65 },
+    'Papaya': { pricePerKg:5.49, averageWeightKg:0.45 },
+    'Mam?o 1/2': { pricePerKg:4.79, averageWeightKg:0.9 }
   };
 
   /* ?? IMAGE FALLBACKS ?? */
@@ -74,7 +74,7 @@ const carrinho = {};
     ));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
-      ['Morangos','Banana Madeira','Laranja Algarve','P?ra Rocha','Ma?? Royal Gala','Melancia','Manga Avi?o','Abacate Hass']
+      ['Morangos','Banana Madeira','Laranja Algarve','P?ra Rocha','Ma?? Royal Gala','Melancia','Manga','Abacate Hass']
     ));
     preencherDestaques('season-grid', produtos.frutas.filter(item =>
       String(item.badge || '').includes('Ver?o')
@@ -307,6 +307,13 @@ const carrinho = {};
     }).format(valor);
   }
 
+  function formatarPesoAproximado(kg) {
+    if (kg < 1) {
+      return `${new Intl.NumberFormat('pt-PT').format(Math.round(kg * 1000))} g`;
+    }
+    return `${formatarKg(kg)} kg`;
+  }
+
   function normalizarProdutos() {
     [...produtos.frutas, ...produtos.legumes, ...produtos.cabazes].forEach(item => {
       const pesoVariavel = PRODUTOS_PESO_VARIAVEL[item.nome];
@@ -314,7 +321,7 @@ const carrinho = {};
         item.pricePerKg = pesoVariavel.pricePerKg;
         item.averageWeightKg = pesoVariavel.averageWeightKg;
         item.vendaUnidade = true;
-        item.peso = `1 unidade ? aprox. ${formatarKg(item.averageWeightKg)} kg`;
+        item.peso = `1 unidade ? aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
         item.notaPeso = PESO_APROX_NOTA;
       }
       if (item.nome === 'Lichia') {
@@ -359,7 +366,7 @@ const carrinho = {};
 
   function detalhePesoProduto(item) {
     if (produtoComPesoMedio(item)) {
-      return `1 unidade ? aprox. ${formatarKg(item.averageWeightKg)} kg`;
+      return `1 unidade ? aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
     }
     return item.peso || 'Unidade';
   }
