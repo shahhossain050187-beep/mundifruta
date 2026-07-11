@@ -95,7 +95,7 @@
   window.aceitarOferta = function () {
     gravarCupao({ code: cupaoConfig.codigo, status: 'available', issuedAt: Date.now() });
     document.getElementById('offer-pop').hidden = true;
-    if (typeof mostrarToast === 'function') mostrarToast('🎁 Cupão MUNDI10 ativado (mín. 30€)');
+    if (typeof mostrarToast === 'function') mostrarToast(`🎁 Cupão ${cupaoConfig.codigo} ativado (mín. ${cupaoConfig.minimo}€)`);
     window.trackEvent('coupon_generated', { coupon: cupaoConfig.codigo });
     atualizarProgresso();
   };

@@ -343,10 +343,10 @@
   const cupaoConfig = {
     codigo: "MUNDI10",
     desconto: 10,      // € abatidos
-    minimo: 30,        // € mínimo de compra
+    minimo: 40,        // € mínimo de compra
     validadeDias: 30,  // dias após emissão
     copyTitulo: "Bem-vindo à Mundi Fruta",
-    copyTexto: "Receba 10€ de desconto na sua primeira compra de 30€ ou mais.",
+    copyTexto: "Receba 10€ de desconto na sua primeira compra de 40€ ou mais.",
     copyExclusivo: "Oferta exclusiva para novos clientes.",
   };
 

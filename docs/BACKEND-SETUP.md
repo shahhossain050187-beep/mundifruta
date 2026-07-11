@@ -69,7 +69,7 @@ create table public.coupons (
   customer_id   uuid not null references public.customers(id) on delete cascade,
   code          text not null default 'MUNDI10',
   discount_eur  numeric(6,2) not null default 10.00,
-  min_basket_eur numeric(6,2) not null default 30.00,
+  min_basket_eur numeric(6,2) not null default 40.00,
   status        text not null default 'available',  -- available | used | expired | cancelled
   issued_at     timestamptz not null default now(),
   expires_at    timestamptz not null default (now() + interval '30 days'),
