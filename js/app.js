@@ -8,19 +8,8 @@ const carrinho = {};
   };
   let modalProdutoId = null;
   let modalQuantidade = 1;
-  const PESO_APROX_NOTA = 'Peso aproximado. Por se tratar de um produto natural, o peso real pode variar ligeiramente. O valor apresentado é uma estimativa. O preço final será ajustado de acordo com o peso real no momento da preparação da encomenda.';
   const NOTA_PRECO_ESTIMADO = 'Preço estimado com base no peso médio. O valor final pode variar conforme o peso real do produto no momento da preparação da encomenda.';
   const DISCLAIMER_PRODUTOS_NATURAIS = 'Produtos naturais podem variar de peso. O preço final será calculado de acordo com o peso exato preparado para a sua encomenda.';
-  const PRODUTOS_PESO_VARIAVEL = {
-    'Abacaxi Maturado': { pricePerKg:2.99, averageWeightKg:1.8 },
-    'Abacaxi Avião': { pricePerKg:6.49, averageWeightKg:2.5 },
-    'Melão Branco': { pricePerKg:1.20, averageWeightKg:3.5 },
-    'Melancia': { pricePerKg:0.99, averageWeightKg:3.0 },
-    'Meloa': { pricePerKg:2.49, averageWeightKg:1.3 },
-    'Manga': { pricePerKg:5.79, averageWeightKg:0.65 },
-    'Papaya': { pricePerKg:5.49, averageWeightKg:0.45 },
-    'Mamão 1/2': { pricePerKg:4.79, averageWeightKg:0.9 }
-  };
 
   /* ══ IMAGE FALLBACKS ══ */
   function erroImagem(img) {
@@ -54,7 +43,7 @@ const carrinho = {};
         <h3>${item.nome}</h3>
         <p>${item.peso || 'Unidade'} · ${item.origem || 'Fresco diário'}</p>
         <div class="feature-buy">
-          <strong>${item.preco}</strong>
+          <strong>${rotuloPreco(item)}</strong>
           <button type="button" class="feature-add" onclick="adicionarProduto('${item._id}', produtos_map['${item._id}'])">＋ Adicionar</button>
         </div>
       </div>`;
@@ -74,7 +63,7 @@ const carrinho = {};
     ));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
-      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga','Abacate Hass']
+      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga Avião','Abacate Hass']
     ));
     preencherDestaques('season-grid', produtos.frutas.filter(item =>
       String(item.badge || '').includes('Verão')
@@ -100,7 +89,8 @@ const carrinho = {};
       </button>
       <div class="card-body">
         <div class="product-name">${item.nome}</div>
-        <div class="product-price">${precoProduto(item)}</div>
+        <div class="product-price">${rotuloPreco(item)}</div>
+        ${item.baseLinha ? `<div class="product-base">${item.baseLinha}</div>` : ''}
         ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
         ${item.origem ? `<div class="product-origem">🌍 ${item.origem}</div>` : '<div class="product-fresh">✓ Fresco Diário</div>'}
         ${disponivel
@@ -203,7 +193,7 @@ const carrinho = {};
         <div class="card-body">
           <div class="product-name">${item.nome}</div>
           ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
-          <div class="product-price">${precoProduto(item)}</div>
+          <div class="product-price">${rotuloPreco(item)}</div>
           ${verBtn}
           <button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
           <div class="qty-controls">
@@ -253,8 +243,8 @@ const carrinho = {};
     imagem.src = urlFoto(item.foto);
     imagem.alt = item.nome;
     document.getElementById('product-modal-name').textContent = item.nome;
-    document.getElementById('product-modal-price').textContent = precoProduto(item);
-    document.getElementById('product-modal-unit').textContent = `Unidade de venda: ${detalhePesoProduto(item)}`;
+    document.getElementById('product-modal-price').innerHTML = rotuloPreco(item);
+    document.getElementById('product-modal-unit').textContent = `Unidade de venda: ${item.peso || 'unidade'}`;
     document.getElementById('product-modal-status').textContent = item.badge
       ? item.badge.replace(/^[^\p{L}\p{N}]+/u, '')
       : 'Disponível hoje';
@@ -300,36 +290,11 @@ const carrinho = {};
     }).format(centimos / 100);
   }
 
-  function formatarKg(valor) {
-    return new Intl.NumberFormat('pt-PT', {
-      minimumFractionDigits: valor < 1 ? 2 : 0,
-      maximumFractionDigits: 2
-    }).format(valor);
-  }
-
-  function formatarPesoAproximado(kg) {
-    if (kg < 1) {
-      return `${new Intl.NumberFormat('pt-PT').format(Math.round(kg * 1000))} g`;
-    }
-    return `${formatarKg(kg)} kg`;
-  }
-
   function normalizarProdutos() {
     [...produtos.frutas, ...produtos.legumes, ...produtos.cabazes].forEach(item => {
-      const pesoVariavel = PRODUTOS_PESO_VARIAVEL[item.nome];
-      if (pesoVariavel) {
-        item.pricePerKg = pesoVariavel.pricePerKg;
-        item.averageWeightKg = pesoVariavel.averageWeightKg;
-        item.vendaUnidade = true;
-        item.peso = `1 unidade • aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
-        item.notaPeso = PESO_APROX_NOTA;
-      }
-      if (item.nome === 'Lichia') {
-        item.status = 'Indisponível';
-        item.preco = null;
+      if (item.status === 'Indisponível') {
         item.badge = 'Indisponível';
         item.badgeClass = 'badge-unavailable';
-        item.nota = 'Produto temporariamente indisponível.';
       }
     });
   }
@@ -338,10 +303,13 @@ const carrinho = {};
     return item && item.status !== 'Indisponível';
   }
 
+  // Produto vendido à unidade mas pesado → preço no carrinho é uma ESTIMATIVA.
   function produtoComPesoMedio(item) {
-    return Number.isFinite(item?.pricePerKg) && Number.isFinite(item?.averageWeightKg);
+    return item && item.venda === 'estimado'
+      && Number.isFinite(item.pricePerKg) && Number.isFinite(item.averageWeightKg);
   }
 
+  // Valor cobrado por 1 unidade no carrinho (em cêntimos).
   function precoCalculadoCentimos(item) {
     if (!produtoDisponivel(item)) return null;
     if (produtoComPesoMedio(item)) {
@@ -353,26 +321,30 @@ const carrinho = {};
     return precoCentimos(item.preco);
   }
 
-  function precoProduto(item) {
+  // Sufixo de unidade para o cartão: /kg · /unidade · /100 g · /500 g · /molho · /cuvete
+  function sufixoUnidade(peso) {
+    const p = String(peso || '');
+    if (/^\s*1\s*kg\s*$/i.test(p)) return '/kg';
+    if (/unidade|^\s*1\s*un\b/i.test(p)) return '/unidade';
+    if (/\b100\s*g\b/i.test(p)) return ' / 100 g';
+    if (/\b250\s*g\b/i.test(p)) return ' / 250 g';
+    if (/\b500\s*g\b/i.test(p)) return ' / 500 g';
+    if (/cuvete/i.test(p)) return '/cuvete';
+    if (/molho/i.test(p)) return '/molho';
+    return '';
+  }
+
+  // Etiqueta de preço mostrada no cartão (NUNCA um total estimado).
+  function rotuloPreco(item) {
     if (!produtoDisponivel(item)) return '';
-    if (produtoComPesoMedio(item)) return precoBaseProduto(item);
-    return item.preco;
-  }
-
-  function precoBaseProduto(item) {
-    if (Number.isFinite(item.pricePerKg)) return `${formatarCentimos(Math.round(item.pricePerKg * 100))}/kg`;
-    return item.preco || 'A consultar';
-  }
-
-  function detalhePesoProduto(item) {
     if (produtoComPesoMedio(item)) {
-      return `1 unidade • aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
+      return `${formatarCentimos(Math.round(item.pricePerKg * 100))}/kg`;
     }
-    return item.peso || 'Unidade';
-  }
-
-  function produtoEstimado(item) {
-    return produtoComPesoMedio(item) && !item.actualWeightKg;
+    const suf = sufixoUnidade(item.peso);
+    if (item.promo && item.precoNormal) {
+      return `<span class="preco-antigo">${item.precoNormal}${suf}</span> <span class="preco-promo">${item.preco}${suf}</span>`;
+    }
+    return `${item.preco || 'A consultar'}${suf}`;
   }
 
   function totaisCarrinho() {
@@ -498,7 +470,7 @@ const carrinho = {};
             <button type="button" onclick="alterarQtdCarrinho('${i._id}',1)" aria-label="Mais">+</button>
           </span>
           <span class="order-item-price">${estimado
-            ? `${precoBaseProduto(i)} <strong>Subtotal estimado: ${subtotal}</strong>`
+            ? `${rotuloPreco(i)} <strong>Subtotal estimado: ${subtotal}</strong>`
             : `${i.preco} · <strong>${subtotal}</strong>`}</span>
           <button class="order-remove" type="button" onclick="removerProduto('${i._id}')" aria-label="Remover ${i.nome}">×</button>
         </span>
@@ -601,7 +573,7 @@ const carrinho = {};
       const preco = precoCalculadoCentimos(i);
       const subtotal = preco === null ? 'A confirmar' : formatarCentimos(preco * i.qtd);
       if (produtoComPesoMedio(i)) {
-        t += `• *${i.qtd}x* ${i.nome} (${i.peso}) — ${precoBaseProduto(i)} — *Subtotal estimado: ${subtotal}*\n`;
+        t += `• *${i.qtd}x* ${i.nome} (${i.peso}) — ${rotuloPreco(i)} — *Subtotal estimado: ${subtotal}*\n`;
       } else {
         t += `• *${i.qtd}x* ${i.nome}${i.peso ? ` (${i.peso})` : ''} — ${i.preco} = *${subtotal}*\n`;
       }
@@ -642,7 +614,7 @@ const carrinho = {};
       legumes: produtos.legumes.length,
       cabazes: produtos.cabazes.length,
       promocoes: [...produtos.frutas, ...produtos.legumes].filter(item =>
-        /popular|premium|recomendado|oferta/i.test(String(item.badge || ''))
+        /popular|premium|recomendado|oferta|promo/i.test(String(item.badge || ''))
       ).length,
       epoca: produtos.frutas.filter(item => /verão|verao/i.test(String(item.badge || ''))).length
     };

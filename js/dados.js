@@ -1,16 +1,25 @@
 /* ═══════════════════════════════════════════════════════════
    DADOS DO SITE — produtos, cabazes, preços e fotos
 
-   Cada produto tem 4 campos importantes:
-     nome  → nome mostrado
-     peso  → peso/quantidade (ex: "1 kg", "±500 g", "Caixa 250 g")
-     preco → preço para essa quantidade (ex: "1,90 €")
-     foto  → chave de FOTOS (a imagem)
+   MODELO DE PREÇO (por produto):
+     nome   → nome mostrado
+     peso   → quantidade/unidade de venda (ex: "1 kg", "500 g", "1 unidade • aprox. 800 g")
+     preco  → preço para essa quantidade (ex: "1,90 €"). É o valor cobrado por cada unidade no carrinho.
+     foto   → chave de FOTOS (a imagem)
 
-   COMO ATUALIZAR UM PREÇO:
-     substituir  preco:P  por  preco:"1,90 €"
-   `P` é o texto mostrado enquanto o preço não está definido.
-   Também pode ajustar `peso` para o peso real de cada produto.
+   VENDA POR PESO APROXIMADO (fruta/legume vendido à unidade mas pesado):
+     venda:"estimado", pricePerKg:<n>, averageWeightKg:<n>, (opcional) weightRange:"7–9 kg"
+     → o cartão mostra "€/kg"; o carrinho calcula uma ESTIMATIVA (pricePerKg × peso médio).
+
+   PROMOÇÃO:
+     promo:true, precoNormal:"1,99 €" (riscado), preco:"0,99 €" (destacado)
+     → o carrinho usa `preco` (o preço promocional).
+
+   baseLinha  → linha extra opcional no cartão (ex: "Base: 2,99 €/kg")
+   status     → "Indisponível" esconde o botão de compra
+   rel        → nomes de produtos relacionados (cross-sell "Também pode gostar")
+
+   COMO ATUALIZAR UM PREÇO:  substituir  preco:P  por  preco:"1,90 €"
    ═══════════════════════════════════════════════════════════ */
   const P = "A consultar";
 
@@ -38,6 +47,7 @@
     abacate:    "fotos/abacate.jpeg",
     coco:       "fotos/coco.jpeg",
     ameixa:     "fotos/ameixa.jpeg",
+    ameixa_roxa:"fotos/mundifruta-photos-web/20260706_195901.jpg",
     tomates:    "fotos/tomates.jpeg",
     cenouras:   "fotos/cenouras.jpeg",
     brocoulos:  "fotos/brocolos.jpeg",
@@ -59,6 +69,7 @@
     coentros:     "fotos/coentros.jpeg",
     hortela:      "fotos/hortela.jpeg",
     abobora:      "fotos/abobora.jpeg",
+    abobora_fatiada: "fotos/mundifruta-photos-web/20260706_195727.jpg",
     alho_frances: "fotos/alho_frances.jpeg",
     couveflor:    "fotos/couveflor.jpeg",
     feijao_verde: "fotos/mundifruta-photos-web/20260706_195735.jpg",
@@ -95,14 +106,14 @@
     batata_branca:    "fotos/batata_branca.jpeg",
     batata_olho_perdiz:"fotos/batata_olho_perdiz.jpeg",
     batata_vermelha:  "fotos/batata_vermelha.jpeg",
-    framboesa:  "fotos/mundifruta-photos-web/20260706_132857.jpg",
+    framboesa:  "fotos/framboesa.jpeg",
     mirtilos:   "fotos/mirtilos.jpeg",
     amoras:     "fotos/amoras.jpeg",
     lichia:     "fotos/lichia.jpeg",
     alperce:    "fotos/alperce.jpeg",
     diospiro:   "fotos/diospiro.jpeg",
     papaia:     "fotos/papaia.jpeg",
-    nesperas:   "fotos/mundifruta-photos-web/20260706_120313.jpg",
+    nesperas:   "fotos/mundifruta-photos-web/20260706_132857.jpg",
     maca_verde: "fotos/mundifruta-photos-web/20260706_120217.jpg",
     pessego_amarelo:  "fotos/mundifruta-photos-web/20260706_120417.jpg",
     pessego_vermelho: "fotos/mundifruta-photos-web/20260706_132522.jpg",
@@ -128,71 +139,71 @@
   function urlFoto(u) { return u.startsWith('fotos/') ? u : u + SFX; }
 
   const produtos = {
-    // FRUTAS — ordem e preços definidos pelo lojista. Preço por kg (exceto frutos vermelhos, por cuvete).
-    // Campo `origem` = país/região de origem (mostrado no cartão).
+    // FRUTAS — Preço por kg (exceto frutos vermelhos por cuvete e fruta pesada à unidade → venda:"estimado").
     frutas: [
-      { nome:"Melancia",                emoji:"🍉", peso:"1 kg", preco:"0,99 €", origem:"Marrocos",     foto:FOTOS.melancia,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Melancia sem Sementes",   emoji:"🍉", peso:"1 kg", preco:"1,20 €",                        foto:FOTOS.melancia_redonda, badge:"🌞 Verão",    badgeClass:"" },      { nome:"Melão Branco",            emoji:"🍈", peso:"1 kg", preco:"1,50 €", origem:"Alentejo",     foto:FOTOS.melao_branco, badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Meloa",                   emoji:"🍈", peso:"1 kg", preco:"2,49 €", origem:"Algarve",      foto:FOTOS.melao_am,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Morangos",                emoji:"🍓", peso:"1 kg", preco:"4,99 €", origem:"Nacional",     foto:FOTOS.morangos,     badge:"🔥 Popular",  badgeClass:"badge-hot" },
-      { nome:"Pêssego Amarelo",         emoji:"🍑", peso:"1 kg", preco:"3,49 €", origem:"Nacional",     foto:FOTOS.pessego_amarelo,  badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Pêssego Vermelho",        emoji:"🍑", peso:"1 kg", preco:"1,99 €", origem:"Nacional",     foto:FOTOS.pessego_vermelho, badge:null },
-      { nome:"Pêssego Paraguaio",       emoji:"🍑", peso:"1 kg", preco:"3,49 €", origem:"Nacional",     foto:FOTOS.pessego_paraguaio,badge:null },
-      { nome:"Pêssego Rosa",            emoji:"🍑", peso:"1 kg", preco:"3,99 €", origem:"Nacional",     foto:FOTOS.pessego_vermelho, badge:null },
-      { nome:"Nectarina",               emoji:"🍑", peso:"1 kg", preco:"3,59 €", origem:"Nacional",     foto:FOTOS.nectarina,        badge:null },
-      { nome:"Nectarina Premium",       emoji:"🍑", peso:"1 kg", preco:"2,99 €", origem:"Nacional",     foto:FOTOS.nectarina,        badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Ameixa Vermelha",         emoji:"🍑", peso:"1 kg", preco:"4,99 €", origem:"Nacional",     foto:FOTOS.ameixa,       badge:null },
-      { nome:"Cereja de Fundão",        emoji:"🍒", peso:"1 kg", preco:"6,99 €",                        foto:FOTOS.cerejas,      badge:"💎 Premium",  badgeClass:"badge-hot" },
-      { nome:"Cereja Gardunha",         emoji:"🍒", peso:"1 kg", preco:"5,99 €", origem:"Beira",        foto:FOTOS.cerejas,      badge:null },
-      { nome:"Uvas sem Grainha",        emoji:"🍇", peso:"1 kg", preco:"5,99 €", origem:"Chile",        foto:FOTOS.uvas,         badge:null },
-      { nome:"Figos",                   emoji:"🫐", peso:"1 kg", preco:"4,99 €",                        foto:FOTOS.figos,        badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Manga Avião",             emoji:"🥭", peso:"1 kg", preco:"5,79 €", origem:"Brasil",       foto:FOTOS.manga,        badge:"🌴 Tropical", badgeClass:"badge-new" },
-      { nome:"Abacaxi Maturado",        emoji:"🍍", peso:"1 kg", preco:"2,99 €", origem:"Costa Rica",   foto:FOTOS.ananas,       badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Limão",                   emoji:"🍋", peso:"1 kg", preco:"1,59 €", origem:"Nacional",     foto:FOTOS.limoes,       badge:null },
-      { nome:"Lima",                    emoji:"🍋", peso:"500 g", preco:"1,99 €",                       foto:FOTOS.lima,         badge:null },
-      { nome:"Banana Del Monte",        emoji:"🍌", peso:"1 kg", preco:"1,79 €", origem:"Costa Rica",   foto:FOTOS.bananas,      badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Banana Madeira",          emoji:"🍌", peso:"1 kg", preco:"3,59 €",                        foto:FOTOS.banana_madeira, badge:null },
-      { nome:"Laranja Algarve",         emoji:"🍊", peso:"1 kg", preco:"1,20 €", origem:"Algarve",      foto:FOTOS.laranjas,     badge:null },
-      { nome:"Laranja Algarve Premium", emoji:"🍊", peso:"1 kg", preco:"1,79 €", origem:"Nacional",     foto:FOTOS.laranjas,     badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Marcott",                 emoji:"🍊", peso:"1 kg", preco:"2,99 €", origem:"Nacional",     foto:FOTOS.tangerina,    badge:null },
-      { nome:"Tangerina",               emoji:"🍊", peso:"1 kg", preco:"2,99 €",                        foto:FOTOS.tangerina,    badge:null },
-      { nome:"Pêra Rocha",              emoji:"🍐", peso:"1 kg", preco:"1,99 €", origem:"Oeste",        foto:FOTOS.peras,        badge:null },
-      { nome:"Pêra Premium",            emoji:"🍐", peso:"1 kg", preco:"2,99 €", origem:"Nacional",     foto:FOTOS.peras,        badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Pêra Pérola",             emoji:"🍐", peso:"1 kg", preco:"1,69 €", origem:"Espanha",      foto:FOTOS.pera_perola,  badge:"👌 Recomendado", badgeClass:"badge-new" },
-      { nome:"Pêra Abate",              emoji:"🍐", peso:"1 kg", preco:"1,99 €",                        foto:FOTOS.peras,        badge:null },
-      { nome:"Kiwi Green New Zealand",  emoji:"🥝", peso:"1 kg", preco:"5,99 €", origem:"Nova Zelândia",foto:FOTOS.kiwi,         badge:null },      { nome:"Abacate Hass",            emoji:"🥑", peso:"1 kg", preco:"4,99 €",                        foto:FOTOS.abacate,      badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Lichia",                  emoji:"🔴", peso:"1 kg", preco:"5,99 €",                        foto:FOTOS.lichia,       badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Ameixa Preta Nacional",   emoji:"🟣", peso:"1 kg", preco:"2,49 €", origem:"Nacional",     foto:FOTOS.ameixa,       badge:null },
-      { nome:"Ameixa Branca Nacional",  emoji:"🟡", peso:"1 kg", preco:"1,49 €", origem:"Nacional",     foto:FOTOS.ameixa,       badge:null },
-      { nome:"Ameixa Abrunho",          emoji:"🟣", peso:"1 kg", preco:"3,99 €",                        foto:FOTOS.ameixa_abrunho, badge:"👌 Recomendado", badgeClass:"badge-new" },
-      { nome:"Alperce Nacional",        emoji:"🍑", peso:"1 kg", preco:"2,99 €", origem:"Nacional",     foto:FOTOS.alperce,      badge:null },
-      { nome:"Diospiro Nacional",       emoji:"🟠", peso:"1 kg", preco:"3,99 €", origem:"Nacional",     foto:FOTOS.diospiro,     badge:null },
-      { nome:"Mamão",                   emoji:"🥭", peso:"1 kg", preco:"4,79 €",                        foto:FOTOS.mamao,        badge:null },
-      { nome:"Papaia",                  emoji:"🥭", peso:"1 kg", preco:"5,49 €",                        foto:FOTOS.papaia,       badge:null },
-      { nome:"Romã",                    emoji:"🔴", peso:"1 kg", preco:"4,99 €",                        foto:FOTOS.roma,         badge:null },
-      { nome:"Maçã Pink Lady",          emoji:"🍎", peso:"1 kg", preco:"3,99 €",                        foto:FOTOS.maca_pink_lady, badge:null },
-      { nome:"Maçã Granny Smith",       emoji:"🍏", peso:"1 kg", preco:"2,99 €",                        foto:FOTOS.maca_verde,   badge:null },
-      { nome:"Maçã Golden",             emoji:"🍎", peso:"1 kg", preco:"1,69 €",                        foto:FOTOS.maca_golden,  badge:null },
-      { nome:"Maçã Reineta",            emoji:"🍏", peso:"1 kg", preco:"2,99 €",                        foto:FOTOS.maca_reineta, badge:null },
-      { nome:"Nêsperas Ruchey",         emoji:"🟠", peso:"1 kg", preco:"5,99 €",                        foto:FOTOS.nesperas,     badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Maçã Fuji",               emoji:"🍎", peso:"1 kg", preco:"1,89 €",                        foto:FOTOS.maca_fuji,    badge:null },
-      { nome:"Maçã Fuji Premium",       emoji:"🍎", peso:"1 kg", preco:"2,99 €",                        foto:FOTOS.maca_fuji,    badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Maçã Royal Gala",         emoji:"🍎", peso:"1 kg", preco:"1,69 €",                        foto:FOTOS.maca_gala,    badge:null },
-      { nome:"Maçã Golden Rosa Francesa",emoji:"🍎",peso:"1 kg", preco:"4,99 €",                        foto:FOTOS.maca_golden,  badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Abacaxi Avião Costa Rica",emoji:"🍍", peso:"1 kg", preco:"6,49 €", origem:"Costa Rica",   foto:FOTOS.ananas,       badge:"💎 Premium",  badgeClass:"" },
-      { nome:"Framboesa",               emoji:"🍒", peso:"Cuvete 130 g", preco:"2,29 €",                foto:FOTOS.framboesa,    badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Mirtilos",                emoji:"🫐", peso:"Cuvete 125 g", preco:"2,49 €",                foto:FOTOS.mirtilos,     badge:"🌞 Verão",    badgeClass:"" },
-      { nome:"Amoras",                  emoji:"🫐", peso:"Cuvete 150 g", preco:"2,99 €",                foto:FOTOS.amoras,       badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Melancia",                emoji:"🍉", venda:"estimado", pricePerKg:0.99, averageWeightKg:3, peso:"1 unidade • aprox. 3 kg", preco:"0,99 €", origem:"Marrocos", foto:FOTOS.melancia, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melão Branco","Uvas sem Grainha","Hortelã"] },
+      { nome:"Melancia sem Sementes",   emoji:"🍉", venda:"estimado", pricePerKg:1.20, averageWeightKg:3, peso:"1 unidade • aprox. 3 kg", preco:"1,20 €", foto:FOTOS.melancia_redonda, badge:"🌞 Verão", badgeClass:"", rel:["Melão Branco","Morangos","Abacaxi Maturado","Hortelã"] },
+      { nome:"Melão Branco",            emoji:"🍈", venda:"estimado", pricePerKg:1.20, averageWeightKg:2.5, peso:"1 unidade • aprox. 2,5 kg", preco:"1,20 €", origem:"Alentejo", foto:FOTOS.melao_branco, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melancia","Uvas sem Grainha"] },
+      { nome:"Meloa",                   emoji:"🍈", venda:"estimado", pricePerKg:2.49, averageWeightKg:1.3, peso:"1 unidade • aprox. 1,3 kg", preco:"2,49 €", origem:"Algarve", foto:FOTOS.melao_am, badge:"🌞 Verão", badgeClass:"" },
+      { nome:"Morangos",                emoji:"🍓", peso:"1 kg", preco:"6,99 €", origem:"Nacional", foto:FOTOS.morangos, badge:"🔥 Popular", badgeClass:"badge-hot", rel:["Banana Madeira","Kiwi Green New Zealand","Manga Avião","Melão Branco"] },
+      { nome:"Pêssego Amarelo",         emoji:"🍑", peso:"1 kg", preco:"3,49 €", origem:"Nacional", foto:FOTOS.pessego_amarelo,  badge:"🌞 Verão", badgeClass:"" },
+      { nome:"Pêssego Vermelho",        emoji:"🍑", peso:"1 kg", preco:"1,99 €", origem:"Nacional", foto:FOTOS.pessego_vermelho, badge:null },
+      { nome:"Pêssego Paraguaio",       emoji:"🍑", peso:"1 kg", preco:"3,49 €", origem:"Nacional", foto:FOTOS.pessego_paraguaio,badge:null },
+      { nome:"Pêssego Rosa",            emoji:"🍑", peso:"1 kg", preco:"3,99 €", origem:"Nacional", foto:FOTOS.pessego_vermelho, badge:null },
+      { nome:"Nectarina",               emoji:"🍑", peso:"1 kg", preco:"3,59 €", origem:"Nacional", foto:FOTOS.nectarina,        badge:null },
+      { nome:"Nectarina Premium",       emoji:"🍑", peso:"1 kg", preco:"2,99 €", origem:"Nacional", foto:FOTOS.nectarina,        badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Ameixa Vermelha",         emoji:"🍑", peso:"1 kg", preco:"4,99 €", origem:"Nacional", foto:FOTOS.ameixa,       badge:null },
+      { nome:"Cereja de Fundão",        emoji:"🍒", peso:"1 kg", preco:"6,99 €",                    foto:FOTOS.cerejas,      badge:"💎 Premium",  badgeClass:"badge-hot" },
+      { nome:"Cereja Gardunha",         emoji:"🍒", peso:"1 kg", preco:"5,99 €", origem:"Beira",    foto:FOTOS.cerejas,      badge:null },
+      { nome:"Uvas sem Grainha",        emoji:"🍇", peso:"1 kg", preco:"5,99 €", origem:"Chile",    foto:FOTOS.uvas,         badge:null },
+      { nome:"Figos",                   emoji:"🫐", peso:"1 kg", preco:"4,99 €",                    foto:FOTOS.figos,        badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Manga Avião",             emoji:"🥭", venda:"estimado", pricePerKg:5.79, averageWeightKg:0.65, peso:"1 unidade • aprox. 650 g", preco:"5,79 €", origem:"Brasil", foto:FOTOS.manga, badge:"🌴 Tropical", badgeClass:"badge-new", rel:["Abacaxi Maturado","Mamão","Papaia","Banana Madeira"] },
+      { nome:"Abacaxi Maturado",        emoji:"🍍", venda:"estimado", pricePerKg:2.99, averageWeightKg:1.8, peso:"1 unidade • aprox. 1,8 kg", preco:"2,99 €", origem:"Costa Rica", foto:FOTOS.ananas, badge:"💎 Premium", badgeClass:"" },
+      { nome:"Limão",                   emoji:"🍋", peso:"1 kg", preco:"1,59 €", origem:"Nacional", foto:FOTOS.limoes,       badge:null },
+      { nome:"Lima",                    emoji:"🍋", peso:"500 g", preco:"1,99 €",                   foto:FOTOS.lima,         badge:null },
+      { nome:"Banana Del Monte",        emoji:"🍌", peso:"1 kg", preco:"1,79 €", origem:"Costa Rica", foto:FOTOS.bananas,   badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Banana Madeira",          emoji:"🍌", peso:"1 kg", preco:"3,59 €",                    foto:FOTOS.banana_madeira, badge:null },
+      { nome:"Laranja Algarve",         emoji:"🍊", peso:"1 kg", preco:"1,20 €", origem:"Algarve",  foto:FOTOS.laranjas,     badge:null },
+      { nome:"Laranja Algarve Premium", emoji:"🍊", peso:"1 kg", preco:"1,79 €", origem:"Nacional", foto:FOTOS.laranjas,     badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Marcott",                 emoji:"🍊", peso:"1 kg", preco:"2,99 €", origem:"Nacional", foto:FOTOS.tangerina,    badge:null },
+      { nome:"Tangerina",               emoji:"🍊", peso:"1 kg", preco:"2,99 €",                    foto:FOTOS.tangerina,    badge:null },
+      { nome:"Pêra Rocha",              emoji:"🍐", peso:"1 kg", preco:"1,99 €", origem:"Oeste",    foto:FOTOS.peras,        badge:null },
+      { nome:"Pêra Premium",            emoji:"🍐", peso:"1 kg", preco:"2,99 €", origem:"Nacional", foto:FOTOS.peras,        badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Pêra Pérola",             emoji:"🍐", peso:"1 kg", preco:"1,69 €", origem:"Espanha",  foto:FOTOS.pera_perola,  badge:"👌 Recomendado", badgeClass:"badge-new" },
+      { nome:"Pêra Abate",              emoji:"🍐", peso:"1 kg", preco:"1,99 €",                    foto:FOTOS.peras,        badge:null },
+      { nome:"Kiwi Green New Zealand",  emoji:"🥝", peso:"1 kg", preco:"5,99 €", origem:"Nova Zelândia", foto:FOTOS.kiwi,   badge:null },
+      { nome:"Abacate Hass",            emoji:"🥑", peso:"1 kg", preco:"4,99 €",                    foto:FOTOS.abacate,      badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Lichia",                  emoji:"🔴", peso:"1 kg", preco:"5,99 €", status:"Indisponível", foto:FOTOS.lichia,  badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Ameixa Roxa Nacional",    emoji:"🟣", peso:"1 kg", promo:true, precoNormal:"1,99 €", preco:"0,99 €", origem:"Nacional", foto:FOTOS.ameixa_roxa, badge:"🏷️ Promoção", badgeClass:"badge-hot" },
+      { nome:"Ameixa Branca Nacional",  emoji:"🟡", peso:"1 kg", preco:"1,49 €", origem:"Nacional", foto:FOTOS.ameixa,       badge:null },
+      { nome:"Ameixa Abrunho",          emoji:"🟣", peso:"1 kg", preco:"3,99 €",                    foto:FOTOS.ameixa_abrunho, badge:"👌 Recomendado", badgeClass:"badge-new" },
+      { nome:"Alperce Nacional",        emoji:"🍑", peso:"1 kg", preco:"2,99 €", origem:"Nacional", foto:FOTOS.alperce,      badge:null },
+      { nome:"Diospiro Nacional",       emoji:"🟠", peso:"1 kg", preco:"3,99 €", origem:"Nacional", foto:FOTOS.diospiro,     badge:null },
+      { nome:"Mamão",                   emoji:"🥭", venda:"estimado", pricePerKg:4.79, averageWeightKg:0.9, peso:"1 unidade • aprox. 900 g", preco:"4,79 €", foto:FOTOS.mamao, badge:null, rel:["Manga Avião","Papaia","Abacaxi Maturado"] },
+      { nome:"Papaia",                  emoji:"🥭", venda:"estimado", pricePerKg:5.49, averageWeightKg:0.45, peso:"1 unidade • aprox. 450 g", preco:"5,49 €", foto:FOTOS.papaia, badge:null, rel:["Manga Avião","Mamão","Abacaxi Maturado"] },
+      { nome:"Romã",                    emoji:"🔴", peso:"1 kg", preco:"4,99 €",                    foto:FOTOS.roma,         badge:null },
+      { nome:"Maçã Pink Lady",          emoji:"🍎", peso:"1 kg", preco:"3,99 €",                    foto:FOTOS.maca_pink_lady, badge:null },
+      { nome:"Maçã Granny Smith",       emoji:"🍏", peso:"1 kg", preco:"2,99 €",                    foto:FOTOS.maca_verde,   badge:null },
+      { nome:"Maçã Golden",             emoji:"🍎", peso:"1 kg", preco:"1,69 €",                    foto:FOTOS.maca_golden,  badge:null },
+      { nome:"Maçã Reineta",            emoji:"🍏", peso:"1 kg", preco:"2,99 €",                    foto:FOTOS.maca_reineta, badge:null },
+      { nome:"Nêsperas Ruchey",         emoji:"🟠", peso:"1 kg", preco:"5,99 €",                    foto:FOTOS.nesperas,     badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Maçã Fuji",               emoji:"🍎", peso:"1 kg", preco:"1,89 €",                    foto:FOTOS.maca_fuji,    badge:null },
+      { nome:"Maçã Fuji Premium",       emoji:"🍎", peso:"1 kg", preco:"2,99 €",                    foto:FOTOS.maca_fuji,    badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Maçã Royal Gala",         emoji:"🍎", peso:"1 kg", preco:"1,69 €",                    foto:FOTOS.maca_gala,    badge:null },
+      { nome:"Maçã Golden Rosa Francesa",emoji:"🍎",peso:"1 kg", preco:"4,99 €",                    foto:FOTOS.maca_golden,  badge:"💎 Premium",  badgeClass:"" },
+      { nome:"Abacaxi Avião Costa Rica",emoji:"🍍", venda:"estimado", pricePerKg:6.49, averageWeightKg:2.5, peso:"1 unidade • aprox. 2,5 kg", preco:"6,49 €", origem:"Costa Rica", foto:FOTOS.ananas, badge:"💎 Premium", badgeClass:"" },
+      { nome:"Framboesa",               emoji:"🍒", peso:"Cuvete 130 g", preco:"2,29 €",            foto:FOTOS.framboesa,    badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Mirtilos",                emoji:"🫐", peso:"Cuvete 125 g", preco:"2,49 €",            foto:FOTOS.mirtilos,     badge:"🌞 Verão",    badgeClass:"" },
+      { nome:"Amoras",                  emoji:"🫐", peso:"Cuvete 150 g", preco:"2,99 €",            foto:FOTOS.amoras,       badge:"🌞 Verão",    badgeClass:"" },
     ],
-    // LEGUMES — ordem alfabética. Preço por kg (ervas por molho).
-    // LEGUMES — ordem alfabética. Preço por kg; ervas/grelos por molho; couves por unidade.
+    // LEGUMES — ordem alfabética. Preço por kg; ervas/grelos por molho; couves à unidade.
     legumes: [
       { nome:"Abóbora Butternut",      emoji:"🎃", peso:"1 kg",       preco:"1,49 €", foto:FOTOS.abobora_butternut, badge:null },
       { nome:"Abóbora Cabocha",        emoji:"🎃", peso:"1 kg",       preco:"3,49 €", foto:FOTOS.abobora_cabocha,   badge:null },
-      { nome:"Abóbora Fatiada s/ Caroço",emoji:"🎃", peso:"1 kg",     preco:"1,89 €", foto:FOTOS.abobora_cortada,   badge:null },
-      { nome:"Abóbora Inteira",        emoji:"🎃", peso:"1 kg",       preco:"1,20 €", foto:FOTOS.abobora,          badge:null },
+      { nome:"Abóbora Fatiada s/ Caroço",emoji:"🎃", peso:"1 kg",     preco:"1,89 €", foto:FOTOS.abobora_fatiada,   badge:null },
+      { nome:"Abóbora Inteira",        emoji:"🎃", venda:"estimado", pricePerKg:1.20, averageWeightKg:8, weightRange:"7–9 kg", peso:"1 unidade • aprox. 7–9 kg", preco:"1,20 €", foto:FOTOS.abobora, badge:null },
       { nome:"Agrião",                 emoji:"🌿", peso:"Molho",      preco:"1,50 €", foto:FOTOS.agriao,           badge:null },
-      { nome:"Alface",                 emoji:"🥬", peso:"1 kg",       preco:"2,49 €", foto:FOTOS.alface,           badge:null },
+      { nome:"Alface",                 emoji:"🥬", venda:"unidade", peso:"1 unidade • aprox. 800 g", preco:"2,49 €", foto:FOTOS.alface, badge:null, rel:["Tomate Salada","Pepino","Cenoura"] },
       { nome:"Alface Roxa",            emoji:"🥬", peso:"1 un",       preco:"1,60 €", foto:FOTOS.alface_roxa,      badge:null },
       { nome:"Alho Francês",           emoji:"🥬", peso:"500 g",      preco:"1,25 €", foto:FOTOS.alho_frances,     badge:null },
       { nome:"Alho Seco",              emoji:"🧄", peso:"250 g",      preco:"1,65 €", foto:FOTOS.alho,             badge:null },
@@ -204,33 +215,33 @@
       { nome:"Batata Vermelha",        emoji:"🥔", peso:"1 kg",       preco:"0,99 €", foto:FOTOS.batata_vermelha,   badge:null },
       { nome:"Beringela",              emoji:"🍆", peso:"1 kg",       preco:"2,99 €", foto:FOTOS.beringela,        badge:null },
       { nome:"Beterraba",              emoji:"🟣", peso:"1 kg",       preco:"1,69 €", foto:FOTOS.beterraba,        badge:null },
-      { nome:"Brócolos sem Folha",     emoji:"🥦", peso:"1 kg",       preco:"2,99 €", foto:FOTOS.brocoulos,        badge:"🌱 Bio",  badgeClass:"badge-bio" },
+      { nome:"Brócolos sem Folha",     emoji:"🥦", venda:"unidade", peso:"1 unidade • aprox. 500 g", preco:"1,50 €", baseLinha:"Base: 2,99 €/kg", foto:FOTOS.brocoulos, badge:"🌱 Bio", badgeClass:"badge-bio" },
       { nome:"Cebola Doce",            emoji:"🧅", peso:"1 kg",       preco:"2,49 €", foto:FOTOS.cebolas,          badge:null },
       { nome:"Cebola Nova",            emoji:"🧅", peso:"1 kg",       preco:"1,20 €", foto:FOTOS.cebola_nova,      badge:null },
       { nome:"Cenoura",                emoji:"🥕", peso:"1 kg",       preco:"0,99 €", foto:FOTOS.cenouras,         badge:null },
-      { nome:"Chuchu",                 emoji:"🥒", peso:"1 kg",       preco:"3,49 €", foto:FOTOS.xuxu,             badge:null },
-      { nome:"Coentros",               emoji:"🌿", peso:"Molho 100g", preco:"1,20 €", foto:FOTOS.coentros,         badge:null },
+      { nome:"Chuchu",                 emoji:"🥒", venda:"estimado", pricePerKg:3.49, averageWeightKg:0.4, peso:"1 unidade • aprox. 400 g", preco:"3,49 €", foto:FOTOS.xuxu, badge:null },
+      { nome:"Coentros",               emoji:"🌿", peso:"Molho 100g", preco:"1,20 €", foto:FOTOS.coentros,        badge:null, rel:["Salsa","Hortelã","Tomate Salada","Cebola Doce"] },
       { nome:"Cogumelos",              emoji:"🍄", peso:"500 g",      preco:"2,99 €", foto:FOTOS.cogumelos,        badge:null },
-      { nome:"Couve Coração",          emoji:"🥬", peso:"1 un",       preco:"1,39 €", foto:FOTOS.couvecoracao,     badge:null },
-      { nome:"Couve Lombarda",         emoji:"🥬", peso:"1 un",       preco:"1,39 €", foto:FOTOS.couvelombarda,    badge:null },
+      { nome:"Couve Coração",          emoji:"🥬", venda:"unidade", peso:"1 unidade • aprox. 1 kg", preco:"1,39 €", foto:FOTOS.couvecoracao, badge:null },
+      { nome:"Couve Lombarda",         emoji:"🥬", venda:"estimado", pricePerKg:1.39, averageWeightKg:1.2, peso:"1 unidade • aprox. 1,2 kg", preco:"1,39 €", foto:FOTOS.couvelombarda, badge:null },
       { nome:"Couve Portuguesa",       emoji:"🥬", peso:"1 un",       preco:"1,99 €", foto:FOTOS.couve,            badge:null },
-      { nome:"Couve-flor",             emoji:"🥦", peso:"1 un",       preco:"1,99 €", foto:FOTOS.couveflor,        badge:null },
+      { nome:"Couve-flor",             emoji:"🥦", venda:"unidade", peso:"1 unidade • aprox. 700 g", preco:"1,39 €", baseLinha:"Base: 1,99 €/kg", foto:FOTOS.couveflor, badge:null },
       { nome:"Curgete",                emoji:"🥒", peso:"1 kg",       preco:"1,99 €", foto:FOTOS.curgete,          badge:null },
       { nome:"Espinafres",             emoji:"🥬", peso:"Molho",      preco:"2,49 €", foto:FOTOS.espinafres,       badge:"🌱 Bio",  badgeClass:"badge-bio" },
-      { nome:"Feijão Dourado",         emoji:"🫘", peso:"1 kg",       preco:"6,99 €", foto:FOTOS.feijao_dourado,   badge:null },
-      { nome:"Feijão Maduro",          emoji:"🫘", peso:"1 kg",       preco:"5,99 €", foto:FOTOS.feijao_maduro,    badge:null },
+      { nome:"Feijão Dourado",         emoji:"🫘", peso:"500 g",      preco:"4,99 €", foto:FOTOS.feijao_dourado,   badge:null },
+      { nome:"Feijão Maduro",          emoji:"🫘", peso:"1 kg",       preco:"4,99 €", foto:FOTOS.feijao_maduro,    badge:null },
       { nome:"Feijão Verde",           emoji:"🫛", peso:"1 kg",       preco:"4,99 €", foto:FOTOS.feijao_verde,     badge:null },
       { nome:"Gengibre",               emoji:"🫚", peso:"250 g",      preco:"1,50 €", foto:FOTOS.gengibre,         badge:null },
       { nome:"Grelo de Couve",         emoji:"🌿", peso:"Molho",      preco:"3,50 €", foto:FOTOS.grelos,           badge:null },
       { nome:"Grelo de Nabo",          emoji:"🌿", peso:"Molho",      preco:"3,95 €", foto:FOTOS.grelos,           badge:null },
-      { nome:"Hortelã",                emoji:"🌿", peso:"Molho 100g", preco:"Oferta da casa", foto:FOTOS.hortela,  badge:"🎁 Oferta", badgeClass:"badge-new" },
+      { nome:"Hortelã",                emoji:"🌿", peso:"100 g",      preco:"1,20 €", foto:FOTOS.hortela,          badge:null, rel:["Salsa","Coentros"] },
       { nome:"Inhame",                 emoji:"🍠", peso:"1 kg",       preco:"6,99 €", foto:FOTOS.inhame,           badge:null },
-      { nome:"Maçaroca",               emoji:"🌽", peso:"1 un",       preco:"1,99 €", foto:FOTOS.milho,            badge:null },
+      { nome:"Maçaroca",               emoji:"🌽", peso:"1 un",       preco:"2,99 €", foto:FOTOS.milho,            badge:null },
       { nome:"Malagueta",              emoji:"🌶️", peso:"250 g",      preco:"2,95 €", foto:FOTOS.malagueta,        badge:null },
       { nome:"Mandioca",               emoji:"🥔", peso:"1 kg",       preco:"4,99 €", foto:FOTOS.mandioca,         badge:null },
       { nome:"Nabiça",                 emoji:"🌿", peso:"Molho",      preco:"2,49 €", foto:FOTOS.grelos,           badge:null },
       { nome:"Nabo",                   emoji:"🥬", peso:"1 kg",       preco:"2,49 €", foto:FOTOS.nabo,             badge:null },
-      { nome:"Pepino",                 emoji:"🥒", peso:"1 kg",       preco:"2,49 €", foto:FOTOS.pepino,           badge:null },
+      { nome:"Pepino",                 emoji:"🥒", peso:"1 kg",       preco:"2,49 €", foto:FOTOS.pepino,           badge:null, rel:["Tomate Salada","Alface","Cenoura"] },
       { nome:"Pimento Verde",          emoji:"🫑", peso:"500 g",      preco:"1,99 €", foto:FOTOS.pimento_verde,     badge:null },
       { nome:"Pimento Vermelho",       emoji:"🫑", peso:"500 g",      preco:"1,99 €", foto:FOTOS.pimento_vermelho,  badge:null },
       { nome:"Quiabo",                 emoji:"🫛", peso:"500 g",      preco:"4,99 €", foto:FOTOS.quiabo,           badge:null },
@@ -241,11 +252,9 @@
       { nome:"Tomate Chucha",          emoji:"🍅", peso:"1 kg",       preco:"1,99 €", foto:FOTOS.tomate_chucha,     badge:null },
       { nome:"Tomate Coração de Boi",  emoji:"🍅", peso:"1 kg",       preco:"2,99 €", foto:FOTOS.tomate_coracao_boi,badge:null },
       { nome:"Tomate Rosa",            emoji:"🍅", peso:"1 kg",       preco:"2,99 €", foto:FOTOS.tomate_rosa,      badge:"💎 Premium", badgeClass:"" },
-      { nome:"Tomate Salada",          emoji:"🍅", peso:"1 kg",       preco:"1,59 €", foto:FOTOS.tomate_salada,     badge:"🔥 Popular", badgeClass:"badge-hot" },
+      { nome:"Tomate Salada",          emoji:"🍅", peso:"1 kg",       preco:"1,59 €", foto:FOTOS.tomate_salada,     badge:"🔥 Popular", badgeClass:"badge-hot", rel:["Alface","Pepino","Cebola Doce","Coentros"] },
     ],
     // CABAZES — cestos prontos de frutas e/ou legumes.
-    // Ajuste nomes, descrições (peso), preços e a lista `itens` conforme desejar.
-    // `itens` é opcional; se existir, o cartão mostra "Ver o que leva" (abre janela com a lista).
     cabazes: [
       { nome:"Cabaz Detox",        emoji:"🥗", peso:"≈ 12 kg", preco:"39,50 €", foto:FOTOS.cabaz_detox, badge:"💚 Detox", badgeClass:"badge-bio",
         nota:"A imagem desta cabaz é meramente ilustrativa.",
@@ -323,15 +332,39 @@
   };
 
   /* ═══════════════════════════════════════════════════════════
+     PROMOÇÃO PRIMEIRA COMPRA — cupão de boas-vindas.
+     NOTA: A validação real (1 uso por cliente) exige o backend
+     (ver docs/BACKEND-SETUP.md). Esta versão frontend é indicativa.
+     ═══════════════════════════════════════════════════════════ */
+  const cupaoConfig = {
+    codigo: "MUNDI10",
+    desconto: 10,      // € abatidos
+    minimo: 30,        // € mínimo de compra
+    validadeDias: 30,  // dias após emissão
+    copyTitulo: "Bem-vindo à Mundi Fruta",
+    copyTexto: "Receba 10€ de desconto na sua primeira compra de 30€ ou mais.",
+    copyExclusivo: "Oferta exclusiva para novos clientes.",
+  };
+
+  /* ═══════════════════════════════════════════════════════════
+     EQUIPA (Quem Somos) — PLACEHOLDERS.
+     Substituir por nomes, funções, fotos e mensagens reais.
+     Fotos reais podem ser colocadas em fotos/equipa/ e referenciadas aqui.
+     ═══════════════════════════════════════════════════════════ */
+  const equipa = [
+    { nome:"[Nome do Proprietário]", funcao:"Proprietário", mensagem:"Escolho pessoalmente a fruta e os legumes todas as manhãs.", foto:"" },
+    { nome:"[Nome]",                 funcao:"Atendimento",  mensagem:"Ajudo cada cliente a levar o melhor do dia.",              foto:"" },
+    { nome:"[Nome]",                 funcao:"Loja",         mensagem:"Mantenho tudo fresco, limpo e bem apresentado.",           foto:"" },
+  ];
+
+  /* ═══════════════════════════════════════════════════════════
      AVALIAÇÕES — nota real do Google Business (4,9 ★ · 107 avaliações).
-     Os textos abaixo são PLACEHOLDER. Substitua por avaliações reais
-     copiadas do Google (nome do cliente + texto), mantendo em português.
+     Os textos abaixo são reais (Google). Manter em português.
      ═══════════════════════════════════════════════════════════ */
   const avaliacoesInfo = {
     nota: "4,9",
     total: 107,
     link: "https://maps.app.goo.gl/1gHGqMac4ahTtfxf8?g_st=ac",
-    // Temas que os clientes mais destacam (tags reais do Google):
     temas: ["Frescura", "Qualidade da fruta", "Limpeza", "Variedade", "Simpatia"],
   };
 

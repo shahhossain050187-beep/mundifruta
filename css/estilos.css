@@ -636,6 +636,11 @@
     .product-card.is-unavailable {
       opacity:.82;
     }
+    /* Preço: base de referência + promoção */
+    .product-base { font-size:.72rem; color:var(--sage-lt); margin:-2px 0 2px; font-weight:600; }
+    .preco-antigo { text-decoration:line-through; color:var(--sage-lt); font-weight:600; margin-right:5px; font-size:.9em; }
+    .preco-promo  { color:var(--cherry); font-weight:800; }
+    .badge-unavailable { background:#6b7280 !important; color:#fff !important; }
     .unavailable-label {
       display:grid;
       place-items:center;
