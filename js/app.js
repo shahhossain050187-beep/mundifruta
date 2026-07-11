@@ -38,6 +38,7 @@ const carrinho = {};
       <button class="feature-photo" type="button" onclick="abrirProduto('${item._id}')" aria-label="Ver ${item.nome}">
         <img src="${urlFoto(item.foto)}" alt="${item.nome}" data-emoji="${item.emoji}" onerror="erroImagem(this)" loading="lazy" decoding="async"/>
         ${item.badge ? `<span class="feature-badge">${item.badge}</span>` : ''}
+        ${item.topVendido ? `<span class="top-badge">⭐ Mais vendido</span>` : ''}
       </button>
       <div class="feature-body">
         <h3>${item.nome}</h3>
@@ -57,10 +58,13 @@ const carrinho = {};
   }
 
   function renderDestaques() {
-    preencherDestaques('promo-grid', selecionarPorNomes(
+    // Promoções: produtos em promoção primeiro, depois destaques da semana para preencher.
+    const promocionais = [...produtos.frutas, ...produtos.legumes].filter(i => i.promo && produtoDisponivel(i));
+    const extraPromo = selecionarPorNomes(
       [...produtos.frutas, ...produtos.legumes],
-      ['Morangos','Melancia 1/4','Laranja Algarve','Maçã Royal Gala','Batata Branca','Cenoura','Tomate Salada','Hortelã']
-    ));
+      ['Morangos','Melancia 1/4','Laranja Algarve','Tomate Salada','Cenoura','Hortelã']
+    ).filter(i => !promocionais.includes(i));
+    preencherDestaques('promo-grid', [...promocionais, ...extraPromo].slice(0, 8));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
       ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia 1/4','Manga Avião','Abacate Hass']
@@ -81,8 +85,10 @@ const carrinho = {};
     const card  = document.createElement('div');
     card.className = 'product-card'; card.id = `card-${id}`; card.dataset.productId = id;
     if (!disponivel) card.classList.add('is-unavailable');
+    const topRibbon = item.topVendido ? `<div class="top-badge">⭐ Mais vendido</div>` : '';
     card.innerHTML = `
       ${badge}
+      ${topRibbon}
       <div class="sel-check">✓</div>
       <button class="photo-wrap" type="button" onclick="abrirProduto('${id}')" aria-label="Ver detalhes de ${item.nome}">
         <img src="${urlFoto(item.foto)}" alt="${item.nome}" data-emoji="${item.emoji}" onerror="erroImagem(this)" loading="lazy" decoding="async"/>

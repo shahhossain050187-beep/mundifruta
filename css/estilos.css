@@ -675,6 +675,15 @@
     .product-card.is-unavailable {
       opacity:.82;
     }
+    /* Selo "Mais vendido" (top seller) */
+    .top-badge {
+      position:absolute; top:8px; left:8px; z-index:3;
+      background:linear-gradient(135deg,#D4A017,#E07B39); color:#fff;
+      font-size:.66rem; font-weight:800; padding:4px 8px; border-radius:var(--r-full);
+      box-shadow:0 3px 10px rgba(0,0,0,.18); letter-spacing:.2px; white-space:nowrap;
+    }
+    .feature-photo .top-badge { top:10px; left:10px; font-size:.7rem; }
+
     /* Preço: base de referência + promoção */
     .product-base { font-size:.72rem; color:var(--sage-lt); margin:-2px 0 2px; font-weight:600; }
     .preco-antigo { text-decoration:line-through; color:var(--sage-lt); font-weight:600; margin-right:5px; font-size:.9em; }
