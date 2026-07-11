@@ -248,11 +248,75 @@
     }
   }
 
+  /* ═══════════ HERO SLIDESHOW ═══════════ */
+  function initHeroSlides() {
+    const wrap = document.getElementById('hero-slides');
+    if (!wrap) return;
+    const fotos = [
+      'fotos/mundifruta-photos-web/20260706_195625.jpg',
+      'fotos/mundifruta-photos-web/20260706_195657.jpg',
+      'fotos/mundifruta-photos-web/20260706_195901.jpg',
+      'fotos/mundifruta-photos-web/20260706_120442.jpg',
+      'fotos/mundifruta-photos-web/20260706_195742.jpg',
+    ];
+    wrap.innerHTML = fotos.map((f, i) =>
+      `<div class="hero-slide${i === 0 ? ' active' : ''}" style="background-image:url('${f}')"></div>`).join('');
+    const slides = [...wrap.children];
+    if (slides.length < 2) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('active');
+    }, 5000);
+  }
+
+  /* ═══════════ CARROSSÉIS (linhas de destaque) ═══════════ */
+  function initCarousels() {
+    const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.feature-grid').forEach(grid => {
+      if (!grid.children.length || grid.dataset.carousel) return;
+      grid.dataset.carousel = '1';
+      grid.classList.add('carousel');
+      const wrap = document.createElement('div');
+      wrap.className = 'carousel-wrap';
+      grid.parentNode.insertBefore(wrap, grid);
+      wrap.appendChild(grid);
+      const passo = () => (grid.firstElementChild ? grid.firstElementChild.offsetWidth + 14 : 220);
+      const prev = document.createElement('button');
+      prev.className = 'carousel-nav prev'; prev.type = 'button';
+      prev.setAttribute('aria-label', 'Anterior'); prev.textContent = '‹';
+      prev.onclick = () => grid.scrollBy({ left: -passo() * 2, behavior: 'smooth' });
+      const next = document.createElement('button');
+      next.className = 'carousel-nav next'; next.type = 'button';
+      next.setAttribute('aria-label', 'Seguinte'); next.textContent = '›';
+      next.onclick = () => grid.scrollBy({ left: passo() * 2, behavior: 'smooth' });
+      wrap.appendChild(prev); wrap.appendChild(next);
+
+      if (reduzir) return;
+      let timer = setInterval(auto, 4500);
+      function auto() {
+        const fim = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 8;
+        if (fim) grid.scrollTo({ left: 0, behavior: 'smooth' });
+        else grid.scrollBy({ left: passo(), behavior: 'smooth' });
+      }
+      const parar = () => { clearInterval(timer); timer = null; };
+      const retomar = () => { if (!timer) timer = setInterval(auto, 4500); };
+      wrap.addEventListener('pointerenter', parar);
+      wrap.addEventListener('pointerleave', retomar);
+      grid.addEventListener('pointerdown', parar);
+      grid.addEventListener('touchstart', parar, { passive: true });
+    });
+  }
+
   /* ═══════════ INIT ═══════════ */
   // extras.js é carregado depois de app.js (que já correu o seu INIT e o DOM
   // já está pronto), por isso arrancamos diretamente aqui.
   window.iniciarExtras = function () {
     renderQuemSomos();
+    initHeroSlides();
+    initCarousels();
     initConsent();
     initOferta();
     atualizarProgresso();

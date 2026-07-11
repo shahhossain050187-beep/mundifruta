@@ -32,7 +32,8 @@
       "Read(//c/c/Users/RFT/**)",
       "Read(//c/c/**)",
       "mcp__2f275f16-8f3a-4f47-bf18-d040d0448b37__download_file_content",
-      "Bash(git commit -q -m 'Phase 1+2: product data corrections + unified pricing model *)"
+      "Bash(git commit -q -m 'Phase 1+2: product data corrections + unified pricing model *)",
+      "Bash(git commit -q -m 'Phase 12: motion — hero slideshow + sliding carousels + mobile polish *)"
     ]
   }
 }

@@ -164,7 +164,46 @@
     .ff9  { top:76%; right:17%; font-size:2.6rem; animation:fD 11.5s ease-in-out infinite; animation-delay:-2.5s; }
     .ff10 { top:4%;  right:32%; font-size:3.6rem; animation:fB 10.5s ease-in-out infinite; animation-delay:-4.5s; }
 
+    /* Hero slideshow (fotos reais em crossfade) */
+    .hero-slides { position:absolute; inset:0; z-index:0; overflow:hidden; }
+    .hero-slide {
+      position:absolute; inset:0; background-size:cover; background-position:center;
+      opacity:0; transition:opacity 1.4s ease; transform:scale(1.04); animation:hero-kb 16s ease-in-out infinite alternate;
+    }
+    .hero-slide.active { opacity:.5; }
+    @keyframes hero-kb { from{ transform:scale(1.04);} to{ transform:scale(1.14);} }
+    .hero-slides::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(148deg, rgba(8,28,18,0.86) 0%, rgba(27,67,50,0.72) 55%, rgba(22,56,38,0.9) 100%);
+    }
+    .hero::before { z-index:1; }
     .hero-content { position:relative; z-index:2; max-width:780px; }
+    @media (prefers-reduced-motion:reduce) {
+      .hero-slide { animation:none; transition:none; }
+    }
+
+    /* Carrosséis deslizantes (linhas de destaque) */
+    .feature-grid.carousel {
+      display:flex; grid-template-columns:none; gap:14px;
+      overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch; padding:4px 2px 14px; scrollbar-width:none;
+    }
+    .feature-grid.carousel::-webkit-scrollbar { display:none; }
+    .feature-grid.carousel > .feature-product {
+      flex:0 0 clamp(190px, 24%, 250px); scroll-snap-align:start;
+    }
+    .carousel-wrap { position:relative; }
+    .carousel-nav {
+      position:absolute; top:38%; transform:translateY(-50%); z-index:3;
+      width:40px; height:40px; border-radius:50%; border:none; cursor:pointer;
+      background:var(--white); color:var(--forest); box-shadow:var(--sh-lg);
+      font-size:1.2rem; font-weight:800; display:grid; place-items:center;
+      opacity:.92; transition:opacity .2s ease, transform .2s ease;
+    }
+    .carousel-nav:hover { opacity:1; transform:translateY(-50%) scale(1.08); }
+    .carousel-nav.prev { left:-6px; }
+    .carousel-nav.next { right:-6px; }
+    @media (hover:none) { .carousel-nav { display:none; } }
 
     .hero-eyebrow {
       display:inline-flex; align-items:center; gap:10px;
