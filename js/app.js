@@ -254,6 +254,7 @@ const carrinho = {};
     document.getElementById('product-modal-qty').textContent = modalQuantidade;
     document.getElementById('product-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
+    if (window.trackEvent) window.trackEvent('view_item', { item: item.nome });
   }
 
   function fecharProduto() {
@@ -371,6 +372,7 @@ const carrinho = {};
     atualizarEstadoProduto(id);
     mostrarToast(`✓ ${item.nome} adicionado`);
     atualizarResumo(); atualizarBadge(); salvarCarrinho();
+    if (window.aoAdicionar) window.aoAdicionar(item);
   }
 
   function atualizarEstadoProduto(id) {
@@ -486,6 +488,7 @@ const carrinho = {};
       ${totais.porConfirmar ? `<small>+ ${totais.porConfirmar} ${totais.porConfirmar === 1 ? 'artigo' : 'artigos'} com preço a confirmar</small>` : ''}
       ${temEstimados ? `<small>${NOTA_PRECO_ESTIMADO}</small><small>${DISCLAIMER_PRODUTOS_NATURAIS}</small>` : ''}
     `;
+    if (window.aoAtualizarResumo) window.aoAtualizarResumo();
   }
 
   /* ══ CATALOG FILTERS / SORT / PAGINATION ══ */
@@ -584,6 +587,7 @@ const carrinho = {};
       t += `\nNota: ${totais.porConfirmar} ${totais.porConfirmar === 1 ? 'artigo tem' : 'artigos têm'} preço a confirmar.`;
     }
     if (temEstimados) t += `\n${NOTA_PRECO_ESTIMADO}\n${DISCLAIMER_PRODUTOS_NATURAIS}`;
+    if (window.linhaCupao) t += window.linhaCupao(totais.centimos);
     if (notas) t += `\nNotas: ${notas}`;
     return t;
   }
@@ -591,6 +595,7 @@ const carrinho = {};
   function enviarWhatsApp(e) {
     e.preventDefault();
     const t = obterTextoEncomenda(); if (!t) return;
+    if (window.trackEvent) window.trackEvent('whatsapp_order_click', { value: totaisCarrinho().centimos / 100, currency: 'EUR' });
     window.open(`https://wa.me/351932699850?text=${encodeURIComponent(t)}`, '_blank');
   }
 
@@ -700,9 +705,13 @@ const carrinho = {};
   renderAvaliacoes();
   atualizarContadoresCategorias();
   carregarCarrinho();
+  if (window.iniciarExtras) window.iniciarExtras();
 
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     if (document.getElementById('product-modal').classList.contains('open')) fecharProduto();
     if (document.getElementById('cabaz-modal').classList.contains('open')) fecharCabaz();
+    const csp = document.getElementById('cs-pop'); if (csp && !csp.hidden) csp.hidden = true;
+    const off = document.getElementById('offer-pop'); if (off && !off.hidden && window.fecharOferta) window.fecharOferta();
+    const priv = document.getElementById('privacy-modal'); if (priv && !priv.hidden) priv.hidden = true;
   });

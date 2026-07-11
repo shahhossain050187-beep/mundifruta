@@ -86,6 +86,7 @@
       <a href="#produtos">Produtos</a>
       <a href="#cabazes">Cabazes</a>
       <a href="#verao">Especiais</a>
+      <a href="#quem-somos">Quem Somos</a>
       <a href="#avaliacoes">Avaliações</a>
       <a href="#contacto">Contacto</a>
     </div>
@@ -107,6 +108,7 @@
   <a href="#cabazes"        onclick="toggleMenu()">Cabazes</a>
   <a href="#como-funciona"  onclick="toggleMenu()">Como Funciona</a>
   <a href="#produtos"       onclick="toggleMenu()">Produtos</a>
+  <a href="#quem-somos"     onclick="toggleMenu()">Quem Somos</a>
   <a href="#avaliacoes"     onclick="toggleMenu()">Avaliações</a>
   <a href="#encomenda"      onclick="toggleMenu()">Encomendar</a>
   <a href="#contacto"       onclick="toggleMenu()">Contacto</a>
@@ -336,6 +338,11 @@
           <li class="empty-msg">Sem artigos ainda. Selecione produtos acima para começar.</li>
         </ul>
         <div class="order-total" id="order-total" hidden></div>
+        <div class="promo-progress" id="promo-progress" hidden></div>
+        <div class="crosssell crosssell-cart" id="crosssell-cart" hidden>
+          <div class="cs-title">Complete o seu pedido</div>
+          <div class="cs-row" id="crosssell-cart-row"></div>
+        </div>
       </div>
       <div class="order-card">
         <div class="order-card-title">📋 Os Seus Dados</div>
@@ -369,6 +376,26 @@
   <div class="temas-row fi" id="temas-row"></div>
   <div class="reviews-grid fi" id="reviews-grid"></div>
   <a class="reviews-cta fi" id="reviews-cta" href="#" target="_blank" rel="noopener">Ver todas as avaliações no Google →</a>
+</div>
+
+<!-- ═══════════ QUEM SOMOS ═══════════ -->
+<div class="section fi" id="quem-somos">
+  <div class="section-hdr fi">
+    <span class="eyebrow">A Nossa História</span>
+    <h2 class="section-title">Quem Somos</h2>
+    <p class="section-sub">Uma equipa local dedicada a escolher e a oferecer fruta e legumes frescos, a preços justos e transparentes.</p>
+  </div>
+  <div class="qs-principios fi">
+    <span class="qs-chip">🌅 Frescura diária</span>
+    <span class="qs-chip">⭐ Qualidade</span>
+    <span class="qs-chip">💶 Preços justos</span>
+    <span class="qs-chip">🤝 Atendimento próximo</span>
+    <span class="qs-chip">🫶 Respeito pelos clientes</span>
+    <span class="qs-chip">🇵🇹 Apoio a produtores portugueses</span>
+  </div>
+  <div class="qs-team fi" id="qs-team"></div>
+  <p class="qs-trust fi">As pessoas por detrás da Mundi Fruta são conhecidas e acompanham muitos vizinhos da zona há cerca de 10 anos — uma relação de confiança construída dia após dia, com atendimento próximo e produto selecionado à mão.</p>
+  <div class="qs-gallery fi" id="qs-gallery"></div>
 </div>
 
 <!-- ═══════════ CONTACT ═══════════ -->
@@ -414,8 +441,10 @@
     <div class="footer-text">&copy; 2026 MUNDIFRUTA · Frutas e Legumes Frescos · Carnaxide</div>
     <div class="footer-links">
       <a href="#produtos">Produtos</a>
+      <a href="#quem-somos">Quem Somos</a>
       <a href="#encomenda">Encomendar</a>
       <a href="#contacto">Contacto</a>
+      <a href="#" onclick="abrirPrivacidade();return false;">Privacidade</a>
     </div>
     <div class="footer-credit">Desenvolvido por <a href="mailto:shahhossain050187@gmail.com">Shah Hossain</a></div>
   </div>
@@ -465,12 +494,59 @@
   <span class="fc-count" id="float-cart-count">0</span>
 </button>
 
-<button class="float-legumes" id="float-legumes" onclick="abrirCatalogo('legumes')" title="Ver legumes frescos" hidden>
-  Legumes
-</button>
-
 <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">▲</button>
 <div class="toast" id="toast"></div>
+
+<!-- ═══════════ CROSS-SELL (após adicionar) ═══════════ -->
+<div class="cs-pop" id="cs-pop" hidden role="dialog" aria-label="Sugestões de produtos">
+  <button class="cs-pop-close" type="button" onclick="fecharCrossSell()" aria-label="Fechar">✕</button>
+  <div class="cs-pop-title" id="cs-pop-title">Também pode gostar</div>
+  <div class="cs-row" id="cs-pop-row"></div>
+  <button class="cs-pop-skip" type="button" onclick="fecharCrossSell()">Continuar sem adicionar</button>
+</div>
+
+<!-- ═══════════ OFERTA PRIMEIRA COMPRA ═══════════ -->
+<div class="offer-pop" id="offer-pop" hidden onclick="if(event.target===this)fecharOferta()">
+  <div class="offer-box" role="dialog" aria-modal="true" aria-labelledby="offer-title">
+    <button class="offer-close" type="button" onclick="fecharOferta()" aria-label="Fechar">✕</button>
+    <div class="offer-emoji">🎁</div>
+    <h3 class="offer-title" id="offer-title"></h3>
+    <p class="offer-text" id="offer-text"></p>
+    <p class="offer-fine" id="offer-fine"></p>
+    <button class="offer-cta" type="button" onclick="aceitarOferta()">Receber 10€</button>
+    <button class="offer-later" type="button" onclick="fecharOferta()">Agora não</button>
+  </div>
+</div>
+
+<!-- ═══════════ CONSENTIMENTO (RGPD) ═══════════ -->
+<div class="consent" id="consent" hidden role="dialog" aria-label="Preferências de privacidade">
+  <div class="consent-text">
+    Usamos cookies essenciais para o funcionamento do site. Com a sua autorização, usamos também estatísticas e marketing (Google) para melhorar a sua experiência.
+    <button class="consent-link" type="button" onclick="abrirPrivacidade()">Saber mais</button>
+  </div>
+  <div class="consent-btns">
+    <button class="consent-no" type="button" onclick="definirConsentimento(false)">Só essenciais</button>
+    <button class="consent-yes" type="button" onclick="definirConsentimento(true)">Aceitar tudo</button>
+  </div>
+</div>
+
+<!-- ═══════════ POLÍTICA DE PRIVACIDADE ═══════════ -->
+<div class="privacy-modal" id="privacy-modal" hidden onclick="if(event.target===this)fecharPrivacidade()">
+  <div class="privacy-box" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+    <button class="privacy-close" type="button" onclick="fecharPrivacidade()" aria-label="Fechar">✕</button>
+    <h3 id="privacy-title">Política de Privacidade</h3>
+    <p>A Mundi Fruta respeita a sua privacidade e cumpre o RGPD.</p>
+    <h4>Que dados usamos</h4>
+    <p>Os dados que introduz na encomenda (nome, telemóvel, notas) são usados apenas para preparar o seu pedido e são enviados por si através do WhatsApp ou email. O site não guarda a sua encomenda num servidor.</p>
+    <h4>Cookies e estatísticas</h4>
+    <p>Só carregamos estatísticas e marketing (Google Ads/Analytics) depois de aceitar. Pode retirar o consentimento a qualquer momento carregando em “Repor consentimento” abaixo.</p>
+    <h4>Cupão de boas-vindas</h4>
+    <p>O cupão de primeira compra é indicativo e validado no momento do levantamento na loja. Uma validação por cliente será possível quando as contas de cliente estiverem ativas.</p>
+    <h4>Os seus direitos</h4>
+    <p>Pode pedir acesso ou eliminação dos seus dados através de <a href="https://wa.me/351932699850" target="_blank" rel="noopener">WhatsApp</a> ou <a href="mailto:shahhossain87@gmail.com">email</a>.</p>
+    <button class="privacy-reset" type="button" onclick="reporConsentimento()">Repor consentimento</button>
+  </div>
+</div>
 
 <!-- ═══════════ PRODUCT PREVIEW MODAL ═══════════ -->
 <div class="product-modal" id="product-modal" onclick="if(event.target===this)fecharProduto()">
@@ -511,5 +587,6 @@
 
 <script src="js/dados.js?v=15"></script>
 <script src="js/app.js?v=15"></script>
+<script src="js/extras.js?v=15"></script>
 </body>
 </html>

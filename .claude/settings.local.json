@@ -24,7 +24,15 @@
       "WebFetch(domain:www.google.com)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git commit -q -m 'Backup: codex work + web-optimized photos \\(restore point before major update\\) *)"
+      "Bash(git commit -q -m 'Backup: codex work + web-optimized photos \\(restore point before major update\\) *)",
+      "Bash(python -c \"import PIL; print\\('Pillow', PIL.__version__\\)\")",
+      "mcp__2f275f16-8f3a-4f47-bf18-d040d0448b37__search_files",
+      "Bash(python -)",
+      "Bash(ls -la \"/c/Users/RFT/AppData/Local/Temp/claude/C--Users-RFT-mundifruta/774f5445-f4f8-4073-a585-bedbf48b9482/scratchpad/\"*.jpg)",
+      "Read(//c/c/Users/RFT/**)",
+      "Read(//c/c/**)",
+      "mcp__2f275f16-8f3a-4f47-bf18-d040d0448b37__download_file_content",
+      "Bash(git commit -q -m 'Phase 1+2: product data corrections + unified pricing model *)"
     ]
   }
 }
