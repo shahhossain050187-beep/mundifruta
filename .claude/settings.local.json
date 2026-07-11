@@ -33,7 +33,11 @@
       "Read(//c/c/**)",
       "mcp__2f275f16-8f3a-4f47-bf18-d040d0448b37__download_file_content",
       "Bash(git commit -q -m 'Phase 1+2: product data corrections + unified pricing model *)",
-      "Bash(git commit -q -m 'Phase 12: motion — hero slideshow + sliding carousels + mobile polish *)"
+      "Bash(git commit -q -m 'Phase 12: motion — hero slideshow + sliding carousels + mobile polish *)",
+      "Bash(git push *)",
+      "Bash(git fetch *)",
+      "Bash(git merge -X ours origin/master -m 'Merge parallel codex baseline \\(origin/master\\) into major-update branch *)",
+      "Bash(cd /c/Users/RFT/mundifruta; echo \"=== Continuar / float-cart / encomenda buttons ===\"; grep -rniE \"continuar|float-cart|fc-label\" index.html js/app.js | head -20; echo; echo \"=== Especiais ===\"; grep -rniE \"especiais\" index.html js/*.js; echo; echo \"=== Melancia refs ===\"; grep -rniE \"melancia\" js/dados.js js/app.js | head)"
     ]
   }
 }

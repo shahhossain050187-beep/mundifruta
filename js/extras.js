@@ -224,16 +224,6 @@
 
   /* ═══════════ QUEM SOMOS ═══════════ */
   function renderQuemSomos() {
-    const team = document.getElementById('qs-team');
-    if (team && typeof equipa !== 'undefined') {
-      team.innerHTML = equipa.map(m => `
-        <div class="qs-member">
-          <div class="qs-avatar">${m.foto ? `<img src="${m.foto}" alt="${m.nome}"/>` : '👤'}</div>
-          <div class="qs-nome">${m.nome}</div>
-          <div class="qs-funcao">${m.funcao}</div>
-          <p class="qs-msg">${m.mensagem}</p>
-        </div>`).join('');
-    }
     const gallery = document.getElementById('qs-gallery');
     if (gallery) {
       const fotos = [

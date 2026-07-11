@@ -106,7 +106,7 @@
     batata_branca:    "fotos/batata_branca.jpeg",
     batata_olho_perdiz:"fotos/batata_olho_perdiz.jpeg",
     batata_vermelha:  "fotos/batata_vermelha.jpeg",
-    framboesa:  "fotos/mundifruta-photos-web/20260706_132857.jpg",
+    framboesa:  "fotos/framboesa.jpeg",
     mirtilos:   "fotos/mirtilos.jpeg",
     amoras:     "fotos/amoras.jpeg",
     lichia:     "fotos/lichia.jpeg",
@@ -135,15 +135,19 @@
     cabaz_verao:   "fotos/cabaz_verao.jpeg",
   };
   const SFX = "?auto=compress&cs=tinysrgb&w=500&h=500&fit=crop";
-
-  function urlFoto(u) { return u.startsWith('fotos/') ? u : u + SFX; }
+  // Versão das imagens locais — incrementar para forçar atualização de cache no browser.
+  const IMG_VER = "v=17";
+  function urlFoto(u) {
+    if (!u.startsWith('fotos/')) return u + SFX;
+    return u + (u.includes('?') ? '&' : '?') + IMG_VER;
+  }
 
   const produtos = {
     // FRUTAS — Preço por kg (exceto frutos vermelhos por cuvete e fruta pesada à unidade → venda:"estimado").
     frutas: [
-      { nome:"Melancia",                emoji:"🍉", venda:"estimado", pricePerKg:0.99, averageWeightKg:3, peso:"1 unidade • aprox. 3 kg", preco:"0,99 €", origem:"Marrocos", foto:FOTOS.melancia, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melão Branco","Uvas sem Grainha","Hortelã"] },
+      { nome:"Melancia 1/4",            emoji:"🍉", venda:"estimado", pricePerKg:0.99, averageWeightKg:3, peso:"1/4 de melancia • aprox. 3 kg", preco:"0,99 €", origem:"Marrocos", foto:FOTOS.melancia, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melão Branco","Uvas sem Grainha","Hortelã"] },
       { nome:"Melancia sem Sementes",   emoji:"🍉", venda:"estimado", pricePerKg:1.20, averageWeightKg:3, peso:"1 unidade • aprox. 3 kg", preco:"1,20 €", foto:FOTOS.melancia_redonda, badge:"🌞 Verão", badgeClass:"", rel:["Melão Branco","Morangos","Abacaxi Maturado","Hortelã"] },
-      { nome:"Melão Branco",            emoji:"🍈", venda:"estimado", pricePerKg:1.20, averageWeightKg:2.5, peso:"1 unidade • aprox. 2,5 kg", preco:"1,20 €", origem:"Alentejo", foto:FOTOS.melao_branco, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melancia","Uvas sem Grainha"] },
+      { nome:"Melão Branco",            emoji:"🍈", venda:"estimado", pricePerKg:1.20, averageWeightKg:2.5, peso:"1 unidade • aprox. 2,5 kg", preco:"1,20 €", origem:"Alentejo", foto:FOTOS.melao_branco, badge:"🌞 Verão", badgeClass:"", rel:["Morangos","Melancia 1/4","Uvas sem Grainha"] },
       { nome:"Meloa",                   emoji:"🍈", venda:"estimado", pricePerKg:2.49, averageWeightKg:1.3, peso:"1 unidade • aprox. 1,3 kg", preco:"2,49 €", origem:"Algarve", foto:FOTOS.melao_am, badge:"🌞 Verão", badgeClass:"" },
       { nome:"Morangos",                emoji:"🍓", peso:"1 kg", preco:"6,99 €", origem:"Nacional", foto:FOTOS.morangos, badge:"🔥 Popular", badgeClass:"badge-hot", rel:["Banana Madeira","Kiwi Green New Zealand","Manga Avião","Melão Branco"] },
       { nome:"Pêssego Amarelo",         emoji:"🍑", peso:"1 kg", preco:"3,49 €", origem:"Nacional", foto:FOTOS.pessego_amarelo,  badge:"🌞 Verão", badgeClass:"" },
@@ -198,7 +202,7 @@
     ],
     // LEGUMES — ordem alfabética. Preço por kg; ervas/grelos por molho; couves à unidade.
     legumes: [
-      { nome:"Abóbora Butternut",      emoji:"🎃", peso:"1 kg",       preco:"1,49 €", foto:FOTOS.abobora_butternut, badge:null },
+      { nome:"Abóbora Butternut",      emoji:"🎃", venda:"estimado", pricePerKg:1.49, averageWeightKg:1.2, peso:"1 unidade • aprox. 1,2 kg", preco:"1,49 €", foto:FOTOS.abobora_butternut, badge:null },
       { nome:"Abóbora Cabocha",        emoji:"🎃", peso:"1 kg",       preco:"3,49 €", foto:FOTOS.abobora_cabocha,   badge:null },
       { nome:"Abóbora Fatiada s/ Caroço",emoji:"🎃", peso:"1 kg",     preco:"1,89 €", foto:FOTOS.abobora_fatiada,   badge:null },
       { nome:"Abóbora Inteira",        emoji:"🎃", venda:"estimado", pricePerKg:1.20, averageWeightKg:8, weightRange:"7–9 kg", peso:"1 unidade • aprox. 7–9 kg", preco:"1,20 €", foto:FOTOS.abobora, badge:null },

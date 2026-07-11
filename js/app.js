@@ -59,11 +59,11 @@ const carrinho = {};
   function renderDestaques() {
     preencherDestaques('promo-grid', selecionarPorNomes(
       [...produtos.frutas, ...produtos.legumes],
-      ['Morangos','Melancia','Laranja Algarve','Maçã Royal Gala','Batata Branca','Cenoura','Tomate Salada','Hortelã']
+      ['Morangos','Melancia 1/4','Laranja Algarve','Maçã Royal Gala','Batata Branca','Cenoura','Tomate Salada','Hortelã']
     ));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
-      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga','Abacate Hass']
+      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia 1/4','Manga Avião','Abacate Hass']
     ));
     preencherDestaques('season-grid', produtos.frutas.filter(item =>
       String(item.badge || '').includes('Verão')
@@ -557,6 +557,24 @@ const carrinho = {};
   function abrirCatalogo(cat) {
     mostrarCategoria(cat, document.getElementById(`tab-${cat}`));
     document.getElementById('produtos').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  /* ══ NAVEGAÇÃO ENCOMENDA ↔ CATÁLOGO ══ */
+  // Guarda a posição de navegação do cliente para poder voltar exatamente ali.
+  let posCatalogo = 0;
+  function irParaEncomenda() {
+    const prod = document.getElementById('produtos');
+    const y = window.scrollY;
+    // Só memoriza se o cliente está a ver o catálogo (não a partir do topo/hero).
+    if (prod && y >= prod.offsetTop - 240) posCatalogo = y;
+    const enc = document.getElementById('encomenda');
+    if (enc) enc.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  // "Continuar a comprar" — fecha a vista de encomenda e volta ao catálogo, na posição anterior.
+  function continuarAComprar() {
+    const prod = document.getElementById('produtos');
+    const alvo = posCatalogo || (prod ? prod.getBoundingClientRect().top + window.scrollY - 8 : 0);
+    window.scrollTo({ top: alvo, behavior:'smooth' });
   }
 
   /* ══ ORDER ══ */

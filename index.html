@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=16"/>
+  <link rel="stylesheet" href="css/estilos.css?v=17"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -85,13 +85,13 @@
     <div class="nav-links">
       <a href="#produtos">Produtos</a>
       <a href="#cabazes">Cabazes</a>
-      <a href="#verao">Especiais</a>
+      <a href="#promocoes">Promoções</a>
       <a href="#quem-somos">Quem Somos</a>
       <a href="#avaliacoes">Avaliações</a>
       <a href="#contacto">Contacto</a>
     </div>
     <div class="nav-right">
-      <button class="nav-order" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
+      <button class="nav-order" onclick="irParaEncomenda()">
         🛒 Encomendar <span class="cart-badge" id="cart-count">0</span>
       </button>
       <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -104,7 +104,7 @@
 <!-- ═══════════ MOBILE MENU ═══════════ -->
 <div class="mobile-menu" id="mobile-menu">
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
-  <a href="#verao"          onclick="toggleMenu()">Especiais de Verão</a>
+  <a href="#promocoes"      onclick="toggleMenu()">Promoções</a>
   <a href="#cabazes"        onclick="toggleMenu()">Cabazes</a>
   <a href="#como-funciona"  onclick="toggleMenu()">Como Funciona</a>
   <a href="#produtos"       onclick="toggleMenu()">Produtos</a>
@@ -189,6 +189,26 @@
   <span class="osm-step"><b>4</b> Envie por WhatsApp</span>
   <span class="osm-arrow">→</span>
   <span class="osm-step"><b>5</b> Levante na loja</span>
+</div>
+
+<!-- ═══════════ ENCOMENDA ONLINE (CTA premium) ═══════════ -->
+<div class="section online-order fi" id="encomenda-online">
+  <div class="oo-inner">
+    <span class="eyebrow">Mais cómodo</span>
+    <h2 class="section-title">Faça a sua encomenda online</h2>
+    <p class="oo-lead">Escolha tudo o que precisa. A nossa equipa seleciona cuidadosamente cada produto para si.</p>
+    <div class="oo-steps">
+      <div class="oo-step"><span class="oo-ic">🛒</span><h4>1. Escolha</h4><p>Adicione os produtos ao carrinho.</p></div>
+      <div class="oo-step"><span class="oo-ic">📱</span><h4>2. Envie</h4><p>Confirme a encomenda por WhatsApp.</p></div>
+      <div class="oo-step"><span class="oo-ic">🧺</span><h4>3. Selecionamos</h4><p>Escolhemos a dedo os melhores produtos.</p></div>
+      <div class="oo-step"><span class="oo-ic">🔔</span><h4>4. Levantamento</h4><p>Normalmente em cerca de 1 hora, avisamos quando estiver pronta.</p></div>
+    </div>
+    <p class="oo-note">Recebemos a sua encomenda, selecionamos os seus produtos com cuidado e avisamos assim que estiver pronta para levantamento na loja.</p>
+    <div class="oo-ctas">
+      <button class="btn-prim" type="button" onclick="irParaEncomenda()">🛒 Começar Encomenda</button>
+      <button class="btn-sec" type="button" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════ SHOPPING-FIRST SECTIONS ═══════════ -->
@@ -335,6 +355,7 @@
     <div class="order-grid">
       <div class="order-card">
         <div class="order-card-title">🛒 A Sua Encomenda</div>
+        <button type="button" class="btn-continuar" onclick="continuarAComprar()">← Continuar a comprar</button>
         <ul class="order-items" id="order-list">
           <li class="empty-msg">Sem artigos ainda. Selecione produtos acima para começar.</li>
         </ul>
@@ -356,6 +377,7 @@
             <button type="submit" class="btn-wa">📱 Encomendar por WhatsApp</button>
             <button type="button" class="btn-em" onclick="enviarEmail()">📧 Encomendar por Email</button>
           </div>
+          <p class="order-note">Depois de enviar, respondemos pelo WhatsApp a confirmar. Preparamos a sua encomenda e avisamos assim que estiver pronta para levantamento (normalmente em cerca de 1 hora).</p>
         </form>
       </div>
     </div>
@@ -384,18 +406,14 @@
   <div class="section-hdr fi">
     <span class="eyebrow">A Nossa História</span>
     <h2 class="section-title">Quem Somos</h2>
-    <p class="section-sub">Uma equipa local dedicada a escolher e a oferecer fruta e legumes frescos, a preços justos e transparentes.</p>
   </div>
+  <p class="qs-intro fi">Há mais de 12 anos em Carnaxide, fazemos parte da comunidade local. Continuamos dedicados a oferecer frutas e legumes frescos, preços justos e um atendimento próximo e de confiança.</p>
   <div class="qs-principios fi">
     <span class="qs-chip">🌅 Frescura diária</span>
-    <span class="qs-chip">⭐ Qualidade</span>
     <span class="qs-chip">💶 Preços justos</span>
     <span class="qs-chip">🤝 Atendimento próximo</span>
-    <span class="qs-chip">🫶 Respeito pelos clientes</span>
-    <span class="qs-chip">🇵🇹 Apoio a produtores portugueses</span>
+    <span class="qs-chip">❤️ Confiança da comunidade</span>
   </div>
-  <div class="qs-team fi" id="qs-team"></div>
-  <p class="qs-trust fi">As pessoas por detrás da Mundi Fruta são conhecidas e acompanham muitos vizinhos da zona há cerca de 10 anos — uma relação de confiança construída dia após dia, com atendimento próximo e produto selecionado à mão.</p>
   <div class="qs-gallery fi" id="qs-gallery"></div>
 </div>
 
@@ -473,7 +491,7 @@
 
 <!-- ═══════════ MOBILE BOTTOM BAR ═══════════ -->
 <nav class="mobile-bar" id="mobile-bar">
-  <button class="mb-item" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
+  <button class="mb-item" onclick="irParaEncomenda()">
     <span class="mb-icon">🛒</span><span class="mb-label">Carrinho</span>
     <span class="mb-badge" id="mb-cart-count">0</span>
   </button>
@@ -489,9 +507,9 @@
 </nav>
 
 <!-- ═══════════ FLOATING CART ═══════════ -->
-<button class="float-cart" id="float-cart" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})" title="Ver a sua encomenda">
+<button class="float-cart" id="float-cart" onclick="irParaEncomenda()" title="Ver a sua encomenda">
   <span class="fc-icon">🛒</span>
-  <span class="fc-label">Continuar Encomenda</span>
+  <span class="fc-label">Ver Encomenda</span>
   <span class="fc-count" id="float-cart-count">0</span>
 </button>
 
@@ -590,8 +608,8 @@
   </div>
 </div>
 
-<script src="js/dados.js?v=16"></script>
-<script src="js/app.js?v=16"></script>
-<script src="js/extras.js?v=16"></script>
+<script src="js/dados.js?v=17"></script>
+<script src="js/app.js?v=17"></script>
+<script src="js/extras.js?v=17"></script>
 </body>
 </html>
