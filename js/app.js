@@ -63,7 +63,7 @@ const carrinho = {};
     ));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
-      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga Avião','Abacate Hass']
+      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga','Abacate Hass']
     ));
     preencherDestaques('season-grid', produtos.frutas.filter(item =>
       String(item.badge || '').includes('Verão')
