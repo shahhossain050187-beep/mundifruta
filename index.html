@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=11"/>
+  <link rel="stylesheet" href="css/estilos.css?v=13"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -129,7 +129,7 @@
       <span class="hero-chip">🛍️ Levantamento na Loja</span>
     </div>
     <div class="hero-ctas">
-      <a href="#produtos" class="btn-prim">🛒 Ver Produtos</a>
+      <a href="#produtos" class="btn-prim">Comprar Agora</a>
     </div>
   </div>
   <svg class="hero-wave" viewBox="0 0 1440 72" fill="none" preserveAspectRatio="none">
@@ -149,28 +149,28 @@
 
 <!-- ═══════════ CATEGORY QUICK ACCESS ═══════════ -->
 <div class="cat-quick">
-  <button class="cat-quick-btn" onclick="document.getElementById('populares').scrollIntoView({behavior:'smooth'})">
+  <button class="cat-quick-btn" onclick="abrirCatalogo('frutas')">
     <img src="fotos/cabaz_frutas.jpeg" alt="Seleção de frutas frescas" loading="lazy" decoding="async"/>
-    <span class="cq-overlay"></span><span class="cq-label">Frutas</span>
+    <span class="cq-overlay"></span><span class="cq-label" data-count-label="frutas">Frutas</span>
   </button>
-  <button class="cat-quick-btn" onclick="document.getElementById('legumes-frescos').scrollIntoView({behavior:'smooth'})">
+  <button class="cat-quick-btn" onclick="abrirCatalogo('legumes')">
     <img src="fotos/cabaz_legumes.jpeg" alt="Seleção apenas de legumes frescos" loading="lazy" decoding="async"/>
-    <span class="cq-overlay"></span><span class="cq-label">Legumes</span>
+    <span class="cq-overlay"></span><span class="cq-label" data-count-label="legumes">Legumes</span>
   </button>
   <button class="cat-quick-btn" onclick="document.getElementById('cabazes').scrollIntoView({behavior:'smooth'})">
     <img src="fotos/cabaz_detox.jpeg" alt="Cabaz de frutas e legumes" loading="lazy" decoding="async"/>
-    <span class="cq-overlay"></span><span class="cq-label">Cabazes</span>
+    <span class="cq-overlay"></span><span class="cq-label" data-count-label="cabazes">Cabazes</span>
   </button>
   <button class="cat-quick-btn" onclick="document.getElementById('promocoes').scrollIntoView({behavior:'smooth'})">
     <img src="fotos/morangos.jpeg" alt="Promoções e destaques da semana" loading="lazy" decoding="async"/>
-    <span class="cq-overlay"></span><span class="cq-label">Promoções</span>
+    <span class="cq-overlay"></span><span class="cq-label" data-count-label="promocoes">Promoções</span>
   </button>
   <button class="cat-quick-btn" onclick="document.getElementById('verao').scrollIntoView({behavior:'smooth'})">
     <img src="fotos/melancia.jpeg" alt="Fruta fresca da época" loading="lazy" decoding="async"/>
-    <span class="cq-overlay"></span><span class="cq-label">Fruta da Época</span>
+    <span class="cq-overlay"></span><span class="cq-label" data-count-label="epoca">Fruta da Época</span>
   </button>
   <button class="cat-quick-btn cq-order" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})">
-    <img src="fotos/cabaz_mix.jpeg" alt="Ir para o carrinho" loading="lazy" decoding="async"/>
+    <img src="fotos/cart-review.jpg" alt="Carrinho de compras vazio para rever a encomenda" loading="lazy" decoding="async"/>
     <span class="cq-overlay"></span><span class="cq-label">Carrinho <b id="quick-cart-count">0</b></span>
   </button>
 </div>
@@ -236,8 +236,8 @@
       </div>
       <div class="catalog-bar-row">
         <div class="cat-tabs">
-          <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">🍎 Frutas <span class="cat-count" id="count-frutas">28</span></button>
-          <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">🥦 Legumes <span class="cat-count" id="count-legumes">16</span></button>
+          <button class="cat-tab active" id="tab-frutas"  onclick="mostrarCategoria('frutas',this)">Frutas <span class="cat-count" id="count-frutas">28</span></button>
+          <button class="cat-tab"        id="tab-legumes" onclick="mostrarCategoria('legumes',this)">Legumes <span class="cat-count" id="count-legumes">16</span></button>
         </div>
         <select class="price-sort" id="price-sort" onchange="ordenarPreco()" aria-label="Ordenar por preço">
           <option value="">↕ Ordenar</option>
@@ -461,8 +461,12 @@
 <!-- ═══════════ FLOATING CART ═══════════ -->
 <button class="float-cart" id="float-cart" onclick="document.getElementById('encomenda').scrollIntoView({behavior:'smooth'})" title="Ver a sua encomenda">
   <span class="fc-icon">🛒</span>
-  <span class="fc-label">Encomenda</span>
+  <span class="fc-label">Continuar Encomenda</span>
   <span class="fc-count" id="float-cart-count">0</span>
+</button>
+
+<button class="float-legumes" id="float-legumes" onclick="abrirCatalogo('legumes')" title="Ver legumes frescos" hidden>
+  Legumes
 </button>
 
 <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">▲</button>
@@ -484,7 +488,7 @@
         <strong id="product-modal-qty">1</strong>
         <button type="button" onclick="alterarQtdModal(1)" aria-label="Aumentar quantidade">+</button>
       </div>
-      <button class="product-modal-add" type="button" onclick="adicionarDoModal()">＋ Adicionar ao Carrinho</button>
+      <button class="product-modal-add" id="product-modal-add" type="button" onclick="adicionarDoModal()">＋ Adicionar ao Carrinho</button>
     </div>
   </div>
 </div>
@@ -505,7 +509,7 @@
   </div>
 </div>
 
-<script src="js/dados.js?v=11"></script>
-<script src="js/app.js?v=11"></script>
+<script src="js/dados.js?v=14"></script>
+<script src="js/app.js?v=13"></script>
 </body>
 </html>

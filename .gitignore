@@ -1,0 +1,7 @@
+# Large photo working folders — keep locally, never commit (web-optimized copies live in fotos/mundifruta-photos-web/)
+fotos/mundifruta-photos-originals/
+fotos/drive/
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store

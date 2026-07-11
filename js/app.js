@@ -1,13 +1,26 @@
 const carrinho = {};
   const produtos_map = {};
   let catAtual = 'frutas';
-  const POR_PAGINA = 26;
+  const POR_PAGINA = 27;
   const catalogoEstado = {
     frutas:  { pagina:1, todos:[], filtrados:[] },
     legumes: { pagina:1, todos:[], filtrados:[] }
   };
   let modalProdutoId = null;
   let modalQuantidade = 1;
+  const PESO_APROX_NOTA = 'Peso aproximado. Por se tratar de um produto natural, o peso real pode variar ligeiramente. O valor apresentado é uma estimativa. O preço final será ajustado de acordo com o peso real no momento da preparação da encomenda.';
+  const NOTA_PRECO_ESTIMADO = 'Preço estimado com base no peso médio. O valor final pode variar conforme o peso real do produto no momento da preparação da encomenda.';
+  const DISCLAIMER_PRODUTOS_NATURAIS = 'Produtos naturais podem variar de peso. O preço final será calculado de acordo com o peso exato preparado para a sua encomenda.';
+  const PRODUTOS_PESO_VARIAVEL = {
+    'Abacaxi Maturado': { pricePerKg:2.99, averageWeightKg:1.8 },
+    'Abacaxi Avião': { pricePerKg:6.49, averageWeightKg:2.5 },
+    'Melão Branco': { pricePerKg:1.20, averageWeightKg:3.5 },
+    'Melancia': { pricePerKg:0.99, averageWeightKg:3.0 },
+    'Meloa': { pricePerKg:2.49, averageWeightKg:1.3 },
+    'Manga': { pricePerKg:5.79, averageWeightKg:0.65 },
+    'Papaya': { pricePerKg:5.49, averageWeightKg:0.45 },
+    'Mamão 1/2': { pricePerKg:4.79, averageWeightKg:0.9 }
+  };
 
   /* ══ IMAGE FALLBACKS ══ */
   function erroImagem(img) {
@@ -30,6 +43,7 @@ const carrinho = {};
   function criarCardDestaque(item) {
     const card = document.createElement('article');
     card.className = 'feature-product';
+    if (!produtoDisponivel(item)) card.classList.add('is-unavailable');
     card.dataset.productId = item._id;
     card.innerHTML = `
       <button class="feature-photo" type="button" onclick="abrirProduto('${item._id}')" aria-label="Ver ${item.nome}">
@@ -60,7 +74,7 @@ const carrinho = {};
     ));
     preencherDestaques('popular-grid', selecionarPorNomes(
       produtos.frutas,
-      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga Avião','Abacate Hass']
+      ['Morangos','Banana Madeira','Laranja Algarve','Pêra Rocha','Maçã Royal Gala','Melancia','Manga','Abacate Hass']
     ));
     preencherDestaques('season-grid', produtos.frutas.filter(item =>
       String(item.badge || '').includes('Verão')
@@ -74,8 +88,10 @@ const carrinho = {};
   /* ══ PRODUCT CARDS ══ */
   function criarCard(item, id) {
     const badge = item.badge ? `<div class="product-badge ${item.badgeClass||''}">${item.badge}</div>` : '';
+    const disponivel = produtoDisponivel(item);
     const card  = document.createElement('div');
     card.className = 'product-card'; card.id = `card-${id}`; card.dataset.productId = id;
+    if (!disponivel) card.classList.add('is-unavailable');
     card.innerHTML = `
       ${badge}
       <div class="sel-check">✓</div>
@@ -84,11 +100,13 @@ const carrinho = {};
       </button>
       <div class="card-body">
         <div class="product-name">${item.nome}</div>
+        <div class="product-price">${precoProduto(item)}</div>
         ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
-        <div class="product-price">${item.preco}</div>
         ${item.origem ? `<div class="product-origem">🌍 ${item.origem}</div>` : '<div class="product-fresh">✓ Fresco Diário</div>'}
-        <button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
-        <div class="qty-controls">
+        ${disponivel
+          ? `<button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>`
+          : `<div class="unavailable-label">Indisponível</div>`}
+        <div class="qty-controls" ${disponivel ? '' : 'hidden'}>
           <button class="qty-btn" onclick="alterarQtd('${id}',-1,event)">−</button>
           <span class="qty-num" data-qty-id="${id}">1</span>
           <button class="qty-btn" onclick="alterarQtd('${id}',1,event)">+</button>
@@ -122,6 +140,7 @@ const carrinho = {};
     });
     document.getElementById(`no-${cat}`).style.display = pagina.length ? 'none' : 'block';
     renderPaginacao(cat);
+    atualizarSugestaoLegumes(cat);
 
     const obs = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
@@ -143,6 +162,16 @@ const carrinho = {};
       <button type="button" onclick="mudarPagina('${cat}',-1)" ${estado.pagina === 1 ? 'disabled' : ''}>← Anterior</button>
       <span>Página ${estado.pagina} de ${paginas}</span>
       <button type="button" onclick="mudarPagina('${cat}',1)" ${estado.pagina === paginas ? 'disabled' : ''}>Seguinte →</button>`;
+  }
+
+  function atualizarSugestaoLegumes(cat) {
+    if (cat !== 'frutas') return;
+    const sugestao = document.querySelector('#cat-frutas .veg-suggestion');
+    if (!sugestao) return;
+    const estado = catalogoEstado.frutas;
+    const termo = document.getElementById('search-input').value.trim();
+    const paginas = Math.max(1, Math.ceil(estado.filtrados.length / POR_PAGINA));
+    sugestao.hidden = Boolean(termo) || estado.filtrados.length === 0 || estado.pagina < paginas;
   }
 
   function mudarPagina(cat, delta) {
@@ -174,7 +203,7 @@ const carrinho = {};
         <div class="card-body">
           <div class="product-name">${item.nome}</div>
           ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
-          <div class="product-price">${item.preco}</div>
+          <div class="product-price">${precoProduto(item)}</div>
           ${verBtn}
           <button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
           <div class="qty-controls">
@@ -224,8 +253,8 @@ const carrinho = {};
     imagem.src = urlFoto(item.foto);
     imagem.alt = item.nome;
     document.getElementById('product-modal-name').textContent = item.nome;
-    document.getElementById('product-modal-price').textContent = item.preco;
-    document.getElementById('product-modal-unit').textContent = `Unidade de venda: ${item.peso || 'unidade'}`;
+    document.getElementById('product-modal-price').textContent = precoProduto(item);
+    document.getElementById('product-modal-unit').textContent = `Unidade de venda: ${detalhePesoProduto(item)}`;
     document.getElementById('product-modal-status').textContent = item.badge
       ? item.badge.replace(/^[^\p{L}\p{N}]+/u, '')
       : 'Disponível hoje';
@@ -271,9 +300,84 @@ const carrinho = {};
     }).format(centimos / 100);
   }
 
+  function formatarKg(valor) {
+    return new Intl.NumberFormat('pt-PT', {
+      minimumFractionDigits: valor < 1 ? 2 : 0,
+      maximumFractionDigits: 2
+    }).format(valor);
+  }
+
+  function formatarPesoAproximado(kg) {
+    if (kg < 1) {
+      return `${new Intl.NumberFormat('pt-PT').format(Math.round(kg * 1000))} g`;
+    }
+    return `${formatarKg(kg)} kg`;
+  }
+
+  function normalizarProdutos() {
+    [...produtos.frutas, ...produtos.legumes, ...produtos.cabazes].forEach(item => {
+      const pesoVariavel = PRODUTOS_PESO_VARIAVEL[item.nome];
+      if (pesoVariavel) {
+        item.pricePerKg = pesoVariavel.pricePerKg;
+        item.averageWeightKg = pesoVariavel.averageWeightKg;
+        item.vendaUnidade = true;
+        item.peso = `1 unidade • aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
+        item.notaPeso = PESO_APROX_NOTA;
+      }
+      if (item.nome === 'Lichia') {
+        item.status = 'Indisponível';
+        item.preco = null;
+        item.badge = 'Indisponível';
+        item.badgeClass = 'badge-unavailable';
+        item.nota = 'Produto temporariamente indisponível.';
+      }
+    });
+  }
+
+  function produtoDisponivel(item) {
+    return item && item.status !== 'Indisponível';
+  }
+
+  function produtoComPesoMedio(item) {
+    return Number.isFinite(item?.pricePerKg) && Number.isFinite(item?.averageWeightKg);
+  }
+
+  function precoCalculadoCentimos(item) {
+    if (!produtoDisponivel(item)) return null;
+    if (produtoComPesoMedio(item)) {
+      const peso = Number.isFinite(item.actualWeightKg) && item.actualWeightKg > 0
+        ? item.actualWeightKg
+        : item.averageWeightKg;
+      return Math.round(item.pricePerKg * peso * 100);
+    }
+    return precoCentimos(item.preco);
+  }
+
+  function precoProduto(item) {
+    if (!produtoDisponivel(item)) return '';
+    if (produtoComPesoMedio(item)) return precoBaseProduto(item);
+    return item.preco;
+  }
+
+  function precoBaseProduto(item) {
+    if (Number.isFinite(item.pricePerKg)) return `${formatarCentimos(Math.round(item.pricePerKg * 100))}/kg`;
+    return item.preco || 'A consultar';
+  }
+
+  function detalhePesoProduto(item) {
+    if (produtoComPesoMedio(item)) {
+      return `1 unidade • aprox. ${formatarPesoAproximado(item.averageWeightKg)}`;
+    }
+    return item.peso || 'Unidade';
+  }
+
+  function produtoEstimado(item) {
+    return produtoComPesoMedio(item) && !item.actualWeightKg;
+  }
+
   function totaisCarrinho() {
     return Object.values(carrinho).reduce((totais, item) => {
-      const preco = precoCentimos(item.preco);
+      const preco = precoCalculadoCentimos(item);
       totais.quantidade += item.qtd;
       if (preco === null) {
         totais.porConfirmar += 1;
@@ -285,7 +389,7 @@ const carrinho = {};
   }
 
   function adicionarProduto(id, item, quantidade = 1) {
-    if (!item) return;
+    if (!item || !produtoDisponivel(item)) return;
     const incremento = Math.max(1, Number.parseInt(quantidade, 10) || 1);
     if (carrinho[id]) {
       carrinho[id].qtd += incremento;
@@ -382,8 +486,9 @@ const carrinho = {};
       return;
     }
     lista.innerHTML = itens.map(i => {
-      const preco = precoCentimos(i.preco);
+      const preco = precoCalculadoCentimos(i);
       const subtotal = preco === null ? 'A confirmar' : formatarCentimos(preco * i.qtd);
+      const estimado = produtoComPesoMedio(i);
       return `<li class="order-item">
         <span class="order-item-main">${i.emoji} ${i.nome}${i.peso ? ` <small>(${i.peso})</small>` : ''}</span>
         <span class="order-item-actions">
@@ -392,23 +497,28 @@ const carrinho = {};
             <b>${i.qtd}</b>
             <button type="button" onclick="alterarQtdCarrinho('${i._id}',1)" aria-label="Mais">+</button>
           </span>
-          <span class="order-item-price">${i.preco} · <strong>${subtotal}</strong></span>
-          <button class="order-remove" type="button" onclick="removerProduto('${i._id}')" aria-label="Remover ${i.nome}">✕</button>
+          <span class="order-item-price">${estimado
+            ? `${precoBaseProduto(i)} <strong>Subtotal estimado: ${subtotal}</strong>`
+            : `${i.preco} · <strong>${subtotal}</strong>`}</span>
+          <button class="order-remove" type="button" onclick="removerProduto('${i._id}')" aria-label="Remover ${i.nome}">×</button>
         </span>
       </li>`;
     }).join('');
 
     const totais = totaisCarrinho();
+    const temEstimados = itens.some(produtoComPesoMedio);
     totalEl.hidden = false;
     totalEl.innerHTML = `
       <span>Total estimado</span>
       <strong>${formatarCentimos(totais.centimos)}</strong>
       ${totais.porConfirmar ? `<small>+ ${totais.porConfirmar} ${totais.porConfirmar === 1 ? 'artigo' : 'artigos'} com preço a confirmar</small>` : ''}
+      ${temEstimados ? `<small>${NOTA_PRECO_ESTIMADO}</small><small>${DISCLAIMER_PRODUTOS_NATURAIS}</small>` : ''}
     `;
   }
 
   /* ══ CATALOG FILTERS / SORT / PAGINATION ══ */
   function precoItem(item) {
+    if (produtoComPesoMedio(item)) return Math.round(item.pricePerKg * 100);
     const valor = precoCentimos(item.preco);
     return valor === null ? Infinity : valor;
   }
@@ -486,16 +596,22 @@ const carrinho = {};
     let t = `Olá MUNDIFRUTA! Gostaria de fazer uma encomenda para levantamento na loja:\n\nNome: ${nome}\nTelemóvel: ${tel}\n`;
     if (hora) t += `Levantamento: ${hora}\n`;
     t += `\nEncomenda:\n`;
+    const temEstimados = itens.some(produtoComPesoMedio);
     itens.forEach(i => {
-      const preco = precoCentimos(i.preco);
+      const preco = precoCalculadoCentimos(i);
       const subtotal = preco === null ? 'A confirmar' : formatarCentimos(preco * i.qtd);
-      t += `• *${i.qtd}x* ${i.nome}${i.peso ? ` (${i.peso})` : ''} — ${i.preco} = *${subtotal}*\n`;
+      if (produtoComPesoMedio(i)) {
+        t += `• *${i.qtd}x* ${i.nome} (${i.peso}) — ${precoBaseProduto(i)} — *Subtotal estimado: ${subtotal}*\n`;
+      } else {
+        t += `• *${i.qtd}x* ${i.nome}${i.peso ? ` (${i.peso})` : ''} — ${i.preco} = *${subtotal}*\n`;
+      }
     });
     const totais = totaisCarrinho();
     t += `\n*TOTAL ESTIMADO: ${formatarCentimos(totais.centimos)}*`;
     if (totais.porConfirmar) {
       t += `\nNota: ${totais.porConfirmar} ${totais.porConfirmar === 1 ? 'artigo tem' : 'artigos têm'} preço a confirmar.`;
     }
+    if (temEstimados) t += `\n${NOTA_PRECO_ESTIMADO}\n${DISCLAIMER_PRODUTOS_NATURAIS}`;
     if (notas) t += `\nNotas: ${notas}`;
     return t;
   }
@@ -514,7 +630,33 @@ const carrinho = {};
   /* ══ UI ══ */
   function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('open'); }
 
+  function promoverCatalogo() {
+    const atalhos = document.querySelector('.cat-quick');
+    const catalogo = document.getElementById('produtos');
+    if (atalhos && catalogo) atalhos.insertAdjacentElement('afterend', catalogo);
+  }
+
+  function atualizarContadoresCategorias() {
+    const contadores = {
+      frutas: produtos.frutas.length,
+      legumes: produtos.legumes.length,
+      cabazes: produtos.cabazes.length,
+      promocoes: [...produtos.frutas, ...produtos.legumes].filter(item =>
+        /popular|premium|recomendado|oferta/i.test(String(item.badge || ''))
+      ).length,
+      epoca: produtos.frutas.filter(item => /verão|verao/i.test(String(item.badge || ''))).length
+    };
+    document.getElementById('count-frutas').textContent = contadores.frutas;
+    document.getElementById('count-legumes').textContent = contadores.legumes;
+    document.querySelectorAll('[data-count-label]').forEach(label => {
+      const chave = label.dataset.countLabel;
+      const texto = label.textContent.replace(/\s*\(\d+\)\s*$/, '').trim();
+      if (Number.isFinite(contadores[chave])) label.textContent = `${texto} (${contadores[chave]})`;
+    });
+  }
+
   let toastTimer;
+  let ultimoScrollY = window.scrollY;
   function mostrarToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
@@ -527,6 +669,11 @@ const carrinho = {};
     const y = window.scrollY;
     document.getElementById('main-nav').classList.toggle('scrolled', y > 60);
     document.getElementById('scroll-top').classList.toggle('visible', y > 400);
+    const aDescer = y > ultimoScrollY && y > 170;
+    const aSubir = y < ultimoScrollY - 4;
+    document.body.classList.toggle('catalog-tools-collapsed', aDescer);
+    if (aSubir || y < 120) document.body.classList.remove('catalog-tools-collapsed');
+    ultimoScrollY = y;
   }, { passive:true });
 
   /* ══ NAV ACTIVE HIGHLIGHT ══ */
@@ -572,13 +719,14 @@ const carrinho = {};
   }
 
   /* ══ INIT ══ */
+  promoverCatalogo();
+  normalizarProdutos();
   renderGrid(produtos.frutas,  'grid-frutas',  'fruta',  'frutas');
   renderGrid(produtos.legumes, 'grid-legumes', 'legume', 'legumes');
   renderDestaques();
   renderCabazes();
   renderAvaliacoes();
-  document.getElementById('count-frutas').textContent  = produtos.frutas.length;
-  document.getElementById('count-legumes').textContent = produtos.legumes.length;
+  atualizarContadoresCategorias();
   carregarCarrinho();
 
   document.addEventListener('keydown', e => {

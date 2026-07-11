@@ -342,7 +342,7 @@
     }
     .float-cart.pop { animation:fc-pop 0.42s ease; }
     @keyframes fc-pop { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 100%{transform:scale(1)} }
-    @media (max-width:480px){ .float-cart .fc-label { display:none; } .float-cart { padding:11px 13px; } }
+    @media (max-width:480px){ .float-cart { padding:10px 12px; gap:7px; font-size:.72rem; } }
 
     .order-steps-mini {
       max-width:1000px; margin:14px auto 0; padding:12px 20px;
@@ -511,6 +511,14 @@
     }
     .catalog-bar .cat-tabs { margin:0; }
     .catalog-bar .price-sort { flex:0 0 auto; }
+    body.catalog-tools-collapsed .catalog-bar {
+      transform:translateY(-105%);
+      opacity:0;
+      pointer-events:none;
+    }
+    .catalog-bar {
+      transition:transform .24s ease, opacity .18s ease;
+    }
     @media (max-width:768px){
       .catalog-bar { top:50px; padding:9px 0 8px; }
       .catalog-bar-row { justify-content:space-between; gap:8px; }
@@ -625,6 +633,20 @@
     }
     .add-btn:hover { background:var(--forest-2); }
     .product-card.selected .add-btn { background:var(--cherry); }
+    .product-card.is-unavailable {
+      opacity:.82;
+    }
+    .unavailable-label {
+      display:grid;
+      place-items:center;
+      min-height:36px;
+      padding:0 10px;
+      border-radius:var(--r-md);
+      background:#f8e9e4;
+      color:var(--cherry);
+      font-size:.8rem;
+      font-weight:800;
+    }
 
     .qty-controls {
       display:none; align-items:center; justify-content:center; gap:14px; margin-top:10px;
@@ -668,6 +690,7 @@
       display:flex; flex-direction:column; align-items:flex-end; gap:5px; flex:0 0 auto;
     }
     .order-item-price { color:var(--sage-lt); font-weight:600; white-space:nowrap; font-size:0.86rem; }
+    .order-item-price strong { display:block; margin-top:2px; color:#fff; }
     .oi-stepper { display:inline-flex; align-items:center; gap:9px; }
     .oi-stepper button {
       width:28px; height:28px; border-radius:var(--r-full); border:1px solid rgba(255,255,255,0.3);
@@ -1344,4 +1367,89 @@
       .product-card { min-height:0; }
       .product-name { font-size:.68rem; }
       .add-btn { font-size:.62rem; }
+    }
+
+    /* Final shopping-flow refinements */
+    .veg-suggestion[hidden] { display:none; }
+    #produtos { padding-top:32px !important; }
+    #produtos .section-hdr { margin-bottom:18px !important; }
+    #produtos .section-sub { display:none; }
+
+    @media (max-width:700px) {
+      .info-strip,
+      .order-steps-mini { display:none; }
+      .hero { padding:60px 16px 12px; }
+      .hero-heading { font-size:1.68rem; line-height:1.1; }
+      .hero-trust { margin-top:7px; }
+      .hero-rating { padding:6px 11px; }
+      .hero-ctas { margin-top:8px; margin-bottom:0; }
+      .hero-ctas .btn-prim { min-height:38px; padding:10px 20px; font-size:.84rem; }
+      .hero-wave { height:18px; }
+      .cat-quick {
+        grid-template-columns:repeat(3,1fr);
+        gap:8px;
+        padding:10px 10px 8px;
+      }
+      .cat-quick-btn {
+        min-height:86px;
+        border-radius:12px;
+      }
+      .cat-quick-btn .cq-label {
+        left:9px;
+        right:9px;
+        bottom:9px;
+        font-size:.76rem;
+        line-height:1.15;
+      }
+      .cat-quick-btn .cq-label b {
+        min-width:21px;
+        height:21px;
+        font-size:.65rem;
+      }
+      #produtos { padding:22px 10px 44px !important; }
+      #produtos .section-title { font-size:1.48rem; }
+      .catalog-bar {
+        top:50px;
+        margin-left:-10px;
+        margin-right:-10px;
+        padding:8px 10px;
+      }
+      .search-input {
+        padding:11px 42px 11px 16px;
+        font-size:.84rem;
+      }
+      .catalog-bar-row {
+        justify-content:center;
+      }
+      .catalog-bar .cat-tab {
+        padding:8px 12px;
+        font-size:.76rem;
+      }
+      .catalog-bar .price-sort {
+        max-width:124px;
+        padding:7px 8px;
+        font-size:.7rem;
+      }
+      .catalog-pagination {
+        gap:8px;
+        margin-top:16px;
+      }
+      .catalog-pagination button {
+        min-height:36px;
+        padding:0 11px;
+        font-size:.72rem;
+      }
+      .catalog-pagination span {
+        flex:1;
+        min-width:96px;
+        text-align:center;
+        font-size:.72rem;
+      }
+      .veg-suggestion {
+        bottom:74px;
+        min-height:42px;
+        margin-top:16px;
+        font-size:.76rem;
+      }
+      .shop-feature { padding-top:42px; }
     }
