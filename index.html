@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=20"/>
+  <link rel="stylesheet" href="css/estilos.css?v=21"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -528,16 +528,43 @@
   <button class="cs-pop-skip" type="button" onclick="fecharCrossSell()">Continuar sem adicionar</button>
 </div>
 
-<!-- ═══════════ OFERTA PRIMEIRA COMPRA ═══════════ -->
-<div class="offer-pop" id="offer-pop" hidden onclick="if(event.target===this)fecharOferta()">
-  <div class="offer-box" role="dialog" aria-modal="true" aria-labelledby="offer-title">
-    <button class="offer-close" type="button" onclick="fecharOferta()" aria-label="Fechar">✕</button>
-    <div class="offer-emoji">🎁</div>
-    <h3 class="offer-title" id="offer-title"></h3>
-    <p class="offer-text" id="offer-text"></p>
-    <p class="offer-fine" id="offer-fine"></p>
-    <button class="offer-cta" type="button" onclick="aceitarOferta()">Receber 10€</button>
-    <button class="offer-later" type="button" onclick="fecharOferta()">Agora não</button>
+<!-- ═══════════ OFERTA 1ª COMPRA — REVELAÇÃO MELANCIA ═══════════ -->
+<div class="offer-reveal" id="offer-pop" hidden role="dialog" aria-modal="true" aria-labelledby="offer-aria" aria-describedby="offer-text">
+  <span id="offer-aria" class="sr-only">Oferta de boas-vindas: 10 euros de desconto na sua primeira compra.</span>
+  <button class="reveal-close" type="button" onclick="fecharOferta()" aria-label="Fechar oferta">✕</button>
+  <div class="reveal-inner">
+    <div class="reveal-stage" aria-hidden="true">
+      <svg class="watermelon" viewBox="0 0 240 220" role="presentation" focusable="false">
+        <g class="wm-half wm-l">
+          <path d="M120 30 A88 88 0 0 0 120 210 Z" fill="#2f7d32"/>
+          <path d="M120 30 A88 88 0 0 0 120 210" fill="none" stroke="#194d1d" stroke-width="4"/>
+          <path d="M120 40 A78 78 0 0 0 120 200 Z" fill="#f2fbe6"/>
+          <path d="M120 47 A71 71 0 0 0 120 193 Z" fill="#e23b4e"/>
+          <ellipse cx="96" cy="86" rx="4" ry="7" fill="#2a1414"/>
+          <ellipse cx="84" cy="120" rx="4" ry="7" fill="#2a1414"/>
+          <ellipse cx="96" cy="154" rx="4" ry="7" fill="#2a1414"/>
+        </g>
+        <g class="wm-half wm-r">
+          <path d="M120 30 A88 88 0 0 1 120 210 Z" fill="#2f7d32"/>
+          <path d="M120 30 A88 88 0 0 1 120 210" fill="none" stroke="#194d1d" stroke-width="4"/>
+          <path d="M120 40 A78 78 0 0 1 120 200 Z" fill="#f2fbe6"/>
+          <path d="M120 47 A71 71 0 0 1 120 193 Z" fill="#e23b4e"/>
+          <ellipse cx="144" cy="86" rx="4" ry="7" fill="#2a1414"/>
+          <ellipse cx="156" cy="120" rx="4" ry="7" fill="#2a1414"/>
+          <ellipse cx="144" cy="154" rx="4" ry="7" fill="#2a1414"/>
+        </g>
+      </svg>
+      <div class="reveal-amount"><span>10€</span></div>
+    </div>
+    <div class="reveal-copy">
+      <h2 class="reveal-title">De Desconto</h2>
+      <p class="reveal-text" id="offer-text"></p>
+      <p class="reveal-fine" id="offer-fine"></p>
+      <div class="reveal-actions">
+        <button class="reveal-cta" type="button" onclick="aceitarOferta()">🎁 Receber Oferta</button>
+        <button class="reveal-later" type="button" onclick="fecharOferta()">Agora não</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -608,8 +635,8 @@
   </div>
 </div>
 
-<script src="js/dados.js?v=20"></script>
-<script src="js/app.js?v=20"></script>
-<script src="js/extras.js?v=18"></script>
+<script src="js/dados.js?v=21"></script>
+<script src="js/app.js?v=21"></script>
+<script src="js/extras.js?v=21"></script>
 </body>
 </html>

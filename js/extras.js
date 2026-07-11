@@ -82,34 +82,59 @@
   }
 
   function preencherOferta() {
-    document.getElementById('offer-title').textContent = cupaoConfig.copyTitulo;
-    document.getElementById('offer-text').textContent = cupaoConfig.copyTexto;
-    document.getElementById('offer-fine').textContent = cupaoConfig.copyExclusivo;
+    // texto dinâmico → sempre coerente com o mínimo real do cupão
+    const t = document.getElementById('offer-text');
+    const f = document.getElementById('offer-fine');
+    if (t) t.textContent = `Na sua primeira compra de ${cupaoConfig.minimo}€ ou mais.`;
+    if (f) f.textContent = cupaoConfig.copyExclusivo;
   }
+  let _revealKey = null;
   function mostrarOferta() {
     // só a novos visitantes: sem cupão emitido nem dispensado
     if (lerCupao()) return;
+    const pop = document.getElementById('offer-pop');
+    if (!pop) return;
     preencherOferta();
-    document.getElementById('offer-pop').hidden = false;
+    pop.hidden = false;
+    document.body.style.overflow = 'hidden';
+    const foco = pop.querySelectorAll('button');
+    const cta = pop.querySelector('.reveal-cta');
+    setTimeout(() => { try { (cta || foco[0]).focus(); } catch (e) {} }, 60);
+    _revealKey = function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); window.fecharOferta(); return; }
+      if (e.key === 'Tab' && foco.length) {
+        const first = foco[0], last = foco[foco.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    document.addEventListener('keydown', _revealKey);
+    if (typeof window.trackEvent === 'function') window.trackEvent('offer_shown', { coupon: cupaoConfig.codigo });
+  }
+  function encerrarReveal() {
+    const pop = document.getElementById('offer-pop');
+    if (pop) pop.hidden = true;
+    document.body.style.overflow = '';
+    if (_revealKey) { document.removeEventListener('keydown', _revealKey); _revealKey = null; }
   }
   window.aceitarOferta = function () {
     gravarCupao({ code: cupaoConfig.codigo, status: 'available', issuedAt: Date.now() });
-    document.getElementById('offer-pop').hidden = true;
-    if (typeof mostrarToast === 'function') mostrarToast(`🎁 Cupão ${cupaoConfig.codigo} ativado (mín. ${cupaoConfig.minimo}€)`);
-    window.trackEvent('coupon_generated', { coupon: cupaoConfig.codigo });
+    encerrarReveal();
+    if (typeof mostrarToast === 'function') mostrarToast(`🎁 Cupão ${cupaoConfig.codigo} reservado (mín. ${cupaoConfig.minimo}€)`);
+    if (typeof window.trackEvent === 'function') window.trackEvent('coupon_generated', { coupon: cupaoConfig.codigo });
     atualizarProgresso();
   };
   window.fecharOferta = function () {
     // marca como dispensado para não voltar a aparecer
     if (!lerCupao()) gravarCupao({ code: cupaoConfig.codigo, status: 'dismissed', issuedAt: Date.now() });
-    document.getElementById('offer-pop').hidden = true;
+    encerrarReveal();
   };
 
   function initOferta() {
     if (lerCupao()) return; // já emitido/dispensado
     let mostrado = false;
     const disparar = () => { if (!mostrado) { mostrado = true; mostrarOferta(); limpar(); } };
-    const timer = setTimeout(disparar, 5000);
+    const timer = setTimeout(disparar, 1200);
     const onInteract = () => disparar();
     function limpar() {
       clearTimeout(timer);
@@ -128,12 +153,14 @@
     if (!cupaoAtivo()) { box.hidden = true; return; }
     const total = totaisCarrinho().centimos;
     const minimo = cupaoConfig.minimo * 100;
-    if (total <= 0) { box.hidden = true; return; }
     box.hidden = false;
-    if (total < minimo) {
+    if (total <= 0) {
+      box.className = 'promo-progress';
+      box.innerHTML = `🎁 <strong>Cupão de ${cupaoConfig.desconto}€ reservado.</strong> Adicione produtos até ${cupaoConfig.minimo}€ e desbloqueie o seu desconto.`;
+    } else if (total < minimo) {
       const faltam = formatarCentimos(minimo - total);
       box.className = 'promo-progress';
-      box.innerHTML = `🎁 Faltam <strong>${faltam}</strong> para receber <strong>10€ de desconto</strong> na 1ª compra.`;
+      box.innerHTML = `🎁 Faltam <strong>${faltam}</strong> para desbloquear o seu desconto de <strong>${cupaoConfig.desconto}€</strong>.`;
     } else {
       const desconto = descontoCentimos(total);
       const net = formatarCentimos(total - desconto);
