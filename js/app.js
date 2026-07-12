@@ -437,12 +437,24 @@ const carrinho = {};
   }
 
   function atualizarBadge() {
-    const n = totaisCarrinho().quantidade;
+    const totais = totaisCarrinho();
+    const n = totais.quantidade;
     document.getElementById('cart-count').textContent = n;
     const quick = document.getElementById('quick-cart-count');
     if (quick) quick.textContent = n;
     const mb = document.getElementById('mb-cart-count');
     if (mb) { mb.textContent = n; mb.style.display = n > 0 ? 'flex' : 'none'; }
+    // Running subtotal on the persistent cart tab, so shoppers always see "how much am I at".
+    const mbLabel = document.getElementById('mb-cart-label');
+    if (mbLabel) {
+      if (totais.centimos > 0) {
+        mbLabel.textContent = formatarCentimos(totais.centimos);
+        mbLabel.classList.add('is-total');
+      } else {
+        mbLabel.textContent = 'Carrinho';
+        mbLabel.classList.remove('is-total');
+      }
+    }
     const fc = document.getElementById('float-cart');
     if (fc) {
       document.getElementById('float-cart-count').textContent = n;

@@ -349,6 +349,8 @@
       }
       .mb-item:active { background:rgba(255,255,255,0.08); }
       .mb-item .mb-icon { font-size:1.35rem; line-height:1; }
+      /* Running subtotal shown on the cart tab — brand-accent so the value reads at a glance */
+      .mb-item .mb-label.is-total { color:var(--sage-lt); font-weight:800; }
       .mb-item .mb-badge {
         position:absolute; top:4px; left:calc(50% + 8px); background:var(--cherry); color:#fff;
         min-width:18px; height:18px; padding:0 5px; border-radius:var(--r-full);
@@ -759,6 +761,10 @@
     }
     .order-remove:hover { background:var(--cherry); color:#fff; }
     .order-item-actions { flex-direction:row !important; align-items:center !important; gap:12px !important; flex-wrap:wrap; justify-content:flex-end; }
+    @media (max-width:600px){
+      .order-item { flex-direction:column; align-items:stretch; gap:8px; }
+      .order-item-actions { width:100%; justify-content:space-between; }
+    }
     .order-total {
       display:grid; grid-template-columns:1fr auto; align-items:center; gap:4px 16px;
       margin-top:18px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.2);
@@ -787,20 +793,40 @@
       box-shadow:0 0 0 3px rgba(82,183,136,0.2);
     }
     .order-form textarea { height:90px; resize:none; }
-    .order-btns { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
+    /* Optional fields tucked behind a quiet reveal link — keeps the form a fast 2-field ask */
+    .order-optional-toggle {
+      display:inline-block; margin-bottom:12px; padding:4px 2px;
+      background:none; border:none; cursor:pointer;
+      color:var(--sage-lt); font-weight:600; font-size:0.86rem;
+      font-family:'Poppins',sans-serif; text-decoration:underline; text-underline-offset:3px;
+      transition:color 0.2s;
+    }
+    .order-optional-toggle span { opacity:0.65; font-weight:500; }
+    .order-optional-toggle:hover { color:#fff; }
+    .order-optional[hidden] { display:none; }
+    .order-btns { display:flex; flex-direction:column; gap:6px; margin-top:16px; }
+    /* WhatsApp is the single primary action */
     .btn-wa {
-      background:#25D366; color:#fff; border:none; padding:14px 24px;
-      border-radius:var(--r-md); font-weight:700; font-size:0.9rem;
+      background:#25D366; color:#fff; border:none; padding:16px 24px;
+      border-radius:var(--r-md); font-weight:800; font-size:1rem;
       cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.25s; text-align:center;
+      box-shadow:0 6px 18px rgba(37,211,102,0.28);
     }
-    .btn-wa:hover { background:#1ebe5d; transform:translateY(-1px); box-shadow:0 6px 20px rgba(37,211,102,0.4); }
+    .btn-wa:hover { background:#1ebe5d; transform:translateY(-1px); box-shadow:0 8px 22px rgba(37,211,102,0.42); }
+    /* Trust line — reassures at the point of action (no online payment) */
+    .order-reassure {
+      display:flex; align-items:center; justify-content:center; gap:7px;
+      margin:6px 0 2px; text-align:center;
+      color:var(--sage-lt); font-size:0.82rem; font-weight:600; line-height:1.4;
+    }
+    /* Email demoted to a quiet secondary link */
     .btn-em {
-      background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.82);
-      border:1px solid rgba(255,255,255,0.2); padding:12px 24px;
-      border-radius:var(--r-md); font-weight:600; font-size:0.86rem;
-      cursor:pointer; font-family:'Poppins',sans-serif; transition:all 0.25s; text-align:center;
+      align-self:center; background:none; border:none; padding:8px 14px;
+      color:rgba(255,255,255,0.6); font-weight:600; font-size:0.82rem;
+      text-decoration:underline; text-underline-offset:3px; cursor:pointer;
+      font-family:'Poppins',sans-serif; transition:color 0.2s;
     }
-    .btn-em:hover { background:rgba(255,255,255,0.18); }
+    .btn-em:hover { color:#fff; background:none; }
 
     /* ??????????????????????????????????????
        CONTACT
@@ -838,7 +864,7 @@
     .footer-logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:#fff; }
     .footer-logo span { color:var(--peach); }
     .footer-text { color:rgba(255,255,255,0.4); font-size:0.8rem; }
-    .footer-links { display:flex; gap:20px; }
+    .footer-links { display:flex; flex-wrap:wrap; gap:20px; }
     .footer-links a { color:rgba(255,255,255,0.5); text-decoration:none; font-size:0.84rem; transition:color 0.2s; }
     .footer-links a:hover { color:var(--peach); }
     .footer-credit { width:100%; text-align:center; margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); color:rgba(255,255,255,0.3); font-size:0.72rem; }
@@ -932,7 +958,14 @@
       .product-fresh { display:none; }
       .product-price { font-size:0.74rem; margin-bottom:4px; }
       .add-btn { padding:5px 2px; font-size:0.62rem; }
-      .product-badge { font-size:0.5rem; padding:2px 5px; }
+      .product-badge { font-size:0.5rem; padding:2px 5px; top:6px; right:6px; }
+      /* Dense cards: compact badges so nothing overflows/clips (e.g. "Mais vendido") */
+      .top-badge { font-size:0.5rem; padding:2px 6px; top:6px; left:6px; letter-spacing:0; }
+      .sel-check { width:22px; height:22px; top:6px; left:6px; font-size:0.66rem; }
+      /* Avoid double-badge clutter on the narrow card: keep the top-seller badge, drop the corner badge */
+      .product-card:has(.top-badge) .product-badge { display:none; }
+      /* Selected-card ring: smaller on dense cards so it never reaches the screen edge (no "cut off" look) */
+      .product-card.selected { outline-width:2px; box-shadow:0 0 0 3px rgba(82,183,136,0.18), var(--sh); }
       .cat-tab { font-size:0.82rem; padding:9px 12px; }
       .sc { width:240px; height:320px; }
       .social-link { transform:translateX(calc(100% - 46px)); }
@@ -1431,22 +1464,36 @@
     @media (max-width:700px) {
       .info-strip,
       .order-steps-mini { display:none; }
-      .hero { padding:60px 16px 12px; }
-      .hero-heading { font-size:1.68rem; line-height:1.1; }
-      .hero-trust { margin-top:7px; }
-      .hero-rating { padding:6px 11px; }
-      .hero-ctas { margin-top:8px; margin-bottom:0; }
-      .hero-ctas .btn-prim { min-height:38px; padding:10px 20px; font-size:.84rem; }
-      .hero-wave { height:18px; }
+      /* Slimmer mobile header — same logo wordmark/colors, sized for mobile + room for the cart chip */
+      #main-nav .nav-inner { padding:11px 16px; }
+      #main-nav.scrolled .nav-inner { padding:9px 16px; }
+      .logo { font-size:1.4rem; }
+      .hero { padding:52px 16px 10px; }
+      .hero-heading { font-size:1.5rem; line-height:1.06; margin-bottom:4px; }
+      .hero-trust { margin-top:5px; }
+      .hero-rating { padding:5px 11px; }
+      /* Comprar Agora is redundant on mobile — category tiles + catalog sit directly below */
+      .hero-ctas { display:none; }
+      .hero-wave { height:16px; }
       .cat-quick {
         grid-template-columns:repeat(3,1fr);
-        gap:8px;
-        padding:10px 10px 8px;
+        gap:7px;
+        padding:8px 10px 6px;
       }
       .cat-quick-btn {
-        min-height:86px;
+        min-height:70px;
         border-radius:12px;
       }
+      /* Compact cart chip docked in the header row (left of the menu button).
+         Sits inside the fixed nav band at every scroll position, so it never overlaps content. */
+      .float-cart .fc-label { display:none; }
+      .float-cart {
+        top:11px; right:58px; padding:5px 8px; gap:4px;
+        border-width:1px; font-size:.72rem;
+        box-shadow:0 4px 14px rgba(196,30,58,.4);
+      }
+      .float-cart .fc-icon { font-size:1rem; }
+      .float-cart .fc-count { min-width:17px; height:17px; font-size:.66rem; padding:0 4px; }
       .cat-quick-btn .cq-label {
         left:9px;
         right:9px;
@@ -1459,16 +1506,16 @@
         height:21px;
         font-size:.65rem;
       }
-      #produtos { padding:22px 10px 44px !important; }
-      #produtos .section-title { font-size:1.48rem; }
+      #produtos { padding:14px 12px 40px !important; }
+      #produtos .section-title { font-size:1.4rem; }
       .catalog-bar {
         top:50px;
-        margin-left:-10px;
-        margin-right:-10px;
-        padding:8px 10px;
+        margin-left:-12px;
+        margin-right:-12px;
+        padding:8px 12px;
       }
       .search-input {
-        padding:11px 42px 11px 16px;
+        padding:10px 42px 10px 16px;
         font-size:.84rem;
       }
       .catalog-bar-row {
@@ -1693,7 +1740,7 @@
     }
 
     @media (max-width:640px) {
-      .oo-steps { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .oo-steps { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
       .oo-ctas { flex-direction:column; }
       .oo-ctas .btn-prim, .oo-ctas .btn-sec { width:100%; justify-content:center; }
       .qs-intro { font-size:1.05rem; }

@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilos.css?v=21"/>
+  <link rel="stylesheet" href="css/estilos.css?v=34"/>
 
   <!-- ═══════════ DADOS ESTRUTURADOS (Google) ═══════════ -->
   <script type="application/ld+json">
@@ -191,25 +191,8 @@
   <span class="osm-step"><b>5</b> Levante na loja</span>
 </div>
 
-<!-- ═══════════ ENCOMENDA ONLINE (CTA premium) ═══════════ -->
-<div class="section online-order fi" id="encomenda-online">
-  <div class="oo-inner">
-    <span class="eyebrow">Mais cómodo</span>
-    <h2 class="section-title">Faça a sua encomenda online</h2>
-    <p class="oo-lead">Escolha tudo o que precisa. A nossa equipa seleciona cuidadosamente cada produto para si.</p>
-    <div class="oo-steps">
-      <div class="oo-step"><span class="oo-ic">🛒</span><h4>1. Escolha</h4><p>Adicione os produtos ao carrinho.</p></div>
-      <div class="oo-step"><span class="oo-ic">📱</span><h4>2. Envie</h4><p>Confirme a encomenda por WhatsApp.</p></div>
-      <div class="oo-step"><span class="oo-ic">🧺</span><h4>3. Selecionamos</h4><p>Escolhemos a dedo os melhores produtos.</p></div>
-      <div class="oo-step"><span class="oo-ic">🔔</span><h4>4. Levantamento</h4><p>Normalmente em cerca de 1 hora, avisamos quando estiver pronta.</p></div>
-    </div>
-    <p class="oo-note">Recebemos a sua encomenda, selecionamos os seus produtos com cuidado e avisamos assim que estiver pronta para levantamento na loja.</p>
-    <div class="oo-ctas">
-      <button class="btn-prim" type="button" onclick="irParaEncomenda()">🛒 Começar Encomenda</button>
-      <button class="btn-sec" type="button" onclick="document.getElementById('produtos').scrollIntoView({behavior:'smooth'})">Ver Produtos</button>
-    </div>
-  </div>
-</div>
+<!-- "How to order" explainer consolidated into a single section (#como-funciona) to reduce duplicate reading. -->
+
 
 <!-- ═══════════ SHOPPING-FIRST SECTIONS ═══════════ -->
 <div class="section shop-feature promo-shop" id="promocoes">
@@ -371,11 +354,18 @@
         <form class="order-form" id="order-form" onsubmit="enviarWhatsApp(event)">
           <input type="text" id="cust-nome"      placeholder="O Seu Nome *" required/>
           <input type="tel"  id="cust-telemovel" placeholder="Nº de Telemóvel *" required/>
-          <input type="text" id="cust-levantamento" placeholder="Hora de levantamento (ex: 17h30)"/>
-          <textarea          id="cust-notas"     placeholder="Pedidos especiais ou notas..."></textarea>
+          <button type="button" class="order-optional-toggle" id="order-optional-toggle"
+                  onclick="var o=document.getElementById('order-optional');o.hidden=false;this.hidden=true;">
+            + Hora de levantamento ou nota <span>(opcional)</span>
+          </button>
+          <div class="order-optional" id="order-optional" hidden>
+            <input type="text" id="cust-levantamento" placeholder="Hora de levantamento (ex: 17h30)"/>
+            <textarea          id="cust-notas"     placeholder="Pedidos especiais ou notas..."></textarea>
+          </div>
           <div class="order-btns">
             <button type="submit" class="btn-wa">📱 Encomendar por WhatsApp</button>
-            <button type="button" class="btn-em" onclick="enviarEmail()">📧 Encomendar por Email</button>
+            <p class="order-reassure">🔒 Sem pagamento antecipado. Pague apenas na loja ao levantar.</p>
+            <button type="button" class="btn-em" onclick="enviarEmail()">ou encomende por email</button>
           </div>
           <p class="order-note">Depois de enviar, respondemos pelo WhatsApp a confirmar. Preparamos a sua encomenda e avisamos assim que estiver pronta para levantamento (normalmente em cerca de 1 hora).</p>
         </form>
@@ -492,7 +482,7 @@
 <!-- ═══════════ MOBILE BOTTOM BAR ═══════════ -->
 <nav class="mobile-bar" id="mobile-bar">
   <button class="mb-item" onclick="irParaEncomenda()">
-    <span class="mb-icon">🛒</span><span class="mb-label">Carrinho</span>
+    <span class="mb-icon">🛒</span><span class="mb-label" id="mb-cart-label">Carrinho</span>
     <span class="mb-badge" id="mb-cart-count">0</span>
   </button>
   <a class="mb-item" href="#promocoes">
@@ -636,7 +626,7 @@
 </div>
 
 <script src="js/dados.js?v=21"></script>
-<script src="js/app.js?v=21"></script>
+<script src="js/app.js?v=32"></script>
 <script src="js/extras.js?v=21"></script>
 </body>
 </html>
