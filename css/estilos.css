@@ -409,7 +409,7 @@
       }
       /* replace the sliding social panel with the bottom bar on mobile */
       .social-panel { display:none; }
-      .float-cart { top:66px; }
+      .float-cart { top:calc(var(--announcement-height) + 8px); right:14px; padding:6px 10px; gap:6px; font-size:.72rem; }
       .scroll-top { bottom:78px; }
       body { padding-bottom:62px; }
     }
@@ -652,16 +652,16 @@
 
     .search-row { position:relative; max-width:520px; margin:0 auto 24px; }
     .search-input {
-      width:100%; padding:14px 46px 14px 20px;
-      border:1px solid rgba(232,213,192,0.8); border-radius:var(--r-full);
-      font-family:'Poppins',sans-serif; font-size:0.92rem;
+      width:100%; padding:16px 48px 16px 20px;
+      border:1px solid rgba(196,30,58,0.14); border-radius:999px;
+      font-family:'Poppins',sans-serif; font-size:0.96rem;
       background:var(--white); color:var(--text);
       outline:none; transition:all 0.22s ease;
-      box-shadow:0 6px 20px rgba(0,0,0,0.06);
+      box-shadow:0 12px 28px rgba(0,0,0,0.07);
     }
     .search-input:focus {
-      border-color:var(--sage);
-      box-shadow:0 9px 24px rgba(82,183,136,0.16);
+      border-color:var(--cherry);
+      box-shadow:0 14px 32px rgba(196,30,58,0.12);
     }
     .search-clear {
       position:absolute; right:14px; top:50%; transform:translateY(-50%);
@@ -1350,7 +1350,8 @@
     .product-name { min-height:2.55em; font-size:1rem; }
     .product-origem, .product-fresh { margin-bottom:14px; }
     .add-btn { margin-top:auto; min-height:42px; }
-    .product-card.selected .add-btn { background:var(--forest-2); }
+    /* Once a product is in the cart, the qty stepper replaces the + button instead of stacking under it */
+    .product-card.selected .add-btn { display:none; }
 
     .catalog-pagination {
       display:flex;
@@ -1555,9 +1556,14 @@
       #main-nav .nav-inner { padding:11px 16px; }
       #main-nav.scrolled .nav-inner { padding:9px 16px; }
       .logo { font-size:1.4rem; }
-      .hero { padding:52px 16px 10px; }
+      /* Denser Products section on mobile only — desktop keeps the original spacing above */
+      #produtos { padding-top:18px !important; padding-bottom:18px !important; }
+      #produtos .section-hdr { margin-bottom:12px !important; }
+      /* Shorten the announcement bar on mobile only; desktop keeps --announcement-height:44px */
+      :root { --announcement-height: 34px; }
+      .hero { padding:36px 16px 10px; }
       .hero-heading { font-size:1.5rem; line-height:1.06; margin-bottom:4px; }
-      .hero-trust { margin-top:5px; }
+      .hero-trust { margin-top:4px; }
       .hero-rating { padding:5px 11px; }
       /* Comprar Agora is redundant on mobile — category tiles + catalog sit directly below */
       .hero-ctas { display:none; }
@@ -1572,10 +1578,11 @@
         border-radius:12px;
       }
       /* Compact cart chip docked in the header row (left of the menu button).
-         Sits inside the fixed nav band at every scroll position, so it never overlaps content. */
+         Anchored below the announcement bar (not a raw pixel offset) so it always
+         sits inside the nav band and never overlaps the announcement text. */
       .float-cart .fc-label { display:none; }
       .float-cart {
-        top:11px; right:58px; padding:5px 8px; gap:4px;
+        top:calc(var(--announcement-height) + 11px); right:58px; padding:5px 8px; gap:4px;
         border-width:1px; font-size:.72rem;
         box-shadow:0 4px 14px rgba(196,30,58,.4);
       }
