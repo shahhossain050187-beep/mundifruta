@@ -45,7 +45,7 @@ const carrinho = {};
         <p>${item.peso || 'Unidade'} · ${item.origem || 'Fresco diário'}</p>
         <div class="feature-buy">
           <strong>${rotuloPreco(item)}</strong>
-          <button type="button" class="feature-add" onclick="adicionarProduto('${item._id}', produtos_map['${item._id}'])">＋ Adicionar</button>
+          <button type="button" class="feature-add" onclick="adicionarProduto('${item._id}', produtos_map['${item._id}'])">＋</button>
         </div>
       </div>`;
     return card;
@@ -100,7 +100,7 @@ const carrinho = {};
         ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
         ${item.origem ? `<div class="product-origem">🌍 ${item.origem}</div>` : '<div class="product-fresh">✓ Fresco Diário</div>'}
         ${disponivel
-          ? `<button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>`
+          ? `<button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋</button>`
           : `<div class="unavailable-label">Indisponível</div>`}
         <div class="qty-controls" ${disponivel ? '' : 'hidden'}>
           <button class="qty-btn" onclick="alterarQtd('${id}',-1,event)">−</button>
@@ -201,7 +201,7 @@ const carrinho = {};
           ${item.peso ? `<div class="product-peso">${item.peso}</div>` : ''}
           <div class="product-price">${rotuloPreco(item)}</div>
           ${verBtn}
-          <button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋ Adicionar</button>
+          <button class="add-btn" type="button" onclick="adicionarProduto('${id}', produtos_map['${id}'])">＋</button>
           <div class="qty-controls">
             <button class="qty-btn" onclick="alterarQtd('${id}',-1,event)">−</button>
             <span class="qty-num" data-qty-id="${id}">1</span>
@@ -386,7 +386,7 @@ const carrinho = {};
     document.querySelectorAll(`[data-product-id="${id}"]`).forEach(card => {
       card.classList.toggle('selected', selecionado);
       const add = card.querySelector('.add-btn, .feature-add');
-      if (add) add.textContent = selecionado ? '＋ Adicionar mais' : '＋ Adicionar';
+      if (add) add.textContent = '＋';
     });
     document.querySelectorAll(`[data-qty-id="${id}"]`).forEach(el => {
       el.textContent = selecionado ? carrinho[id].qtd : '1';
@@ -457,7 +457,10 @@ const carrinho = {};
     }
     const fc = document.getElementById('float-cart');
     if (fc) {
-      document.getElementById('float-cart-count').textContent = n;
+      const fcText = document.getElementById('float-cart-text');
+      const subtotalText = totais.centimos > 0 ? formatarCentimos(totais.centimos) : (totais.porConfirmar ? 'A confirmar' : formatarCentimos(0));
+      if (fcText) fcText.textContent = `${n} · ${subtotalText}`;
+      fc.title = n > 0 ? `Ver a sua encomenda — ${n} itens · ${subtotalText}` : 'Ver a sua encomenda';
       if (n > 0) {
         fc.classList.add('visible');
         fc.classList.remove('pop'); void fc.offsetWidth; fc.classList.add('pop');
