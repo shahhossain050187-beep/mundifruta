@@ -204,7 +204,7 @@
         <img src="${urlFoto(item.foto)}" alt="${item.nome}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'cs-emoji',textContent:'${item.emoji}'}))"/>
         <span class="cs-nome">${item.nome}</span>
         <span class="cs-preco">${rotuloPreco(item)}</span>
-        <span class="cs-add">＋ Adicionar</span>
+        <span class="cs-add">＋</span>
       </button>`;
   }
 
